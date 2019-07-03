@@ -10,4 +10,3 @@
 	path = modules/gitstatus
 	url = https://github.com/romkatv/gitstatus.git
 	update = merge
-	shallow = true
