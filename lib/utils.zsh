@@ -106,3 +106,18 @@ spaceship::section_is_tagged_as() {
   local -a sections=(${=__SS_DATA[${tag}_sections]:-})
   [[ "${sections[(re)${section}]:-}" == "${section}" ]]
 }
+
+spaceship::upsearch() {
+  local root="$PWD"
+
+  while [[ -n "$root" ]] && [[ ! -f "$root/$1" ]]; do
+    root="${root%/*}"
+  done
+
+  if [[ -n "$root" ]]; then
+    echo "$root"
+    return 0
+  else
+    return 1
+  fi
+}
