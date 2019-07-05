@@ -41,15 +41,13 @@ spaceship::is_git() {
 # USAGE:
 #   spaceship::is_hg
 spaceship::is_hg() {
-  local root="$(pwd -P)"
-  local up_level=0
+  local root="$PWD"
 
-  while [ "$up_level" -ne 3 ] && [ "$root" ] && [ ! -d "$root/.hg" ]; do
+  while [[ "$root" ]] && [[ ! -d "$root/.hg" ]]; do
     root="${root%/*}"
-    ((up_level++))
   done
 
-  [[ -n "$root" ]] && [ "$up_level" -ne 3 ] &>/dev/null
+  [[ -n "$root" ]] &>/dev/null
 }
 
 # Print message backward compatibility warning
