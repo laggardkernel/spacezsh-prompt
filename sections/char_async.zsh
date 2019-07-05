@@ -18,6 +18,7 @@ SPACESHIP_CHAR_COLOR_SECONDARY="${SPACESHIP_CHAR_COLOR_SECONDARY="yellow"}"
 SPACESHIP_VI_MODE_SHOW="${SPACESHIP_VI_MODE_SHOW=true}"
 SPACESHIP_VI_MODE_INSERT="${SPACESHIP_VI_MODE_INSERT="❯ "}"
 SPACESHIP_VI_MODE_NORMAL="${SPACESHIP_VI_MODE_NORMAL="❮ "}"
+SPACESHIP_VI_MODE_CURSOR_CHANGE="${SPACESHIP_VI_MODE_CURSOR_CHANGE="false"}"
 
 # ------------------------------------------------------------------------------
 # Section
@@ -67,27 +68,36 @@ spaceship_char_async() {
 
 # Temporarily switch to vi-mode
 spaceship_vi_mode_enable() {
-  function zle-keymap-select() {
-    # fix vi mode indicator in async mode
-    # https://github.com/maximbaz/spaceship-prompt/issues/4
-    PROMPT=$(spaceship::compose_prompt $SPACESHIP_PROMPT_ORDER)
+  if [[ $SPACESHIP_VI_MODE_CURSOR_CHANGE == true ]]; then
+    function zle-keymap-select() {
+      # fix vi mode indicator in async mode
+      # https://github.com/maximbaz/spaceship-prompt/issues/4
+      PROMPT=$(spaceship::compose_prompt $SPACESHIP_PROMPT_ORDER)
 
-    zle reset-prompt ; zle -R
+      zle reset-prompt ; zle -R
 
-    # http://lynnard.me/blog/2014/01/05/change-cursor-shape-for-zsh-vi-mode/
-    if [[ $KEYMAP = vicmd ]]; then
-      # block symbol for command mode
-      echo -ne "\e[2 q"
-    else
-      # pipe symbol for insert mode
-      echo -ne "\e[6 q"
-    fi
-  }
+      # http://lynnard.me/blog/2014/01/05/change-cursor-shape-for-zsh-vi-mode/
+      if [[ $KEYMAP = vicmd ]]; then
+        # block symbol for command mode
+        echo -ne "\e[2 q"
+      else
+        # pipe symbol for insert mode
+        echo -ne "\e[6 q"
+      fi
+    }
+
+    # Use pipe symbol in insert mode
+    echo -ne "\e[6 q"
+
+  else
+    function zle-keymap-select() {
+      PROMPT=$(spaceship::compose_prompt $SPACESHIP_PROMPT_ORDER)
+      zle reset-prompt ; zle -R
+    }
+  fi
+
   zle -N zle-keymap-select
   bindkey -v
-
-  # Use pipe symbol in insert mode
-  echo -ne "\e[6 q"
 }
 
 # Temporarily switch to emacs-mode
