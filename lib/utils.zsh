@@ -108,11 +108,24 @@ spaceship::section_is_tagged_as() {
 }
 
 spaceship::upsearch() {
+  local search_type=""
   local root="$PWD"
 
-  while [[ -n "$root" ]] && [[ ! -f "$root/$1" ]]; do
-    root="${root%/*}"
-  done
+  if [[ -z $2 ]]; then
+    search_type="file"
+  else
+    search_type="$2"
+  fi
+
+  if [[ $search_type == file ]]; then
+    while [[ -n "$root" ]] && [[ ! -f "$root/$1" ]]; do
+      root="${root%/*}"
+    done
+  elif [[ $search_type == dir ]]; then
+    while [[ -n "$root" ]] && [[ ! -d "$root/$1" ]]; do
+      root="${root%/*}"
+    done
+  fi
 
   if [[ -n "$root" ]]; then
     echo "$root"
