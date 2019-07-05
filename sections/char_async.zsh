@@ -72,7 +72,11 @@ spaceship_vi_mode_enable() {
     function zle-keymap-select() {
       # fix vi mode indicator in async mode
       # https://github.com/maximbaz/spaceship-prompt/issues/4
-      PROMPT=$(spaceship::compose_prompt $SPACESHIP_PROMPT_ORDER)
+      if (( ${SPACESHIP_PROMPT_ORDER[(Ie)char_async]} )); then
+        PROMPT=$(spaceship::compose_prompt $SPACESHIP_PROMPT_ORDER)
+      else
+        RPROMPT=$(spaceship::compose_prompt $SPACESHIP_RPROMPT_ORDER)
+      fi
 
       zle reset-prompt ; zle -R
 
@@ -95,12 +99,17 @@ spaceship_vi_mode_enable() {
         echo -ne "\e[6 q"
       fi
     }
-    
+
     zle -N zle-line-init
 
   else
     function zle-keymap-select() {
-      PROMPT=$(spaceship::compose_prompt $SPACESHIP_PROMPT_ORDER)
+      # (Ie) return index in an array with exact match
+      if (( ${SPACESHIP_PROMPT_ORDER[(Ie)char_async]} )); then
+        PROMPT=$(spaceship::compose_prompt $SPACESHIP_PROMPT_ORDER)
+      else
+        RPROMPT=$(spaceship::compose_prompt $SPACESHIP_RPROMPT_ORDER)
+      fi
       zle reset-prompt ; zle -R
     }
   fi

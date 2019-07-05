@@ -143,7 +143,11 @@ spaceship_gitstatus_resume() {
   if [[ -z $_SP_NEXT_VCS_DIR ]]; then
     unset _SP_NEXT_VCS_DIR
     _SP_REFRESH_REASON="gitstatus"
-    PROMPT=$(spaceship::compose_prompt $SPACESHIP_PROMPT_ORDER)
+    if (( ${SPACESHIP_PROMPT_ORDER[(Ie)gitstatus]} )); then
+      PROMPT=$(spaceship::compose_prompt $SPACESHIP_PROMPT_ORDER)
+    else
+      RPROMPT=$(spaceship::compose_prompt $SPACESHIP_RPROMPT_ORDER)
+    fi
     _SP_REFRESH_REASON=""
     zle && zle .reset-prompt && zle -R
   else
@@ -156,7 +160,11 @@ spaceship_gitstatus_resume() {
       *-sync)
         unset _SP_NEXT_VCS_DIR
         _SP_REFRESH_REASON="gitstatus"
-        PROMPT=$(spaceship::compose_prompt $SPACESHIP_PROMPT_ORDER)
+        if (( ${SPACESHIP_PROMPT_ORDER[(Ie)gitstatus]} )); then
+          PROMPT=$(spaceship::compose_prompt $SPACESHIP_PROMPT_ORDER)
+        else
+          RPROMPT=$(spaceship::compose_prompt $SPACESHIP_RPROMPT_ORDER)
+        fi
         _SP_REFRESH_REASON=""
         zle && zle .reset-prompt && zle -R
         ;;
