@@ -86,8 +86,17 @@ spaceship_vi_mode_enable() {
       fi
     }
 
-    # Use pipe symbol in insert mode
-    echo -ne "\e[6 q"
+    function zle-line-init() {
+      if [[ $KEYMAP = vicmd ]]; then
+        # block symbol for command mode
+        echo -ne "\e[2 q"
+      else
+        # pipe symbol for insert mode
+        echo -ne "\e[6 q"
+      fi
+    }
+    
+    zle -N zle-line-init
 
   else
     function zle-keymap-select() {
