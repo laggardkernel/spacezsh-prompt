@@ -1,11 +1,12 @@
 # vim: fdm=marker foldlevel=0 sw=2 ts=2 sts=2
 #
-# Git supported by romkatv/gitstatus
+# Git, query repo using romkatv/gitstatus
 #
 # Configuration {{{
 # Gitstatus
 SPACESHIP_GITSTATUS_HYBRID="${SPACESHIP_GITSTATUS_HYBRID=false}"
 SPACESHIP_GITSTATUS_SKIP_DAEMON="${SPACESHIP_GITSTATUS_SKIP_DAEMON=false}"
+SPACESHIP_VCS_MAX_SYNC_LATENCY_SECONDS="${SPACESHIP_VCS_MAX_SYNC_LATENCY_SECONDS=0.05}"
 
 # Git
 SPACESHIP_GIT_SHOW="${SPACESHIP_GIT_SHOW=true}"
@@ -34,18 +35,6 @@ SPACESHIP_GIT_STATUS_UNMERGED="${SPACESHIP_GIT_STATUS_UNMERGED="="}"
 SPACESHIP_GIT_STATUS_AHEAD="${SPACESHIP_GIT_STATUS_AHEAD="⇡"}"
 SPACESHIP_GIT_STATUS_BEHIND="${SPACESHIP_GIT_STATUS_BEHIND="⇣"}"
 SPACESHIP_GIT_STATUS_DIVERGED="${SPACESHIP_GIT_STATUS_DIVERGED="⇕"}"
-
-# }}}
-# Gitstatus Daemon {{{
-if [[ $SPACESHIP_GITSTATUS_SKIP_MODULE != true ]]; then
-  if ! (( $+functions[gitstatus_query] )); then
-    source "$SPACESHIP_ROOT/modules/gitstatus/gitstatus.plugin.zsh" || return
-  fi
-
-  if [[ $SPACESHIP_GITSTATUS_SKIP_DAEMON != true ]]; then
-    gitstatus_stop SPACESHIP && gitstatus_start SPACESHIP
-  fi
-fi
 
 # }}}
 # Dependencies {{{
@@ -136,25 +125,105 @@ spaceship_gitstatus_status() {
 }
 
 # }}}
+# Callback for gitstatusd {{{
+# Called only after gitstatus_query returns 0 with VCS_STATUS_RESULT=tout.
+spaceship_gitstatus_resume() {
+  emulate -L zsh
+
+  if [[ $VCS_STATUS_RESULT == ok-async ]]; then
+    local latency=$((EPOCHREALTIME - _SP_GITSTATUS_START_TIME))
+    echo "$latency" >> $HOME/test.txt
+    if (( latency > SPACESHIP_VCS_MAX_SYNC_LATENCY_SECONDS )); then
+      _SP_GIT_SLOW[$VCS_STATUS_WORKDIR]=1
+    elif (( latency < 0.8 * SPACESHIP_VCS_MAX_SYNC_LATENCY_SECONDS )); then  # 0.8 to avoid flip-flopping
+      _SP_GIT_SLOW[$VCS_STATUS_WORKDIR]=0
+    fi
+  fi
+
+  if [[ -z $_SP_NEXT_VCS_DIR ]]; then
+    unset _SP_NEXT_VCS_DIR
+    _SP_REFRESH_REASON="gitstatus"
+    PROMPT=$(spaceship::compose_prompt $SPACESHIP_PROMPT_ORDER)
+    _SP_REFRESH_REASON=""
+    zle && zle .reset-prompt && zle -R
+  else
+    typeset -gFH _SP_GITSTATUS_START_TIME=$EPOCHREALTIME
+    if ! gitstatus_query -d $_SP_NEXT_VCS_DIR -t 0 -c spaceship_gitstatus_resume SPACESHIP; then
+      unset _SP_NEXT_VCS_DIR
+      return
+    fi
+    case $VCS_STATUS_RESULT in
+      *-sync)
+        unset _SP_NEXT_VCS_DIR
+        _SP_REFRESH_REASON="gitstatus"
+        PROMPT=$(spaceship::compose_prompt $SPACESHIP_PROMPT_ORDER)
+        _SP_REFRESH_REASON=""
+        zle && zle .reset-prompt && zle -R
+        ;;
+      tout)
+        typeset -gH _SP_NEXT_VCS_DIR=""
+        ;;
+    esac
+  fi
+}
+# }}}
 # Section {{{
+spaceship_gitstatus_render() {
+  local git_branch="$(spaceship_gitstatus_branch)" git_status="$(spaceship_gitstatus_status)"
+
+  [[ -z $git_branch ]] && return
+
+  spaceship::section \
+    'white' \
+    "$SPACESHIP_GIT_PREFIX" \
+    "${git_branch}${git_status}" \
+    "$SPACESHIP_GIT_SUFFIX"
+}
+
 spaceship_gitstatus() {
   [[ $SPACESHIP_GIT_SHOW == false ]] && return
 
   spaceship::is_git || return
 
+  # skip current section in case user wanna load gitstatusd manually
+  # and the daemon is not started yet after shell startup
   (( $+functions[gitstatus_query] )) || return
 
-  if gitstatus_query SPACESHIP && [[ "$VCS_STATUS_RESULT" == ok-sync ]]; then
-    local git_branch="$(spaceship_gitstatus_branch)" git_status="$(spaceship_gitstatus_status)"
-
-    [[ -z $git_branch ]] && return
-
-    spaceship::section \
-      'white' \
-      "$SPACESHIP_GIT_PREFIX" \
-      "${git_branch}${git_status}" \
-      "$SPACESHIP_GIT_SUFFIX"
+  if [[ $_SP_REFRESH_REASON != 'gitstatus' ]]; then
+    if (( $+_SP_NEXT_VCS_DIR )); then
+      typeset -gH _SP_NEXT_VCS_DIR=${${GIT_DIR:a}:-$PWD}
+    else
+      local dir=${${GIT_DIR:a}:-$PWD}
+      local -F timeout=$SPACESHIP_VCS_MAX_SYNC_LATENCY_SECONDS
+      while true; do
+        case "$_SP_GIT_SLOW[$dir]" in
+          "") [[ $dir == / ]] && break; dir=${dir:h};;
+          0) break;;
+          1) timeout=0; break;;
+        esac
+      done
+      typeset -gFH _SP_GITSTATUS_START_TIME=$EPOCHREALTIME
+      gitstatus_query -d ${${GIT_DIR:a}:-$PWD} -t $timeout -c spaceship_gitstatus_resume SPACESHIP || return 1
+      [[ $VCS_STATUS_RESULT == tout ]] && typeset -gH _SP_NEXT_VCS_DIR=""
+      # else [[ "$VCS_STATUS_RESULT" == ok-sync ]]
+    fi
   fi
+
+  spaceship_gitstatus_render
 }
 
 # }}}
+# Gitstatus Daemon {{{
+if [[ $SPACESHIP_GITSTATUS_SKIP_MODULE != true ]]; then
+  if ! (( $+functions[gitstatus_query] )); then
+    source "$SPACESHIP_ROOT/modules/gitstatus/gitstatus.plugin.zsh" || return
+  fi
+
+  if [[ $SPACESHIP_GITSTATUS_SKIP_DAEMON != true ]]; then
+    gitstatus_stop SPACESHIP && gitstatus_start SPACESHIP
+  fi
+fi
+
+# }}}
+# git workdir => 1 if gitstatus is slow on it, 0 if it's fast.
+typeset -gAH _SP_GIT_SLOW
