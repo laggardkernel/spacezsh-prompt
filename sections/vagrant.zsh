@@ -12,9 +12,11 @@ SPACESHIP_VAGRANT_SHOW="${SPACESHIP_VAGRANT_SHOW=true}"
 SPACESHIP_VAGRANT_PREFIX="${SPACESHIP_VAGRANT_PREFIX="on "}"
 SPACESHIP_VAGRANT_SUFFIX="${SPACESHIP_VAGRANT_SUFFIX="$SPACESHIP_PROMPT_DEFAULT_SUFFIX"}"
 SPACESHIP_VAGRANT_SYMBOL="${SPACESHIP_VAGRANT_SYMBOL="Ｖ"}"
-SPACESHIP_VAGRANT_ON_COLOR="${SPACESHIP_VAGRANT_ON_COLOR="39"}" # deepskyblue
-SPACESHIP_VAGRANT_OFF_COLOR="${SPACESHIP_VAGRANT_OFF_COLOR="247"}" # grey62
+SPACESHIP_VAGRANT_COLOR_ON="${SPACESHIP_VAGRANT_COLOR_ON="27"}" # dodgerblue2
+SPACESHIP_VAGRANT_COLOR_OFF="${SPACESHIP_VAGRANT_COLOR_OFF="247"}" # grey62
+SPACESHIP_VAGRANT_COLOR_SUSPENDED="${SPACESHIP_VAGRANT_COLOR_SUSPENDED="214"}" # orange1
 SPACESHIP_VAGRANT_COLOR=""
+SPACESHIP_VAGRANT_SHOW_TEXT="${SPACESHIP_VAGRANT_SHOW_TEXT="true"}"
 
 # ------------------------------------------------------------------------------
 # Section
@@ -44,15 +46,18 @@ for box in json_file:
 ')
   fi
 
-  # possible status: running, poweroff
+  # possible status: running, poweroff(halt), saved(suspend)
   if [[ -z ${vagrant_status} ]]; then
     return
   elif [[ $vagrant_status == poweroff ]]; then
-    SPACESHIP_VAGRANT_COLOR="$SPACESHIP_VAGRANT_OFF_COLOR"
+    SPACESHIP_VAGRANT_COLOR="$SPACESHIP_VAGRANT_COLOR_OFF"
   elif [[ $vagrant_status == running ]]; then
-    SPACESHIP_VAGRANT_COLOR="$SPACESHIP_VAGRANT_ON_COLOR"
+    SPACESHIP_VAGRANT_COLOR="$SPACESHIP_VAGRANT_COLOR_ON"
+  elif [[ $vagrant_status == saved ]]; then
+    SPACESHIP_VAGRANT_COLOR="$SPACESHIP_VAGRANT_COLOR_SUSPENDED"
   fi
-  vagrant_status=""
+
+  [[ $SPACESHIP_VAGRANT_SHOW_TEXT == "false" ]] && vagrant_status=""
 
   spaceship::section \
     "$SPACESHIP_VAGRANT_COLOR" \
