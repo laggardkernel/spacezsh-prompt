@@ -25,7 +25,7 @@ spaceship_pyenv() {
   # Show pyenv python version only for Python-specific folders
   [[ -n "$PYENV_VERSION" || -f .python-version || -f requirements.txt || -f pyproject.toml || -n *.py(#qN^/) ]] || return
 
-  spaceship::exists pyenv || return # Do nothing if pyenv is not installed
+  (( $+commands[pyenv] )) || return # Do nothing if pyenv is not installed
 
   local pyenv_status=${$(pyenv version-name 2>/dev/null)//:/ }
 

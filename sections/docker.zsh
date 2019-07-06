@@ -23,7 +23,7 @@ SPACESHIP_DOCKER_VERBOSE="${SPACESHIP_DOCKER_VERBOSE=false}"
 spaceship_docker() {
   [[ $SPACESHIP_DOCKER_SHOW == false ]] && return
 
-  spaceship::exists docker || return
+  (( $+commands[docker] )) || return
 
   # Better support for docker environment vars: https://docs.docker.com/compose/reference/envvars/
   local compose_exists=false

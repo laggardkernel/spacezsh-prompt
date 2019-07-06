@@ -26,7 +26,7 @@ spaceship_golang() {
   [[ -f go.mod || -d Godeps || -f glide.yaml || -n *.go(#qN^/) || -f Gopkg.toml || -f Gopkg.lock \
   || ( $GOPATH && "$PWD/" =~ "$GOPATH/" ) ]] || return
 
-  spaceship::exists go || return
+  (( $+commands[go] )) || return
 
   # Go version is either the commit hash and date like "devel +5efe9a8f11 Web Jan 9 07:21:16 2019 +0000"
   # at the time of the build or a release tag like "go1.11.4".

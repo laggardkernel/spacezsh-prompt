@@ -25,7 +25,7 @@ spaceship_php() {
   # Show only if php files or composer.json exist in current directory
   [[ -n *.php(#qN^/) || -f composer.json ]] || return
 
-  spaceship::exists php || return
+  (( $+commands[php] )) || return
 
   local php_version=$(php -v 2>&1 | grep --color=never -oe "^PHP\s*[0-9.]\+" | awk '{print $2}')
 

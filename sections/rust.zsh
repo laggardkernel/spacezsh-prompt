@@ -26,7 +26,7 @@ spaceship_rust() {
   # If there are Rust-specific files in current directory
   [[ -f Cargo.toml || -n *.rs(#qN^/) ]] || return
 
-  spaceship::exists rustc || return
+  (( $+commands[rustc] )) || return
 
   local rust_version=$(rustc --version | cut -d' ' -f2)
 

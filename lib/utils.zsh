@@ -15,13 +15,6 @@
 # }
 # spaceship::source_autoloads
 
-# Check if command exists in $PATH
-# USAGE:
-#   spaceship::exists <command>
-spaceship::exists() {
-  command -v $1 > /dev/null 2>&1
-}
-
 # Check if function is defined
 # USAGE:
 #   spaceship::defined <function>

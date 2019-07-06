@@ -26,7 +26,7 @@ spaceship_haskell() {
   [[ -f stack.yaml ]] || return
 
   # The command is stack, so do not change this to haskell.
-  spaceship::exists stack || return
+  (( $+commands[stack] )) || return
 
   local haskell_version=$(stack ghc -- --numeric-version --no-install-ghc)
 

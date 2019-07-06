@@ -24,7 +24,7 @@ spaceship_conda() {
   [[ $SPACESHIP_CONDA_SHOW == false ]] && return
 
   # Check if running via conda virtualenv
-  spaceship::exists conda && [ -n "$CONDA_DEFAULT_ENV" ] || return
+  (( $+commands[conda] )) && [ -n "$CONDA_DEFAULT_ENV" ] || return
 
   local conda_env=${CONDA_DEFAULT_ENV}
 

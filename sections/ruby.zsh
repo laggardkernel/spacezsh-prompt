@@ -27,13 +27,13 @@ spaceship_ruby() {
 
   local 'ruby_version'
 
-  if spaceship::exists rvm-prompt; then
+  if (( $+commands[rvm-prompt] )); then
     ruby_version=$(rvm-prompt i v g)
-  elif spaceship::exists chruby; then
+  elif (( $+commands[chruby] )); then
     ruby_version=$(chruby | sed -n -e 's/ \* //p')
-  elif spaceship::exists rbenv; then
+  elif (( $+commands[rbenv] )); then
     ruby_version=$(rbenv version-name)
-  elif spaceship::exists asdf; then
+  elif (( $+commands[asdf] )); then
     # split output on space and return first element
     ruby_version=${$(asdf current ruby)[1]}
   else

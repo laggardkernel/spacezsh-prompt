@@ -24,7 +24,7 @@ SPACESHIP_TERRAFORM_COLOR="${SPACESHIP_TERRAFORM_COLOR="105"}"
 spaceship_terraform() {
   [[ $SPACESHIP_TERRAFORM_SHOW == false ]] && return
 
-  spaceship::exists terraform || return
+  (( $+commands[terraform] )) || return
 
   # Show Terraform Workspaces when exists
   [[ -f .terraform/environment ]] || return

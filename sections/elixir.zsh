@@ -28,14 +28,14 @@ spaceship_elixir() {
 
   local 'elixir_version'
 
-  if spaceship::exists kiex; then
+  if (( $+commands[kiex] )); then
     elixir_version="${ELIXIR_VERSION}"
-  elif spaceship::exists exenv; then
+  elif (( $+commands[exenv] )); then
     elixir_version=$(exenv version-name)
   fi
 
   if [[ $elixir_version == "" ]]; then
-    spaceship::exists elixir || return
+    (( $+commands[elixir] )) || return
     elixir_version=$(elixir -v 2>/dev/null | grep "Elixir" --color=never | cut -d ' ' -f 2)
   fi
 

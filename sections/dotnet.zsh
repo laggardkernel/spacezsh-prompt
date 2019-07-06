@@ -26,7 +26,7 @@ spaceship_dotnet() {
 
   [[ -f project.json || -f global.json || -f paket.dependencies || -n *.(cs|fs|x)proj(#qN^/) || -n *.sln(#qN^/) ]] || return
 
-  spaceship::exists dotnet || return
+  (( $+commands[dotnet] )) || return
 
   # dotnet-cli automatically handles SDK pinning (specified in a global.json file)
   # therefore, this already returns the expected version for the current directory

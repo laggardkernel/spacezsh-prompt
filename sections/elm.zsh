@@ -24,7 +24,7 @@ spaceship_elm() {
 
   [[ -f elm.json || -f elm-package.json || -d elm-stuff || -n *.elm(#qN^/) ]] || return
 
-  spaceship::exists elm || return
+  (( $+commands[elm] )) || return
 
   local elm_version=$(elm --version 2> /dev/null)
 

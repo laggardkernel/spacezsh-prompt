@@ -137,32 +137,6 @@ spaceship::section \
 spaceship::section "$color" "$SPACESHIP_CHAR_SYMBOL"
 ```
 
-## `spaceship::exists <command>`
-
-This command validates that given program is available for execution. It checks for PATH binaries, functions, and builtins. It returns zero exit code if a `command` exists and non-zero code otherwise.
-
-You can use this utility to check if some program is installed and perform actions conditionally. For example, you can either return an error and exit or continue script's execution.
-
-### Arguments
-
-1. `command` _Required_ — a command that needs to be checked.
-
-### Example
-
-```zsh
-# Check multiple commands for existing
-if spaceship::exists nvm; then
-  # extract nvm version
-elif spaceship::exists node; then
-  # extract node version
-else
-  return
-fi
-
-# Do nothing if pyenv is not installed
-spaceship::exists pyenv || return
-```
-
 ## `spaceship::defined <function>`
 
 The same as [`spaceship::exists`](#spaceshipexists-command), but for functions. It returns zero exit code if a `function` has been defined previously and non-zero if `function` hasn't.

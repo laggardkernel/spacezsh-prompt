@@ -26,17 +26,17 @@ spaceship_package() {
   # Show package version only when repository is a package
   local 'package_version'
 
-  if [[ -f package.json ]] && spaceship::exists npm; then
-    if spaceship::exists jq; then
+  if [[ -f package.json ]] && (( $+commands[npm] )); then
+    if (( $+commands[jq] )); then
       package_version=$(jq -r '.version' package.json 2>/dev/null)
-    elif spaceship::exists python; then
+    elif (( $+commands[python] )); then
       package_version=$(python -c "import json; print(json.load(open('package.json'))['version'])" 2>/dev/null)
-    elif spaceship::exists node; then
+    elif (( $+commands[node] )); then
       package_version=$(node -p "require('./package.json').version" 2> /dev/null)
     fi
   fi
 
-  if [[ -f Cargo.toml ]] && spaceship::exists cargo; then
+  if [[ -f Cargo.toml ]] && (( $+commands[cargo] )); then
     # Handle missing field `version` in Cargo.toml.
     # `cargo pkgid` need Cargo.lock exists too. If it does't, do not show package version
     # https://github.com/denysdovhan/spaceship-prompt/pull/617
