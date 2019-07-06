@@ -24,9 +24,13 @@ SPACESHIP_DOTNET_COLOR="${SPACESHIP_DOTNET_COLOR="128"}"
 spaceship_dotnet() {
   [[ $SPACESHIP_DOTNET_SHOW == false ]] && return
 
-  [[ -f project.json || -f global.json || -f paket.dependencies || -n *.(cs|fs|x)proj(#qN^/) || -n *.sln(#qN^/) ]] || return
+  spaceship::upsearch "project.json" >/dev/null \
+    || spaceship::upsearch "global.json" >/dev/null \
+    || spaceship::upsearch "paket.dependencies" >/dev/null \
+    || [[ -n *.(cs|fs|x)proj(#qN^/) || -n *.sln(#qN^/) ]] \
+    || return
 
-  spaceship::exists dotnet || return
+  (( $+commands[dotnet] )) || return
 
   # dotnet-cli automatically handles SDK pinning (specified in a global.json file)
   # therefore, this already returns the expected version for the current directory

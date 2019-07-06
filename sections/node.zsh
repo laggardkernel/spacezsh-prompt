@@ -23,18 +23,25 @@ SPACESHIP_NODE_COLOR="${SPACESHIP_NODE_COLOR="green"}"
 spaceship_node() {
   [[ $SPACESHIP_NODE_SHOW == false ]] && return
 
+  (( $+commands[nodenv] )) || (( $+commands[nvm] )) || (( $+commands[node] )) || return
+
   # Show NODE status only for JS-specific folders
-  [[ -f package.json || -d node_modules || -n *.js(#qN^/) ]] || return
+  [[ -n $NODENV_VERSION ]] \
+    || spaceship::upsearch ".node-version" >/dev/null \
+    || spaceship::upsearch "package.json" >/dev/null \
+    || spaceship::upsearch "node_modules" "dir" >/dev/null \
+    || [[ -n *.js(#qN^/) ]] \
+    || return
 
   local 'node_version'
 
-  if spaceship::exists nvm; then
+  if (( $+commands[nvm] )); then
     node_version=$(nvm current 2>/dev/null)
     [[ $node_version == "system" || $node_version == "node" ]] && return
-  elif spaceship::exists nodenv; then
+  elif (( $+commands[nodenv] )); then
     node_version=$(nodenv version-name)
     [[ $node_version == "system" || $node_version == "node" ]] && return
-  elif spaceship::exists node; then
+  elif (( $+commands[node] )); then
     node_version=$(node -v 2>/dev/null)
   else
     return

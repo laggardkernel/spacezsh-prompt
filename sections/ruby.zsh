@@ -22,18 +22,27 @@ SPACESHIP_RUBY_COLOR="${SPACESHIP_RUBY_COLOR="red"}"
 spaceship_ruby() {
   [[ $SPACESHIP_RUBY_SHOW == false ]] && return
 
+  (( $+commands[rbenv] )) || (( $+commands[rvm-prompt] )) \
+    || (( $+commands[chruby] )) || (( $+commands[asdf] )) \
+    || return
+
   # Show versions only for Ruby-specific folders
-  [[ -f Gemfile || -f Rakefile || -n *.rb(#qN^/) ]] || return
+  [[ -n $RBENV_VERSION ]] \
+    || spaceship::upsearch ".ruby-version" >/dev/null \
+    || spaceship::upsearch "Gemfile" >/dev/null \
+    || spaceship::upsearch "Rakefile" >/dev/null \
+    || [[ -n *.rb(#qN^/) ]] \
+    || return
 
   local 'ruby_version'
 
-  if spaceship::exists rvm-prompt; then
+  if (( $+commands[rvm-prompt] )); then
     ruby_version=$(rvm-prompt i v g)
-  elif spaceship::exists chruby; then
+  elif (( $+commands[chruby] )); then
     ruby_version=$(chruby | sed -n -e 's/ \* //p')
-  elif spaceship::exists rbenv; then
+  elif (( $+commands[rbenv] )); then
     ruby_version=$(rbenv version-name)
-  elif spaceship::exists asdf; then
+  elif (( $+commands[asdf] )); then
     # split output on space and return first element
     ruby_version=${$(asdf current ruby)[1]}
   else

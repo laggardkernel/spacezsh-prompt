@@ -103,6 +103,16 @@ echo $SPACESHIP_ROOT
 #> /path/to/spaceship-prompt
 ```
 
+## `SPACESHIP_CUSTOM_SECTION_LOCATION`
+
+Path where custom section files are auto sourced. Defaults to `$HOME/.config/spaceship/sections`.
+
+Custom section name and function name should follow the same pattern as the built/core sections. To be specific, a custom section named `foobar` should be rendered with function `spaceship_foobar` and stored in file `${SPACESHIP_CUSTOM_SECTION_LOCATION}/foobar.zsh`.
+
+To load a custom section defined in a file, you should tag the section name with `custom` (like `foobar::custom`) in the array `SPACESHIP_PROMPT_ORDER`. Tag `custom` is only required for custom section sourced from a file by Spaceship. If you've sourced the file manually before spaceship is loaded, there's no need to use the tag `custom`.
+
+**Note**: custom section is preferred over core/builtin section with the same name.
+
 ## `spaceship::section <color> [prefix] <content> [suffix]`
 
 This command displays prompt section prefixed with `prefix`, suffixed with `suffix` and `content` painted in `color`. **Bold** style is applied by default.
@@ -135,32 +145,6 @@ spaceship::section \
 
 # Display prompt section without prefix and suffix
 spaceship::section "$color" "$SPACESHIP_CHAR_SYMBOL"
-```
-
-## `spaceship::exists <command>`
-
-This command validates that given program is available for execution. It checks for PATH binaries, functions, and builtins. It returns zero exit code if a `command` exists and non-zero code otherwise.
-
-You can use this utility to check if some program is installed and perform actions conditionally. For example, you can either return an error and exit or continue script's execution.
-
-### Arguments
-
-1. `command` _Required_ — a command that needs to be checked.
-
-### Example
-
-```zsh
-# Check multiple commands for existing
-if spaceship::exists nvm; then
-  # extract nvm version
-elif spaceship::exists node; then
-  # extract node version
-else
-  return
-fi
-
-# Do nothing if pyenv is not installed
-spaceship::exists pyenv || return
 ```
 
 ## `spaceship::defined <function>`

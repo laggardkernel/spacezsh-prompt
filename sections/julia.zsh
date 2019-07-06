@@ -25,7 +25,7 @@ spaceship_julia() {
   # If there are julia files in current directory
   [[ -n *.jl(#qN^/) ]] || return
 
-  spaceship::exists julia || return
+  (( $+commands[julia] )) || return
 
   local julia_version=$(julia --version | grep --color=never -oE '[[:digit:]]+\.[[:digit:]]+\.[[:digit:]]')
 

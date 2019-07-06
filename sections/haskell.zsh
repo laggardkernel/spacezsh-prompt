@@ -23,10 +23,10 @@ spaceship_haskell() {
   [[ $SPACESHIP_HASKELL_SHOW == false ]] && return
 
   # If there are stack files in current directory
-  [[ -f stack.yaml ]] || return
+  spaceship::upsearch "stack.yaml" >/dev/null || return
 
   # The command is stack, so do not change this to haskell.
-  spaceship::exists stack || return
+  (( $+commands[stack] )) || return
 
   local haskell_version=$(stack ghc -- --numeric-version --no-install-ghc)
 

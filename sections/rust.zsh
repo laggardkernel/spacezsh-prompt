@@ -24,14 +24,16 @@ spaceship_rust() {
   [[ $SPACESHIP_RUST_SHOW == false ]] && return
 
   # If there are Rust-specific files in current directory
-  [[ -f Cargo.toml || -n *.rs(#qN^/) ]] || return
+  spaceship::upsearch "Cargo.toml" >/dev/null \
+    || [[ -n *.rs(#qN^/) ]] \
+    || return
 
-  spaceship::exists rustc || return
+  (( $+commands[rustc] )) || return
 
   local rust_version=$(rustc --version | cut -d' ' -f2)
 
   if [[ $SPACESHIP_RUST_VERBOSE_VERSION == false ]]; then
-  	local rust_version=$(echo $rust_version | cut -d'-' -f1) # Cut off -suffixes from version. "v1.30.0-beta.11" or "v1.30.0-nightly"
+  	local rust_version=$(<<< $rust_version cut -d'-' -f1) # Cut off -suffixes from version. "v1.30.0-beta.11" or "v1.30.0-nightly"
   fi
 
   spaceship::section \

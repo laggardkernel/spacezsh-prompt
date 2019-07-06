@@ -19,35 +19,39 @@ SPACESHIP_DOCKER_VERBOSE="${SPACESHIP_DOCKER_VERBOSE=false}"
 # Section
 # ------------------------------------------------------------------------------
 
+spaceship::docker_compose_file_exists() {
+  [[ -n "$COMPOSE_FILE" ]] || return 1
+
+  # Better support for docker environment vars: https://docs.docker.com/compose/reference/envvars/
+
+  # Use COMPOSE_PATH_SEPARATOR or colon as default
+  local separator=${COMPOSE_PATH_SEPARATOR:-":"}
+
+  # COMPOSE_FILE may have several filenames separated by colon, test all of them
+  local filenames=("${(@ps/$separator/)COMPOSE_FILE}")
+
+  # Must ensure all compose files exist
+  # https://github.com/docker/docker.github.io/issues/5472
+  for filename in $filenames; do
+    if ! spaceship::upsearch "$filename" >/dev/null; then
+      return 1
+    fi
+  done
+  return 0
+}
+
 # Show current Docker version and connected machine
 spaceship_docker() {
   [[ $SPACESHIP_DOCKER_SHOW == false ]] && return
 
-  spaceship::exists docker || return
-
-  # Better support for docker environment vars: https://docs.docker.com/compose/reference/envvars/
-  local compose_exists=false
-  if [[ -n "$COMPOSE_FILE" ]]; then
-    # Use COMPOSE_PATH_SEPARATOR or colon as default
-    local separator=${COMPOSE_PATH_SEPARATOR:-":"}
-
-    # COMPOSE_FILE may have several filenames separated by colon, test all of them
-    local filenames=("${(@ps/$separator/)COMPOSE_FILE}")
-
-    for filename in $filenames; do
-      if [[ ! -f $filename ]]; then
-        compose_exists=false
-        break
-      fi
-      compose_exists=true
-    done
-
-    # Must return if COMPOSE_FILE is present but invalid
-    [[ "$compose_exists" == false ]] && return
-  fi
+  (( $+commands[docker] )) || return
 
   # Show Docker status only for Docker-specific folders
-  [[ "$compose_exists" == true || -f Dockerfile || -f docker-compose.yml || -f /.dockerenv ]] || return
+  spaceship::upsearch "Dockerfile" >/dev/null \
+    || spaceship::upsearch "docker-compose.yml" >/dev/null \
+    || spaceship::docker_compose_file_exists \
+    || [[ -f "/.dockerenv" ]] \
+    || return
 
   # if docker daemon isn't running you'll get an error saying it can't connect
   local docker_version=$(docker version -f "{{.Server.Version}}" 2>/dev/null)

@@ -3,12 +3,17 @@
 # Utils for common used actions
 # ------------------------------------------------------------------------------
 
-# Check if command exists in $PATH
-# USAGE:
-#   spaceship::exists <command>
-spaceship::exists() {
-  command -v $1 > /dev/null 2>&1
+# Autoload rarely used functions
+# Source all autoload functions.
+spaceship::source_autoloads() {
+  local autoload_path="${SPACESHIP_ROOT}/lib/autoload"
+  # test if we already autoloaded the functions
+  if [[ ${fpath[(ie)$autoload_path]} -gt ${#fpath} ]]; then
+    fpath=( ${autoload_path} "${fpath[@]}" )
+    autoload -Uz spaceship::env
+  fi
 }
+spaceship::source_autoloads
 
 # Check if function is defined
 # USAGE:
@@ -29,9 +34,9 @@ spaceship::is_git() {
 # USAGE:
 #   spaceship::is_hg
 spaceship::is_hg() {
-  local root="$(pwd -P)"
+  local root="$PWD"
 
-  while [ "$root" ] && [ ! -d "$root/.hg" ]; do
+  while [[ "$root" ]] && [[ ! -d "$root/.hg" ]]; do
     root="${root%/*}"
   done
 
@@ -77,4 +82,82 @@ spaceship::displaytime() {
 spaceship::union() {
   typeset -U sections=("$@")
   echo $sections
+}
+
+# Tests if a section is tagged as given tag
+# @args
+#   $1 string The tag to test
+#   $2 string The section name
+#   $3 string Alignment info
+#
+# @returns
+#   0 if the section contains the tag
+spaceship::section_is_tagged_as() {
+  local tag="${1}"
+  local section="${2}"
+  local -a sections
+  local alignment
+  local -a alignments=("prompt" "rprompt")
+
+  [[ -n "$3" ]] && alignments=("$3")
+
+  for alignment in "${(@)alignments}"; do
+    sections=(${(@)sections} ${=__SS_DATA[${tag}_${alignment}_sections]:-})
+  done
+  (( ${sections[(Ie)${section}]} ))
+}
+
+# Determine if the passed section is used in either the LEFT or
+# RIGHT prompt arrays.
+#
+# @args
+#   $1 string The section to be tested.
+#   $2 prompt/rprompt/"" The alignment info
+spaceship::section_in_use() {
+  local section="$1"
+  local -a sections
+  local alignment
+  local -a alignments=("prompt" "rprompt")
+
+  [[ -n "$2" ]] && alignments=("$2")
+
+  for alignment in "${(@)alignments}"; do
+    sections=(${(@)sections} ${=__SS_DATA[${alignment}_sections]:-})
+  done
+  (( ${sections[(Ie)${section}]} ))
+}
+
+# Search recursively in parent folders for given file.
+#
+# @args
+#   $1 string File/folder name to search for.
+#   $2 file/dir, type to be searched
+# @return
+#   The 1st path where the file/folder has been found
+spaceship::upsearch() {
+  local search_type=""
+  local root="$PWD"
+
+  if [[ -z $2 ]]; then
+    search_type="file"
+  else
+    search_type="$2"
+  fi
+
+  if [[ $search_type == file ]]; then
+    while [[ -n "$root" ]] && [[ ! -f "$root/$1" ]]; do
+      root="${root%/*}"
+    done
+  elif [[ $search_type == dir ]]; then
+    while [[ -n "$root" ]] && [[ ! -d "$root/$1" ]]; do
+      root="${root%/*}"
+    done
+  fi
+
+  if [[ -n "$root" ]]; then
+    echo "$root"
+    return 0
+  else
+    return 1
+  fi
 }

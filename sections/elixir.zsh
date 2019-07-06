@@ -24,18 +24,19 @@ spaceship_elixir() {
   [[ $SPACESHIP_ELIXIR_SHOW == false ]] && return
 
   # Show versions only for Elixir-specific folders
-  [[ -f mix.exs || -n *.ex(#qN^/) || -n *.exs(#qN^/) ]] || return
+  spaceship::upsearch "mix.exs" >/dev/null \
+    || [[ -n *.ex(#qN^/) || -n *.exs(#qN^/) ]] || return
 
   local 'elixir_version'
 
-  if spaceship::exists kiex; then
+  if (( $+commands[kiex] )); then
     elixir_version="${ELIXIR_VERSION}"
-  elif spaceship::exists exenv; then
+  elif (( $+commands[exenv] )); then
     elixir_version=$(exenv version-name)
   fi
 
   if [[ $elixir_version == "" ]]; then
-    spaceship::exists elixir || return
+    (( $+commands[elixir] )) || return
     elixir_version=$(elixir -v 2>/dev/null | grep "Elixir" --color=never | cut -d ' ' -f 2)
   fi
 
