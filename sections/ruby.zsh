@@ -22,8 +22,14 @@ SPACESHIP_RUBY_COLOR="${SPACESHIP_RUBY_COLOR="red"}"
 spaceship_ruby() {
   [[ $SPACESHIP_RUBY_SHOW == false ]] && return
 
+  (( $+commands[rbenv] )) || (( $+commands[rvm-prompt] )) \
+    || (( $+commands[chruby] )) || (( $+commands[asdf] )) \
+    || return
+
   # Show versions only for Ruby-specific folders
-  spaceship::upsearch "Gemfile" >/dev/null \
+  [[ -n $RBENV_VERSION ]] \
+    || spaceship::upsearch ".ruby-version" >/dev/null \
+    || spaceship::upsearch "Gemfile" >/dev/null \
     || spaceship::upsearch "Rakefile" >/dev/null \
     || [[ -n *.rb(#qN^/) ]] \
     || return

@@ -22,6 +22,8 @@ SPACESHIP_PYENV_COLOR="${SPACESHIP_PYENV_COLOR="yellow"}"
 spaceship_pyenv() {
   [[ $SPACESHIP_PYENV_SHOW == false ]] && return
 
+  (( $+commands[pyenv] )) || return # Do nothing if pyenv is not installed
+
   # Show pyenv python version only for Python-specific folders
   [[ -n "$PYENV_VERSION" ]] \
     || spaceship::upsearch ".python-version" >/dev/null \
@@ -29,8 +31,6 @@ spaceship_pyenv() {
     || spaceship::upsearch "pyproject.toml" >/dev/null \
     || [[ -n *.py(#qN^/) ]] \
     || return
-
-  (( $+commands[pyenv] )) || return # Do nothing if pyenv is not installed
 
   local pyenv_status=${$(pyenv version-name 2>/dev/null)//:/ }
 

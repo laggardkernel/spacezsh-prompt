@@ -23,8 +23,12 @@ SPACESHIP_NODE_COLOR="${SPACESHIP_NODE_COLOR="green"}"
 spaceship_node() {
   [[ $SPACESHIP_NODE_SHOW == false ]] && return
 
+  (( $+commands[nodenv] )) || (( $+commands[nvm] )) || (( $+commands[node] )) || return
+
   # Show NODE status only for JS-specific folders
-  spaceship::upsearch "package.json" >/dev/null \
+  [[ -n $NODENV_VERSION ]] \
+    || spaceship::upsearch ".node-version" >/dev/null \
+    || spaceship::upsearch "package.json" >/dev/null \
     || spaceship::upsearch "node_modules" "dir" >/dev/null \
     || [[ -n *.js(#qN^/) ]] \
     || return
