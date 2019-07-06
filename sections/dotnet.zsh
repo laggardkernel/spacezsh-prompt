@@ -24,7 +24,11 @@ SPACESHIP_DOTNET_COLOR="${SPACESHIP_DOTNET_COLOR="128"}"
 spaceship_dotnet() {
   [[ $SPACESHIP_DOTNET_SHOW == false ]] && return
 
-  [[ -f project.json || -f global.json || -f paket.dependencies || -n *.(cs|fs|x)proj(#qN^/) || -n *.sln(#qN^/) ]] || return
+  spaceship::upsearch "project.json" >/dev/null \
+    || spaceship::upsearch "global.json" >/dev/null \
+    || spaceship::upsearch "paket.dependencies" >/dev/null \
+    || [[ -n *.(cs|fs|x)proj(#qN^/) || -n *.sln(#qN^/) ]] \
+    || return
 
   (( $+commands[dotnet] )) || return
 

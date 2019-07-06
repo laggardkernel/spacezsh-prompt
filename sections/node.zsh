@@ -24,7 +24,10 @@ spaceship_node() {
   [[ $SPACESHIP_NODE_SHOW == false ]] && return
 
   # Show NODE status only for JS-specific folders
-  [[ -f package.json || -d node_modules || -n *.js(#qN^/) ]] || return
+  spaceship::upsearch "package.json" >/dev/null \
+    || spaceship::upsearch "node_modules" "dir" >/dev/null \
+    || [[ -n *.js(#qN^/) ]] \
+    || return
 
   local 'node_version'
 

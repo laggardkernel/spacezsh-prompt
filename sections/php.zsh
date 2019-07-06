@@ -23,7 +23,9 @@ spaceship_php() {
   [[ $SPACESHIP_PHP_SHOW == false ]] && return
 
   # Show only if php files or composer.json exist in current directory
-  [[ -n *.php(#qN^/) || -f composer.json ]] || return
+  spaceship::upsearch "composer.json" >/dev/null \
+    || [[ -n *.php(#qN^/) ]] \
+    || return
 
   (( $+commands[php] )) || return
 

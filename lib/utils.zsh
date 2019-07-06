@@ -98,6 +98,13 @@ spaceship::section_is_tagged_as() {
   [[ "${sections[(re)${section}]:-}" == "${section}" ]]
 }
 
+# Search recursively in parent folders for given file.
+#
+# @args
+#   $1 string File/folder name to search for.
+#   $2 file/dir, type to be searched
+# @return
+#   The 1st path where the file/folder has been found
 spaceship::upsearch() {
   local search_type=""
   local root="$PWD"

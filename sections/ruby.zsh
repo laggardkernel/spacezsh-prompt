@@ -23,7 +23,10 @@ spaceship_ruby() {
   [[ $SPACESHIP_RUBY_SHOW == false ]] && return
 
   # Show versions only for Ruby-specific folders
-  [[ -f Gemfile || -f Rakefile || -n *.rb(#qN^/) ]] || return
+  spaceship::upsearch "Gemfile" >/dev/null \
+    || spaceship::upsearch "Rakefile" >/dev/null \
+    || [[ -n *.rb(#qN^/) ]] \
+    || return
 
   local 'ruby_version'
 

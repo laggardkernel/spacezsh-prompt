@@ -24,7 +24,9 @@ spaceship_rust() {
   [[ $SPACESHIP_RUST_SHOW == false ]] && return
 
   # If there are Rust-specific files in current directory
-  [[ -f Cargo.toml || -n *.rs(#qN^/) ]] || return
+  spaceship::upsearch "Cargo.toml" >/dev/null \
+    || [[ -n *.rs(#qN^/) ]] \
+    || return
 
   (( $+commands[rustc] )) || return
 

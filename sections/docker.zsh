@@ -35,7 +35,7 @@ spaceship_docker() {
     local filenames=("${(@ps/$separator/)COMPOSE_FILE}")
 
     for filename in $filenames; do
-      if [[ ! -f $filename ]]; then
+      if ! spaceship::upsearch "$filename" >/dev/null; then
         compose_exists=false
         break
       fi
@@ -47,7 +47,11 @@ spaceship_docker() {
   fi
 
   # Show Docker status only for Docker-specific folders
-  [[ "$compose_exists" == true || -f Dockerfile || -f docker-compose.yml || -f /.dockerenv ]] || return
+  [[ "$compose_exists" == true ]] \
+    || spaceship::upsearch "Dockerfile" >/dev/null \
+    || spaceship::upsearch "docker-compose.yml" >/dev/null \
+    || [[ -f "/.dockerenv" ]] \
+    || return
 
   # if docker daemon isn't running you'll get an error saying it can't connect
   local docker_version=$(docker version -f "{{.Server.Version}}" 2>/dev/null)

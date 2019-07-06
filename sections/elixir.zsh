@@ -24,7 +24,8 @@ spaceship_elixir() {
   [[ $SPACESHIP_ELIXIR_SHOW == false ]] && return
 
   # Show versions only for Elixir-specific folders
-  [[ -f mix.exs || -n *.ex(#qN^/) || -n *.exs(#qN^/) ]] || return
+  spaceship::upsearch "mix.exs" >/dev/null \
+    || [[ -n *.ex(#qN^/) || -n *.exs(#qN^/) ]] || return
 
   local 'elixir_version'
 
