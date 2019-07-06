@@ -132,7 +132,6 @@ spaceship_gitstatus_resume() {
 
   if [[ $VCS_STATUS_RESULT == ok-async ]]; then
     local latency=$((EPOCHREALTIME - _SP_GITSTATUS_START_TIME))
-    echo "$latency" >> $HOME/test.txt
     if (( latency > SPACESHIP_VCS_MAX_SYNC_LATENCY_SECONDS )); then
       _SP_GIT_SLOW[$VCS_STATUS_WORKDIR]=1
     elif (( latency < 0.8 * SPACESHIP_VCS_MAX_SYNC_LATENCY_SECONDS )); then  # 0.8 to avoid flip-flopping
@@ -143,13 +142,8 @@ spaceship_gitstatus_resume() {
   if [[ -z $_SP_NEXT_VCS_DIR ]]; then
     unset _SP_NEXT_VCS_DIR
     _SP_REFRESH_REASON="gitstatus"
-    if (( ${SPACESHIP_PROMPT_ORDER[(Ie)gitstatus]} )); then
-      PROMPT=$(spaceship::compose_prompt $SPACESHIP_PROMPT_ORDER)
-    else
-      RPROMPT=$(spaceship::compose_prompt $SPACESHIP_RPROMPT_ORDER)
-    fi
+    spaceship::refresh_cache_item "gitstatus" "true"
     _SP_REFRESH_REASON=""
-    zle && zle .reset-prompt && zle -R
   else
     typeset -gFH _SP_GITSTATUS_START_TIME=$EPOCHREALTIME
     if ! gitstatus_query -d $_SP_NEXT_VCS_DIR -t 0 -c spaceship_gitstatus_resume SPACESHIP; then
@@ -160,13 +154,8 @@ spaceship_gitstatus_resume() {
       *-sync)
         unset _SP_NEXT_VCS_DIR
         _SP_REFRESH_REASON="gitstatus"
-        if (( ${SPACESHIP_PROMPT_ORDER[(Ie)gitstatus]} )); then
-          PROMPT=$(spaceship::compose_prompt $SPACESHIP_PROMPT_ORDER)
-        else
-          RPROMPT=$(spaceship::compose_prompt $SPACESHIP_RPROMPT_ORDER)
-        fi
+        spaceship::refresh_cache_item "gitstatus" "true"
         _SP_REFRESH_REASON=""
-        zle && zle .reset-prompt && zle -R
         ;;
       tout)
         typeset -gH _SP_NEXT_VCS_DIR=""

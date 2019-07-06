@@ -26,7 +26,7 @@ SPACESHIP_VI_MODE_CURSOR_CHANGE="${SPACESHIP_VI_MODE_CURSOR_CHANGE="false"}"
 
 # Paint $PROMPT_SYMBOL in red if previous command was fail and
 # paint in green if everything was OK.
-spaceship_char_async() {
+spaceship_vi_char() {
   local 'color' 'char'
 
   if [[ $RETVAL -eq 0 ]]; then
@@ -70,15 +70,7 @@ spaceship_char_async() {
 spaceship_vi_mode_enable() {
   if [[ $SPACESHIP_VI_MODE_CURSOR_CHANGE == true ]]; then
     function zle-keymap-select() {
-      # fix vi mode indicator in async mode
-      # https://github.com/maximbaz/spaceship-prompt/issues/4
-      if (( ${SPACESHIP_PROMPT_ORDER[(Ie)char_async]} )); then
-        PROMPT=$(spaceship::compose_prompt $SPACESHIP_PROMPT_ORDER)
-      else
-        RPROMPT=$(spaceship::compose_prompt $SPACESHIP_RPROMPT_ORDER)
-      fi
-
-      zle reset-prompt ; zle -R
+      spaceship::refresh_cache_item "vi_char" "true"
 
       # http://lynnard.me/blog/2014/01/05/change-cursor-shape-for-zsh-vi-mode/
       if [[ $KEYMAP = vicmd ]]; then
@@ -104,13 +96,7 @@ spaceship_vi_mode_enable() {
 
   else
     function zle-keymap-select() {
-      # (Ie) return index in an array with exact match
-      if (( ${SPACESHIP_PROMPT_ORDER[(Ie)char_async]} )); then
-        PROMPT=$(spaceship::compose_prompt $SPACESHIP_PROMPT_ORDER)
-      else
-        RPROMPT=$(spaceship::compose_prompt $SPACESHIP_RPROMPT_ORDER)
-      fi
-      zle reset-prompt ; zle -R
+      spaceship::refresh_cache_item "vi_char" "true"
     }
   fi
 

@@ -7,7 +7,7 @@
 
 # Current version of Spaceship
 # Useful for issue reporting
-readonly SPACESHIP_VERSION='3.11.1'
+export SPACESHIP_VERSION="3.11.1"
 
 typeset -gAH __SS_DATA
 
