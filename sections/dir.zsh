@@ -25,10 +25,11 @@ spaceship_dir() {
   [[ $SPACESHIP_DIR_SHOW == false ]] && return
 
   local 'dir' 'trunc_prefix'
+  local git_root
 
   # Threat repo root as a top-level directory or not
-  if [[ $SPACESHIP_DIR_TRUNC_REPO == true ]] && spaceship::is_git; then
-    local git_root=$(git rev-parse --show-toplevel)
+  if [[ $SPACESHIP_DIR_TRUNC_REPO == true ]] &&
+    git_root="$(spaceship::upsearch '.git' 'dir')"; then
 
     # Check if the parent of the $git_root is "/"
     if [[ $git_root:h == / ]]; then

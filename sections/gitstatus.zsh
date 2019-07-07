@@ -180,7 +180,7 @@ spaceship_gitstatus_render() {
 spaceship_gitstatus() {
   [[ $SPACESHIP_GIT_SHOW == false ]] && return
 
-  spaceship::is_git || return
+  spaceship::upsearch ".git" "dir" >/dev/null || return
 
   # skip current section in case user wanna load gitstatusd manually
   # and the daemon is not started yet after shell startup
