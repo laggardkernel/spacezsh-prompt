@@ -68,44 +68,72 @@ spaceship_vi_char() {
 
 # Temporarily switch to vi-mode
 spaceship_vi_mode_enable() {
-  if [[ $SPACESHIP_VI_MODE_CURSOR_CHANGE == true ]]; then
-    function zle-keymap-select() {
-      spaceship::refresh_cache_item "vi_char" "true"
+  function zle-char-switch {
+    # TODO: make char style compatible with more terminals
+    if [[ $KEYMAP = vicmd ]]; then
+      # block symbol for command mode
+      echo -ne "\e[2 q"
+    else
+      # pipe symbol for insert mode
+      echo -ne "\e[6 q"
+    fi
+  }
+  zle -N zle-char-switch
 
-      # http://lynnard.me/blog/2014/01/05/change-cursor-shape-for-zsh-vi-mode/
-      if [[ $KEYMAP = vicmd ]]; then
-        # block symbol for command mode
-        echo -ne "\e[2 q"
-      else
-        # pipe symbol for insert mode
-        echo -ne "\e[6 q"
-      fi
-    }
+  # Enables terminal application mode and updates editor information.
+  function zle-line-init() {
+    # The terminal must be in application mode when ZLE is active for $terminfo
+    # values to be valid.
+    if (( $+terminfo[smkx] )); then
+      # Enable terminal application mode.
+      echoti smkx
+    fi
 
-    function zle-line-init() {
-      if [[ $KEYMAP = vicmd ]]; then
-        # block symbol for command mode
-        echo -ne "\e[2 q"
-      else
-        # pipe symbol for insert mode
-        echo -ne "\e[6 q"
-      fi
-    }
+    # rerender prompt to get vi mode updated
+    spaceship::refresh_cache_item "vi_char" "true"
 
-    zle -N zle-line-init
+    zle-char-switch
+  }
+  zle -N zle-line-init
 
-  else
-    function zle-keymap-select() {
-      spaceship::refresh_cache_item "vi_char" "true"
-    }
-  fi
+  # Disables terminal application mode and updates editor information.
+  function zle-line-finish {
+    # The terminal must be in application mode when ZLE is active for $terminfo
+    # values to be valid.
+    if (( $+terminfo[rmkx] )); then
+      # Disable terminal application mode.
+      echoti rmkx
+    fi
 
+    # rerender prompt to get vi mode updated
+    spaceship::refresh_cache_item "vi_char" "true"
+
+    zle-char-switch
+  }
+  zle -N zle-line-finish
+
+  # Updates editor information when the keymap changes.
+  function zle-keymap-select() {
+    # rerender prompt to get vi mode updated
+    spaceship::refresh_cache_item "vi_char" "true"
+
+    zle-char-switch
+  }
   zle -N zle-keymap-select
+
   bindkey -v
 }
 
 # Temporarily switch to emacs-mode
 spaceship_vi_mode_disable() {
+  zle -D zle-line-init
+  zle -D zle-line-finish
+  zle -D zle-keymap-select
+  zle -D zle-char-switch
+  unset -f zle-line-init
+  unset -f zle-line-finish
+  unset -f zle-keymap-select
+  unset -f zle-char-switch
   bindkey -e
 }
 
