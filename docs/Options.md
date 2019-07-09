@@ -607,6 +607,7 @@ This section show only when there are active jobs in the background.
 | `SPACESHIP_JOBS_AMOUNT_PREFIX` | ` ` | Prefix before the number of jobs (between jobs indicator and jobs amount) |
 | `SPACESHIP_JOBS_AMOUNT_SUFFIX` | ` ` | Suffix after the number of jobs |
 | `SPACESHIP_JOBS_AMOUNT_THRESHOLD` | `1` | Number of jobs after which job count will be shown |
+| `SPACESHIP_JOBS_EXPANDED` | `false` | Display running and suspended jobs separately or not. |
 
 ### Exit code (`exit_code`)
 

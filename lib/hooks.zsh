@@ -35,6 +35,13 @@ spaceship::precmd() {
   RETVAL=$?
   RETVALS=( "$pipestatus[@]" )
 
+  # hooks for section jobs
+  # See https://unix.stackexchange.com/questions/68571/show-jobs-count-only-if-it-is-more-than-0
+  # http://zsh.sourceforge.net/Doc/Release/Zsh-Modules.html#index-jobstates
+  # echo $jobstates
+  __SS_DATA[jobs_running]=${(M)#${jobstates%%:*}:#running}
+  __SS_DATA[jobs_suspended]=${(M)#${jobstates%%:*}:#suspended}
+
   # Stop measuring exec_time, must be the first precmd action
   spaceship_exec_time_precmd_hook
 
