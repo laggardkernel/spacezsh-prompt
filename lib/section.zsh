@@ -1,5 +1,16 @@
-#!/usr/bin/env zsh
 # vim:ft=zsh ts=2 sw=2 sts=2 et fenc=utf-8
+
+prompt_spaceship_help () {
+  cat <<'EOF'
+🚀⭐️ A Zsh prompt for Astronauts
+
+  prompt spaceship
+
+Spaceship is a minimalistic, powerful and extremely customizable Zsh prompt.
+It combines everything you may need for convenient work, without unnecessary
+complications, like a real spaceship.
+EOF
+}
 
 # Internal variable for checking if prompt is opened
 spaceship_prompt_opened="$SPACESHIP_PROMPT_FIRST_PREFIX_SHOW"
@@ -211,7 +222,7 @@ spaceship::render() {
 
     for section in ${=__SS_DATA[${alignment}_sections]}; do
       cache_key="${alignment}::${section}"
-      section_meta=("${(@s:·|·:)${__ss_section_cache[$cache_key]}}")
+      section_meta=("${(@s:·|·:)${__ss_section_cache[${cache_key}]}}")
 
       [[ -z "${section_meta[3]}" ]] && continue # Skip if section is empty
 
@@ -272,24 +283,104 @@ spaceship_ps2() {
 # Setup requirements for prompt
 # ------------------------------------------------------------------------------
 
+# Load functions for sections defined in prompt order arrays
+#
+# @args
+#   $1 - prompt/rpromp/""
+spaceship::load_sections() {
+  local -a alignments=("prompt" "rprompt")
+  local -a raw_sections section_meta
+  local sections_var section raw_section
+  local load_async=false
+
+  [[ -n $1 ]] && alignments=("$1")
+
+  for alignment in "${alignments[@]}"; do
+    # Reset related cache
+    __SS_DATA[${alignment}_raw_sections]=""
+    __SS_DATA[${alignment}_sections]=""
+    __SS_DATA[async_${alignment}_sections]=""
+    __SS_DATA[custom_${alignment}_sections]=""
+
+    sections_var="SPACESHIP_${(U)alignment}_ORDER"
+    raw_sections=(${(P)sections_var})
+    for raw_section in "${(@)raw_sections}"; do
+      # Split by double-colon
+      section_meta=(${(s.::.)raw_section})
+      # First value is always section name
+      section=${section_meta[1]}
+
+      # Cache sections
+      for tag in ${section_meta[2,-1]}; do
+        __SS_DATA[${tag}_${alignment}_sections]+="${section} "
+
+        # Special Case: Remember that async lib should be loaded
+        [[ "$tag" == "async" ]] && load_async=true
+      done
+
+      # Prefer custom section over same name builtin section
+      if spaceship::defined "spaceship_$section"; then
+        # Custom section is declared, nothing else to do
+        continue
+      elif spaceship::section_is_tagged_as "custom" "${section}" \
+        && [[ -f "${SPACESHIP_CUSTOM_SECTION_LOCATION}/${section}.zsh" ]]; then
+        source "${SPACESHIP_CUSTOM_SECTION_LOCATION}/${section}.zsh"
+      elif [[ -f "$SPACESHIP_ROOT/sections/$section.zsh" ]]; then
+        source "$SPACESHIP_ROOT/sections/$section.zsh"
+      else
+        # file not found!
+        # If this happens, we remove the section from the configured elements,
+        # so that we avoid printing errors over and over.
+        print -P "%F{yellow}Warning!%f The '%F{cyan}${section}%f' section was not found. Removing it from the prompt."
+        SPACESHIP_PROMPT_ORDER=("${(@)SPACESHIP_PROMPT_ORDER:#${raw_section}}")
+        SPACESHIP_RPROMPT_ORDER=("${(@)SPACESHIP_RPROMPT_ORDER:#${raw_section}}")
+        for tag in ${section_meta[2,-1]}; do
+          __SS_DATA[${tag}_${alignment}_sections]="${__SS_DATA[${tag}_${alignment}_sections]%${section} } "
+        done
+      fi
+    done
+
+    # Cache configured sections! As nested arrays are not really possible,
+    # store as single string, separated by whitespace.
+    # Cache the raw_sections after invalid ones are removed
+    raw_sections=(${(P)sections_var})
+    __SS_DATA[${alignment}_raw_sections]="${raw_sections[*]}"
+    __SS_DATA[${alignment}_sections]="${raw_sections[@]%::*}"
+  done
+
+  # Load Async libs at last, because before initializing
+  # ZSH-Async, all functions must be defined.
+  if ${load_async}; then
+    __SS_DATA[async]=true
+    # Avoid duplicate sourcing and loading of zsh-async by checking flag ASYNC_INIT_DONE
+    (( ASYNC_INIT_DONE )) || source "${SPACESHIP_ROOT}/modules/zsh-async/async.zsh"
+  fi
+}
+# spaceship::load_sections
+
+# ------------------------------------------------------------------------------
+# BACKWARD COMPATIBILITY WARNINGS
+# Show deprecation messages for options that are set, but not supported
+# ------------------------------------------------------------------------------
+
+spaceship::deprecated_check() {
+  spaceship::deprecated SPACESHIP_PROMPT_SYMBOL "Use %BSPACESHIP_CHAR_SYMBOL%b instead."
+  spaceship::deprecated SPACESHIP_BATTERY_ALWAYS_SHOW "Use %BSPACESHIP_BATTERY_SHOW='always'%b instead."
+  spaceship::deprecated SPACESHIP_BATTERY_CHARGING_SYMBOL "Use %BSPACESHIP_BATTERY_SYMBOL_CHARGING%b instead."
+  spaceship::deprecated SPACESHIP_BATTERY_DISCHARGING_SYMBOL "Use %BSPACESHIP_BATTERY_SYMBOL_DISCHARGING%b instead."
+  spaceship::deprecated SPACESHIP_BATTERY_FULL_SYMBOL "Use %BSPACESHIP_BATTERY_SYMBOL_FULL%b instead."
+}
+
 # Runs once when user opens a terminal
 # All preparation before drawing prompt should be done here
 prompt_spaceship_setup() {
-  # Global section cache
-  typeset -gAh __ss_section_cache=()
-
-  # __ss_unsafe must be a global variable, because we set
-  # PROMPT='$__ss_unsafe[left]', so without letting ZSH
-  # expand this value (single quotes). This is a workaround
-  # to avoid double expansion of the contents of the PROMPT.
-  typeset -gAh __ss_unsafe=()
-
-  # The value below was set to better support 32-bit CPUs.
-  # It's the maximum _signed_ integer value on 32-bit CPUs.
-  # Please don't change it until 19 January of 2038. ;)
-
-  # Disable false display of command execution time
-  SPACESHIP_EXEC_TIME_start=0x7FFFFFFF
+  # reset prompt according to prompt_default_setup
+  # +h, override the -h attr given to global special params
+  local +h PS1='%m%# '
+  local +h PS2='%_> '
+  local +h PS3='?# '
+  local +h PS4='+%N:%i> '
+  unset RPS1 RPS2 RPROMPT RPROMPT2
 
   # This variable is a magic variable used when loading themes with zsh's prompt
   # function. It will ensure the proper prompt options are set.
@@ -308,29 +399,88 @@ prompt_spaceship_setup() {
   # initialize hooks
   autoload -Uz add-zsh-hook
 
-  add-zsh-hook precmd spaceship::precmd
+  typeset -gAH __SS_DATA
 
-  # Add exec_time hooks
-  add-zsh-hook preexec spaceship::preexec
+  # Global section cache
+  typeset -gAh __ss_section_cache=()
 
+  # __ss_unsafe must be a global variable, because we set
+  # PROMPT='$__ss_unsafe[left]', so without letting ZSH
+  # expand this value (single quotes). This is a workaround
+  # to avoid double expansion of the contents of the PROMPT.
+  typeset -gAh __ss_unsafe=()
+
+  # Load a preset by name
+  # presets must be loaded before lib/default.zsh
+  if [[ -n "$1" ]]; then
+    if [[ -r "${SPACESHIP_ROOT}/presets/${1}.zsh" ]]; then
+      source "${SPACESHIP_ROOT}/presets/${1}.zsh"
+    else
+      echo "Spaceship: No such preset found in ${SPACESHIP_ROOT}/presets/${1}"
+    fi
+  fi
+
+  # Always load default conf
+  source "$SPACESHIP_ROOT/lib/default.zsh"
+  # LIBS
+  source "$SPACESHIP_ROOT/lib/utils.zsh"
+  source "$SPACESHIP_ROOT/lib/hooks.zsh"
+  # sections.zsh is deprecated, cause it's linked as prompt_spaceship_setup
+  # source "$SPACESHIP_ROOT/lib/section.zsh"
+  spaceship::load_sections
+  spaceship::deprecated_check
+
+  # Hooks
+  add-zsh-hook precmd prompt_spaceship_precmd
+  add-zsh-hook preexec prompt_spaceship_preexec
   # hook into chpwd for bindkey support
-  add-zsh-hook chpwd spaceship::chpwd
+  add-zsh-hook chpwd prompt_spaceship_chpwd
+
+  # The value below was set to better support 32-bit CPUs.
+  # It's the maximum _signed_ integer value on 32-bit CPUs.
+  # Please don't change it until 19 January of 2038. ;)
+
+  # Disable false display of command execution time
+  SPACESHIP_EXEC_TIME_start=0x7FFFFFFF
 
   # Disable python virtualenv environment prompt prefix
   VIRTUAL_ENV_DISABLE_PROMPT=true
 
   # Expose Spaceship to environment variables
   PS2='$(spaceship_ps2)'
+
+  # prepend custom cleanup hook
+  local -a cleanup_hooks
+  zstyle -g cleanup_hooks :prompt-theme cleanup
+  zstyle -e :prompt-theme cleanup "prompt_spaceship_cleanup;" "${cleanup_hooks[@]}"
+  # append cleanup hook with builtin func
+  # prompt_cleanup "prompt_spaceship_cleanup"
 }
 
+# TODO: compile helper
+
 # This function removes spaceship hooks and resets the prompts.
-prompt_spaceship_teardown() {
-  add-zsh-hook -D precmd spaceship\*
-  add-zsh-hook -D preexec spaceship\*
-  add-zsh-hook -D chpwd spaceship\*
-  PROMPT='%m%# '
-  RPROMPT=
-  PS2='%_> '
+prompt_spaceship_cleanup() {
+  # prmopt specific cleanup
+  spaceship_vi_mode_disable 2>/dev/null
+  # TODO: cleanup preset conf
+
+  # prompt hooks
+  add-zsh-hook -D precmd  prompt_spaceship\*
+  add-zsh-hook -D preexec prompt_spaceship\*
+  add-zsh-hook -D chpwd   prompt_spaceship\*
+
+  # reset prompt according to prompt_default_setup
+  # +h, override the -h attr given to global special params
+  local +h PS1='%m%# '
+  local +h PS2='%_> '
+  local +h PS3='?# '
+  local +h PS4='+%N:%i> '
+  unset RPS1 RPS2 RPROMPT RPROMPT2
+  prompt_opts=( cr percent sp )
+
   unset __ss_section_cache
   unset __ss_unsafe
 }
+
+prompt_spaceship_setup "$@"
