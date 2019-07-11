@@ -89,7 +89,7 @@ spaceship::build_section_cache() {
     [[ ${#__SS_DATA[${alignment}_sections]} == "0" ]] && continue
 
     for section in ${=__SS_DATA[${alignment}_sections]}; do
-      spaceship::section_is_tagged_as "async" "${section}" && async=true || async=false
+      [[ "${__ss_async_sections[${section}]}" == "true" ]] && async=true || async=false
 
       cache_key="${alignment}::${section}"
 
@@ -136,7 +136,7 @@ function spaceship::refresh_cache_item() {
     return 1
   fi
 
-  spaceship::section_is_tagged_as "async" "${section}" && async=true || async=false
+  [[ "${__ss_async_sections[${section}]}" == "true" ]] && async=true || async=false
 
   cache_key="${alignment}::${section}"
 
@@ -215,9 +215,7 @@ spaceship::render() {
     for section in ${=__SS_DATA[${alignment}_sections]}; do
       cache_key="${alignment}::${section}"
       section_meta=("${(@s:·|·:)${__ss_section_cache[${cache_key}]}}")
-
-      [[ -z "${section_meta[3]}" ]] && continue # Skip if section is empty
-
+      # [[ -z "${section_meta[3]}" ]] && continue # Skip if section is empty
       __ss_unsafe[$alignment]+="${section_meta[3]}"
     done
 
@@ -286,14 +284,12 @@ spaceship::load_sections() {
   local sections_var section raw_section
   local load_async=false
 
-  [[ -n $1 ]] && alignments=("$1")
+  # [[ -n $1 ]] && alignments=("$1")
 
   for alignment in "${alignments[@]}"; do
     # Reset related cache
     __SS_DATA[${alignment}_raw_sections]=""
     __SS_DATA[${alignment}_sections]=""
-    __SS_DATA[async_${alignment}_sections]=""
-    __SS_DATA[custom_${alignment}_sections]=""
 
     sections_var="SPACESHIP_${(U)alignment}_ORDER"
     raw_sections=(${(P)sections_var})
@@ -305,17 +301,20 @@ spaceship::load_sections() {
 
       # Cache sections
       for tag in ${section_meta[2,-1]}; do
-        __SS_DATA[${tag}_${alignment}_sections]+="${section} "
-
         # Special Case: Remember that async lib should be loaded
-        [[ "$tag" == "async" ]] && load_async=true
+        if [[ "$tag" == "async" ]]; then
+          __ss_async_sections[${section}]="true"
+          load_async=true
+        elif [[ "$tag" == "custom" ]]; then
+          __ss_custom_sections[${section}]="true"
+        fi
       done
 
       # Prefer custom section over same name builtin section
       if spaceship::defined "spaceship_$section"; then
         # Custom section is declared, nothing else to do
         continue
-      elif spaceship::section_is_tagged_as "custom" "${section}" \
+      elif (( ${__ss_custom_sections[(Ie)${section}]} )) \
         && [[ -f "${SPACESHIP_CUSTOM_SECTION_LOCATION}/${section}.zsh" ]]; then
         source "${SPACESHIP_CUSTOM_SECTION_LOCATION}/${section}.zsh"
       elif [[ -f "$SPACESHIP_ROOT/sections/$section.zsh" ]]; then
@@ -327,9 +326,8 @@ spaceship::load_sections() {
         print -P "%F{yellow}Warning!%f The '%F{cyan}${section}%f' section was not found. Removing it from the prompt."
         SPACESHIP_PROMPT_ORDER=("${(@)SPACESHIP_PROMPT_ORDER:#${raw_section}}")
         SPACESHIP_RPROMPT_ORDER=("${(@)SPACESHIP_RPROMPT_ORDER:#${raw_section}}")
-        for tag in ${section_meta[2,-1]}; do
-          __SS_DATA[${tag}_${alignment}_sections]="${__SS_DATA[${tag}_${alignment}_sections]%${section} } "
-        done
+        unset "__ss_async_sections[${section}]"
+        unset "__ss_custom_sections[${section}]"
       fi
     done
 
@@ -395,6 +393,9 @@ prompt_spaceship_setup() {
   typeset -gAH __SS_DATA=()
   # store result from spaceship::section
   __SS_DATA[section_result]=""
+
+  typeset -gAh __ss_async_sections=()
+  typeset -gAh __ss_custom_sections=()
 
   # Global section cache
   typeset -gAh __ss_section_cache=()
@@ -474,6 +475,9 @@ prompt_spaceship_cleanup() {
   unset RPS1 RPS2 RPROMPT RPROMPT2
   prompt_opts=( cr percent sp )
 
+  unset __SS_DATA
+  unset __ss_async_sections
+  unset __ss_custom_sections
   unset __ss_section_cache
   unset __ss_unsafe
 }
