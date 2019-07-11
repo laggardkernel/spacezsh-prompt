@@ -44,9 +44,11 @@ spaceship::section() {
   fi
   result+="%{%b%}" # unset bold
 
-  echo -n "$result"
+  # pass the result out with the global variable
+  __SS_DATA[section_result]="$result"
 }
 
+# Get result from custom section without
 # Takes the result of the sections computation and echos it,
 # so that ZSH-Async can grab it.
 #
@@ -54,12 +56,13 @@ spaceship::section() {
 #   $1 string The command to execute
 #   $* Parameters for the command
 spaceship::async_wrapper() {
-  local command="$1"
+  local command="${1}"
+  local result="${2}"
 
-  echo -n "${2}"
-
+  __SS_DATA[section_result]=""
   shift 1
-  ${command}
+  ${command} "$@"
+  echo -n "${result}${__SS_DATA[section_result]}"
 }
 
 # Build prompt cache from section functions
@@ -98,14 +101,10 @@ spaceship::build_section_cache() {
         # Placeholder
         __ss_section_cache[${cache_key}]="${section}·|·${alignment}·|·${SPACESHIP_SECTION_PLACEHOLDER}"
       else
-        # Pass the alignment and index to the real section func in case that
-        # the section func needs to know its position in the left/right prompt.
-        # E.g. trigger re-rendering from vi_mode
-
-        # Trick needed: keep single newline from section line_sep
-        result="$(spaceship_${section}; echo 'x')"
-        result="${result%?}"
-        __ss_section_cache[${cache_key}]="${section}·|·${alignment}·|·${result}"
+        # pre-empty result storage, assuming the section won't be display
+        __SS_DATA[section_result]=""
+        spaceship_${section}
+        __ss_section_cache[${cache_key}]="${section}·|·${alignment}·|·${__SS_DATA[section_result]}"
       fi
 
     index=$((index + 1))
@@ -151,10 +150,9 @@ function spaceship::refresh_cache_item() {
     # Placeholder
     __ss_section_cache[${cache_key}]="${section}·|·${alignment}·|·${SPACESHIP_SECTION_PLACEHOLDER}"
   else
-    # Trick needed: keep single newline from section line_sep
-    result="$(spaceship_${section}; echo 'x')"
-    result="${result%?}"
-    __ss_section_cache[${cache_key}]="${section}·|·${alignment}·|·${result}"
+    __SS_DATA[section_result]=""
+    spaceship_${section}
+    __ss_section_cache[${cache_key}]="${section}·|·${alignment}·|·${__SS_DATA[section_result]}"
 
     [[ $2 == "true" ]] && spaceship::render "$alignment"
   fi
@@ -274,6 +272,7 @@ spaceship::async_render() {
 spaceship_ps2() {
   local char="${SPACESHIP_CHAR_SYMBOL_SECONDARY="$SPACESHIP_CHAR_SYMBOL"}"
   spaceship::section "$SPACESHIP_CHAR_COLOR_SECONDARY" "$char"
+  echo -n "${__SS_DATA[section_result]}"
 }
 
 # ------------------------------------------------------------------------------
@@ -397,7 +396,9 @@ prompt_spaceship_setup() {
   # initialize hooks
   autoload -Uz add-zsh-hook
 
-  typeset -gAH __SS_DATA
+  typeset -gAH __SS_DATA=()
+  # store result from spaceship::section
+  __SS_DATA[section_result]=""
 
   # Global section cache
   typeset -gAh __ss_section_cache=()
