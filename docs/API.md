@@ -113,7 +113,7 @@ To load a custom section defined in a file, you should tag the section name with
 
 **Note**: custom section is preferred over core/builtin section with the same name.
 
-## `spaceship::section <color> [prefix] <content> [suffix]`
+## `spaceship::section <color> <content> [prefix] [suffix]`
 
 This command displays prompt section prefixed with `prefix`, suffixed with `suffix` and `content` painted in `color`. **Bold** style is applied by default.
 
@@ -128,8 +128,8 @@ Both `prefix` and `suffix` are optional. They are equal to empty strings by defa
 ### Arguments
 
 1. `color` _Required_ — Color for displaying the `content`. Can be any of [basic colors](https://wiki.archlinux.org/index.php/zsh#Colors) or [color codes](https://upload.wikimedia.org/wikipedia/commons/1/15/Xterm_256color_chart.svg).
-2. `prefix` _Optional_ — Prefix before `content`. Usually, it's the value of `SPACESHIP_*_PREFIX`.
-3. `content` _Required_ — The content of the section. Can be any valid value or result of command execution.
+2. `content` _Required_ — The content of the section. Can be any valid value or result of command execution.
+3. `prefix` _Optional_ — Prefix before `content`. Usually, it's the value of `SPACESHIP_*_PREFIX`.
 4. `suffix` _Optional_ — Suffix after `content`. Usually, it's the value of `SPACESHIP_*_SUFFIX`.
 
 ### Example
@@ -139,8 +139,8 @@ Both `prefix` and `suffix` are optional. They are equal to empty strings by defa
 # Backslash is used to escape line ending
 spaceship::section \
   "$SPACESHIP_SECTION_COLOR" \
-  "$SPACESHIP_SECTION_PREFIX" \
   "$SPACESHIP_SECTION_SYMBOL$section_content" \
+  "$SPACESHIP_SECTION_PREFIX" \
   "$SPACESHIP_SECTION_SUFFIX"
 
 # Display prompt section without prefix and suffix

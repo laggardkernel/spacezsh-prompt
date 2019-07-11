@@ -41,7 +41,7 @@ spaceship_golang() {
 
   spaceship::section \
     "$SPACESHIP_GOLANG_COLOR" \
-    "$SPACESHIP_GOLANG_PREFIX" \
     "${SPACESHIP_GOLANG_SYMBOL}${go_version}" \
+    "$SPACESHIP_GOLANG_PREFIX" \
     "$SPACESHIP_GOLANG_SUFFIX"
 }

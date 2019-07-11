@@ -17,15 +17,13 @@ spaceship_prompt_opened="$SPACESHIP_PROMPT_FIRST_PREFIX_SHOW"
 
 # Draw prompt section (bold is used as default)
 # USAGE:
-#   spaceship::section <color> [prefix] <content> [suffix]
+#   spaceship::section <color> <content> [prefix] [suffix]
 spaceship::section() {
   local color prefix content suffix
-  [[ -n $1 ]] && color="%F{$1}"  || color="%f"
-  [[ -n $2 ]] && prefix="$2"     || prefix=""
-  [[ -n $3 ]] && content="$3"    || content=""
-  [[ -n $4 ]] && suffix="$4"     || suffix=""
-
-  [[ -z $3 && -z $4 ]] && content=$2 prefix=''
+  [[ -n $1 ]] && color="%F{$1}" || color="%f"
+  content="$2"
+  prefix="$3"
+  suffix="$4"
 
   local result=""
 

@@ -43,13 +43,13 @@ test_section() {
   assertEquals "render short section" "$expected_short" "$actual_short"
 
   local expected_suffix="%{%B%}%{%b%}%{%B%F{$color}%}$content%{%b%f%}%{%B%}$suffix%{%b%}"
-  local actual_suffix="$(spaceship::section $color $prefix $content $suffix)"
+  local actual_suffix="$(spaceship::section $color $content $prefix $suffix)"
 
   assertEquals "render full section with suffix" "$expected_suffix" "$actual_suffix"
 
   spaceship_prompt_opened=true
   local expected="%{%B%}$prefix%{%b%}%{%B%F{$color}%}$content%{%b%f%}%{%B%}$suffix%{%b%}"
-  local actual="$(spaceship::section $color $prefix $content $suffix)"
+  local actual="$(spaceship::section $color $content $prefix $suffix)"
 
   assertEquals "render full section with prefix and suffix" "$expected" "$actual"
 }

@@ -32,7 +32,7 @@ spaceship_ember() {
 
   spaceship::section \
     "$SPACESHIP_EMBER_COLOR" \
-    "$SPACESHIP_EMBER_PREFIX" \
     "${SPACESHIP_EMBER_SYMBOL}${ember_version}" \
+    "$SPACESHIP_EMBER_PREFIX" \
     "$SPACESHIP_EMBER_SUFFIX"
 }

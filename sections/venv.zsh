@@ -39,7 +39,7 @@ spaceship_venv() {
 
 spaceship::section \
     "$SPACESHIP_VENV_COLOR" \
-    "$SPACESHIP_VENV_PREFIX" \
     "${SPACESHIP_VENV_SYMBOL}${venv}" \
+    "$SPACESHIP_VENV_PREFIX" \
     "$SPACESHIP_VENV_SUFFIX"
 }

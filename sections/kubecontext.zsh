@@ -56,7 +56,7 @@ spaceship_kubecontext() {
 
   spaceship::section \
     "$section_color" \
-    "$SPACESHIP_KUBECONTEXT_PREFIX" \
     "${SPACESHIP_KUBECONTEXT_SYMBOL}${kube_context}" \
+    "$SPACESHIP_KUBECONTEXT_PREFIX" \
     "$SPACESHIP_KUBECONTEXT_SUFFIX"
 }

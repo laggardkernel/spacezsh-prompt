@@ -39,8 +39,8 @@ spaceship_exec_time() {
 
     spaceship::section \
       "$SPACESHIP_EXEC_TIME_COLOR" \
-      "$SPACESHIP_EXEC_TIME_PREFIX" \
       "$humanReadableDuration" \
+      "$SPACESHIP_EXEC_TIME_PREFIX" \
       "$SPACESHIP_EXEC_TIME_SUFFIX"
   fi
 }

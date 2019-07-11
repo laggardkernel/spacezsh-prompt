@@ -172,8 +172,8 @@ spaceship_gitstatus_render() {
 
   spaceship::section \
     'white' \
-    "$SPACESHIP_GIT_PREFIX" \
     "${git_branch}${git_status}" \
+    "$SPACESHIP_GIT_PREFIX" \
     "$SPACESHIP_GIT_SUFFIX"
 }
 

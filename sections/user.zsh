@@ -43,8 +43,8 @@ spaceship_user() {
 
     spaceship::section \
       "$user_color" \
-      "$SPACESHIP_USER_PREFIX" \
       '%n' \
+      "$SPACESHIP_USER_PREFIX" \
       "$SPACESHIP_USER_SUFFIX"
   fi
 }

@@ -48,7 +48,7 @@ spaceship_elixir() {
 
   spaceship::section \
     "$SPACESHIP_ELIXIR_COLOR" \
-    "$SPACESHIP_ELIXIR_PREFIX" \
     "${SPACESHIP_ELIXIR_SYMBOL}${elixir_version}" \
+    "$SPACESHIP_ELIXIR_PREFIX" \
     "$SPACESHIP_ELIXIR_SUFFIX"
 }

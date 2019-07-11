@@ -65,7 +65,7 @@ spaceship_docker() {
 
   spaceship::section \
     "$SPACESHIP_DOCKER_COLOR" \
-    "$SPACESHIP_DOCKER_PREFIX" \
     "${SPACESHIP_DOCKER_SYMBOL}v${docker_version}" \
+    "$SPACESHIP_DOCKER_PREFIX" \
     "$SPACESHIP_DOCKER_SUFFIX"
 }

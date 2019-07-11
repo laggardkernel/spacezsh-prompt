@@ -34,7 +34,7 @@ spaceship_hg() {
 
   spaceship::section \
     'white' \
-    "$SPACESHIP_HG_PREFIX" \
     "${hg_branch}${hg_status}" \
+    "$SPACESHIP_HG_PREFIX" \
     "$SPACESHIP_HG_SUFFIX"
 }

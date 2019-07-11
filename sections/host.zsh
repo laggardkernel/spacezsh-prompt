@@ -39,8 +39,8 @@ spaceship_host() {
 
     spaceship::section \
       "$host_color" \
-      "$SPACESHIP_HOST_PREFIX" \
       "$host" \
+      "$SPACESHIP_HOST_PREFIX" \
       "$SPACESHIP_HOST_SUFFIX"
   fi
 }
