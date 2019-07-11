@@ -41,8 +41,8 @@ spaceship_xcode() {
 
         spaceship::section \
           "$SPACESHIP_XCODE_COLOR" \
-          "$SPACESHIP_XCODE_PREFIX" \
           "${SPACESHIP_XCODE_SYMBOL}${xcode_version}" \
+          "$SPACESHIP_XCODE_PREFIX" \
           "$SPACESHIP_XCODE_SUFFIX"
       fi
     fi

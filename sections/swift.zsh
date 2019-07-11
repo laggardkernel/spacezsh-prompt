@@ -37,7 +37,7 @@ spaceship_swift() {
 
   spaceship::section \
     "$SPACESHIP_SWIFT_COLOR" \
-    "$SPACESHIP_SWIFT_PREFIX" \
     "${SPACESHIP_SWIFT_SYMBOL}${swift_version}" \
+    "$SPACESHIP_SWIFT_PREFIX" \
     "$SPACESHIP_SWIFT_SUFFIX"
 }

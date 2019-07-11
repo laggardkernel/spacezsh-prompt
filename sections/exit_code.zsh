@@ -22,7 +22,7 @@ spaceship_exit_code() {
 
   spaceship::section \
     "$SPACESHIP_EXIT_CODE_COLOR" \
-    "$SPACESHIP_EXIT_CODE_PREFIX" \
     "${SPACESHIP_EXIT_CODE_SYMBOL}$RETVAL" \
+    "$SPACESHIP_EXIT_CODE_PREFIX" \
     "$SPACESHIP_EXIT_CODE_SUFFIX"
 }

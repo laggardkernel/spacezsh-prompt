@@ -61,7 +61,7 @@ for box in json_file:
 
   spaceship::section \
     "$SPACESHIP_VAGRANT_COLOR" \
-    "$SPACESHIP_VAGRANT_PREFIX" \
     "${SPACESHIP_VAGRANT_SYMBOL}${vagrant_status}" \
+    "$SPACESHIP_VAGRANT_PREFIX" \
     "$SPACESHIP_VAGRANT_SUFFIX"
 }

@@ -34,7 +34,7 @@ spaceship_elm() {
 
   spaceship::section \
     "$SPACESHIP_ELM_COLOR" \
-    "$SPACESHIP_ELM_PREFIX" \
     "${SPACESHIP_ELM_SYMBOL}v${elm_version}" \
+    "$SPACESHIP_ELM_PREFIX" \
     "$SPACESHIP_ELM_SUFFIX"
 }

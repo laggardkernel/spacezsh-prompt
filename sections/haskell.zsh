@@ -32,7 +32,7 @@ spaceship_haskell() {
 
   spaceship::section \
     "$SPACESHIP_HASKELL_COLOR" \
-    "$SPACESHIP_HASKELL_PREFIX" \
     "${SPACESHIP_HASKELL_SYMBOL}v${haskell_version}" \
+    "$SPACESHIP_HASKELL_PREFIX" \
     "$SPACESHIP_HASKELL_SUFFIX"
 }

@@ -1,20 +1,29 @@
-#!/usr/bin/env zsh
 # vim:ft=zsh ts=2 sw=2 sts=2 et fenc=utf-8
+
+prompt_spaceship_help () {
+  cat <<'EOF'
+🚀⭐️ A Zsh prompt for Astronauts
+
+  prompt spaceship
+
+Spaceship is a minimalistic, powerful and extremely customizable Zsh prompt.
+It combines everything you may need for convenient work, without unnecessary
+complications, like a real spaceship.
+EOF
+}
 
 # Internal variable for checking if prompt is opened
 spaceship_prompt_opened="$SPACESHIP_PROMPT_FIRST_PREFIX_SHOW"
 
 # Draw prompt section (bold is used as default)
 # USAGE:
-#   spaceship::section <color> [prefix] <content> [suffix]
+#   spaceship::section <color> <content> [prefix] [suffix]
 spaceship::section() {
   local color prefix content suffix
-  [[ -n $1 ]] && color="%F{$1}"  || color="%f"
-  [[ -n $2 ]] && prefix="$2"     || prefix=""
-  [[ -n $3 ]] && content="$3"    || content=""
-  [[ -n $4 ]] && suffix="$4"     || suffix=""
-
-  [[ -z $3 && -z $4 ]] && content=$2 prefix=''
+  [[ -n $1 ]] && color="%F{$1}" || color="%f"
+  content="$2"
+  prefix="$3"
+  suffix="$4"
 
   local result=""
 
@@ -35,9 +44,11 @@ spaceship::section() {
   fi
   result+="%{%b%}" # unset bold
 
-  echo -n "$result"
+  # pass the result out with the global variable
+  __SS_DATA[section_result]="$result"
 }
 
+# Get result from custom section without
 # Takes the result of the sections computation and echos it,
 # so that ZSH-Async can grab it.
 #
@@ -45,12 +56,13 @@ spaceship::section() {
 #   $1 string The command to execute
 #   $* Parameters for the command
 spaceship::async_wrapper() {
-  local command="$1"
+  local command="${1}"
+  local result="${2}"
 
-  echo -n "${2}"
-
+  __SS_DATA[section_result]=""
   shift 1
-  ${command}
+  ${command} "$@"
+  echo -n "${result}${__SS_DATA[section_result]}"
 }
 
 # Build prompt cache from section functions
@@ -70,16 +82,14 @@ spaceship::build_section_cache() {
   local -a alignments=("prompt" "rprompt")
   local alignment
   local custom async section cache_key result
-  local index
 
   [[ -n "$1" ]] && alignments=("$1")
 
   for alignment in "${alignments[@]}"; do
     [[ ${#__SS_DATA[${alignment}_sections]} == "0" ]] && continue
 
-    index=1
     for section in ${=__SS_DATA[${alignment}_sections]}; do
-      spaceship::section_is_tagged_as "async" "${section}" && async=true || async=false
+      [[ "${__ss_async_sections[${section}]}" == "true" ]] && async=true || async=false
 
       cache_key="${alignment}::${section}"
 
@@ -89,17 +99,11 @@ spaceship::build_section_cache() {
         # Placeholder
         __ss_section_cache[${cache_key}]="${section}·|·${alignment}·|·${SPACESHIP_SECTION_PLACEHOLDER}"
       else
-        # Pass the alignment and index to the real section func in case that
-        # the section func needs to know its position in the left/right prompt.
-        # E.g. trigger re-rendering from vi_mode
-
-        # Trick needed: keep single newline from section line_sep
-        result="$(spaceship_${section}; echo 'x')"
-        result="${result%?}"
-        __ss_section_cache[${cache_key}]="${section}·|·${alignment}·|·${result}"
+        # pre-empty result storage, assuming the section won't be display
+        __SS_DATA[section_result]=""
+        spaceship_${section}
+        __ss_section_cache[${cache_key}]="${section}·|·${alignment}·|·${__SS_DATA[section_result]}"
       fi
-
-    index=$((index + 1))
     done
   done
 
@@ -132,7 +136,7 @@ function spaceship::refresh_cache_item() {
     return 1
   fi
 
-  spaceship::section_is_tagged_as "async" "${section}" && async=true || async=false
+  [[ "${__ss_async_sections[${section}]}" == "true" ]] && async=true || async=false
 
   cache_key="${alignment}::${section}"
 
@@ -142,10 +146,9 @@ function spaceship::refresh_cache_item() {
     # Placeholder
     __ss_section_cache[${cache_key}]="${section}·|·${alignment}·|·${SPACESHIP_SECTION_PLACEHOLDER}"
   else
-    # Trick needed: keep single newline from section line_sep
-    result="$(spaceship_${section}; echo 'x')"
-    result="${result%?}"
-    __ss_section_cache[${cache_key}]="${section}·|·${alignment}·|·${result}"
+    __SS_DATA[section_result]=""
+    spaceship_${section}
+    __ss_section_cache[${cache_key}]="${section}·|·${alignment}·|·${__SS_DATA[section_result]}"
 
     [[ $2 == "true" ]] && spaceship::render "$alignment"
   fi
@@ -211,10 +214,8 @@ spaceship::render() {
 
     for section in ${=__SS_DATA[${alignment}_sections]}; do
       cache_key="${alignment}::${section}"
-      section_meta=("${(@s:·|·:)${__ss_section_cache[$cache_key]}}")
-
-      [[ -z "${section_meta[3]}" ]] && continue # Skip if section is empty
-
+      section_meta=("${(@s:·|·:)${__ss_section_cache[${cache_key}]}}")
+      # [[ -z "${section_meta[3]}" ]] && continue # Skip if section is empty
       __ss_unsafe[$alignment]+="${section_meta[3]}"
     done
 
@@ -236,7 +237,7 @@ spaceship::render() {
       # are never executed. The same applies to $RPROMPT.
       PROMPT='${__ss_unsafe[prompt]}'
     else
-      if [[ "$SPACESHIP_RPROMPT_ON_NEWLINE" != true ]]; then
+      if [[ "$SPACESHIP_RPROMPT_ADD_NEWLINE" != true ]]; then
         # The right prompt should be on the same line as the first line of the left
         # prompt. To do so, there is just a quite ugly workaround: Before zsh draws
         # the RPROMPT, we advise it, to go one line up. At the end of RPROMPT, we
@@ -265,6 +266,7 @@ spaceship::async_render() {
 spaceship_ps2() {
   local char="${SPACESHIP_CHAR_SYMBOL_SECONDARY="$SPACESHIP_CHAR_SYMBOL"}"
   spaceship::section "$SPACESHIP_CHAR_COLOR_SECONDARY" "$char"
+  echo -n "${__SS_DATA[section_result]}"
 }
 
 # ------------------------------------------------------------------------------
@@ -272,24 +274,104 @@ spaceship_ps2() {
 # Setup requirements for prompt
 # ------------------------------------------------------------------------------
 
+# Load functions for sections defined in prompt order arrays
+#
+# @args
+#   $1 - prompt/rpromp/""
+spaceship::load_sections() {
+  local -a alignments=("prompt" "rprompt")
+  local -a raw_sections section_meta
+  local sections_var section raw_section
+  local load_async=false
+
+  # [[ -n $1 ]] && alignments=("$1")
+
+  for alignment in "${alignments[@]}"; do
+    # Reset related cache
+    __SS_DATA[${alignment}_raw_sections]=""
+    __SS_DATA[${alignment}_sections]=""
+
+    sections_var="SPACESHIP_${(U)alignment}_ORDER"
+    raw_sections=(${(P)sections_var})
+    for raw_section in "${(@)raw_sections}"; do
+      # Split by double-colon
+      section_meta=(${(s.::.)raw_section})
+      # First value is always section name
+      section=${section_meta[1]}
+
+      # Cache sections
+      for tag in ${section_meta[2,-1]}; do
+        # Special Case: Remember that async lib should be loaded
+        if [[ "$tag" == "async" ]]; then
+          __ss_async_sections[${section}]="true"
+          load_async=true
+        elif [[ "$tag" == "custom" ]]; then
+          __ss_custom_sections[${section}]="true"
+        fi
+      done
+
+      # Prefer custom section over same name builtin section
+      if spaceship::defined "spaceship_$section"; then
+        # Custom section is declared, nothing else to do
+        continue
+      elif (( ${__ss_custom_sections[(Ie)${section}]} )) \
+        && [[ -f "${SPACESHIP_CUSTOM_SECTION_LOCATION}/${section}.zsh" ]]; then
+        source "${SPACESHIP_CUSTOM_SECTION_LOCATION}/${section}.zsh"
+      elif [[ -f "$SPACESHIP_ROOT/sections/$section.zsh" ]]; then
+        source "$SPACESHIP_ROOT/sections/$section.zsh"
+      else
+        # file not found!
+        # If this happens, we remove the section from the configured elements,
+        # so that we avoid printing errors over and over.
+        print -P "%F{yellow}Warning!%f The '%F{cyan}${section}%f' section was not found. Removing it from the prompt."
+        SPACESHIP_PROMPT_ORDER=("${(@)SPACESHIP_PROMPT_ORDER:#${raw_section}}")
+        SPACESHIP_RPROMPT_ORDER=("${(@)SPACESHIP_RPROMPT_ORDER:#${raw_section}}")
+        unset "__ss_async_sections[${section}]"
+        unset "__ss_custom_sections[${section}]"
+      fi
+    done
+
+    # Cache configured sections! As nested arrays are not really possible,
+    # store as single string, separated by whitespace.
+    # Cache the raw_sections after invalid ones are removed
+    raw_sections=(${(P)sections_var})
+    __SS_DATA[${alignment}_raw_sections]="${raw_sections[*]}"
+    __SS_DATA[${alignment}_sections]="${raw_sections[@]%::*}"
+  done
+
+  # Load Async libs at last, because before initializing
+  # ZSH-Async, all functions must be defined.
+  if ${load_async}; then
+    __SS_DATA[async]=true
+    # Avoid duplicate sourcing and loading of zsh-async by checking flag ASYNC_INIT_DONE
+    (( ASYNC_INIT_DONE )) || source "${SPACESHIP_ROOT}/modules/zsh-async/async.zsh"
+  fi
+}
+# spaceship::load_sections
+
+# ------------------------------------------------------------------------------
+# BACKWARD COMPATIBILITY WARNINGS
+# Show deprecation messages for options that are set, but not supported
+# ------------------------------------------------------------------------------
+
+spaceship::deprecated_check() {
+  spaceship::deprecated SPACESHIP_PROMPT_SYMBOL "Use %BSPACESHIP_CHAR_SYMBOL%b instead."
+  spaceship::deprecated SPACESHIP_BATTERY_ALWAYS_SHOW "Use %BSPACESHIP_BATTERY_SHOW='always'%b instead."
+  spaceship::deprecated SPACESHIP_BATTERY_CHARGING_SYMBOL "Use %BSPACESHIP_BATTERY_SYMBOL_CHARGING%b instead."
+  spaceship::deprecated SPACESHIP_BATTERY_DISCHARGING_SYMBOL "Use %BSPACESHIP_BATTERY_SYMBOL_DISCHARGING%b instead."
+  spaceship::deprecated SPACESHIP_BATTERY_FULL_SYMBOL "Use %BSPACESHIP_BATTERY_SYMBOL_FULL%b instead."
+}
+
 # Runs once when user opens a terminal
 # All preparation before drawing prompt should be done here
 prompt_spaceship_setup() {
-  # Global section cache
-  typeset -gAh __ss_section_cache=()
-
-  # __ss_unsafe must be a global variable, because we set
-  # PROMPT='$__ss_unsafe[left]', so without letting ZSH
-  # expand this value (single quotes). This is a workaround
-  # to avoid double expansion of the contents of the PROMPT.
-  typeset -gAh __ss_unsafe=()
-
-  # The value below was set to better support 32-bit CPUs.
-  # It's the maximum _signed_ integer value on 32-bit CPUs.
-  # Please don't change it until 19 January of 2038. ;)
-
-  # Disable false display of command execution time
-  SPACESHIP_EXEC_TIME_start=0x7FFFFFFF
+  # reset prompt according to prompt_default_setup
+  # +h, override the -h attr given to global special params
+  local +h PS1='%m%# '
+  local +h PS2='%_> '
+  local +h PS3='?# '
+  local +h PS4='+%N:%i> '
+  unset RPS1 RPS2 RPROMPT RPROMPT2
 
   # This variable is a magic variable used when loading themes with zsh's prompt
   # function. It will ensure the proper prompt options are set.
@@ -308,29 +390,96 @@ prompt_spaceship_setup() {
   # initialize hooks
   autoload -Uz add-zsh-hook
 
-  add-zsh-hook precmd spaceship::precmd
+  typeset -gAH __SS_DATA=()
+  # store result from spaceship::section
+  __SS_DATA[section_result]=""
 
-  # Add exec_time hooks
-  add-zsh-hook preexec spaceship::preexec
+  typeset -gAh __ss_async_sections=()
+  typeset -gAh __ss_custom_sections=()
 
+  # Global section cache
+  typeset -gAh __ss_section_cache=()
+
+  # __ss_unsafe must be a global variable, because we set
+  # PROMPT='$__ss_unsafe[left]', so without letting ZSH
+  # expand this value (single quotes). This is a workaround
+  # to avoid double expansion of the contents of the PROMPT.
+  typeset -gAh __ss_unsafe=()
+
+  # Load a preset by name
+  # presets must be loaded before lib/default.zsh
+  if [[ -n "$1" ]]; then
+    if [[ -r "${SPACESHIP_ROOT}/presets/${1}.zsh" ]]; then
+      source "${SPACESHIP_ROOT}/presets/${1}.zsh"
+    else
+      echo "Spaceship: No such preset found in ${SPACESHIP_ROOT}/presets/${1}"
+    fi
+  fi
+
+  # Always load default conf
+  source "$SPACESHIP_ROOT/lib/default.zsh"
+  # LIBS
+  source "$SPACESHIP_ROOT/lib/utils.zsh"
+  source "$SPACESHIP_ROOT/lib/hooks.zsh"
+  # sections.zsh is deprecated, cause it's linked as prompt_spaceship_setup
+  # source "$SPACESHIP_ROOT/lib/section.zsh"
+  spaceship::load_sections
+  spaceship::deprecated_check
+
+  # Hooks
+  add-zsh-hook precmd prompt_spaceship_precmd
+  add-zsh-hook preexec prompt_spaceship_preexec
   # hook into chpwd for bindkey support
-  add-zsh-hook chpwd spaceship::chpwd
+  add-zsh-hook chpwd prompt_spaceship_chpwd
+
+  # The value below was set to better support 32-bit CPUs.
+  # It's the maximum _signed_ integer value on 32-bit CPUs.
+  # Please don't change it until 19 January of 2038. ;)
+
+  # Disable false display of command execution time
+  SPACESHIP_EXEC_TIME_start=0x7FFFFFFF
 
   # Disable python virtualenv environment prompt prefix
   VIRTUAL_ENV_DISABLE_PROMPT=true
 
   # Expose Spaceship to environment variables
   PS2='$(spaceship_ps2)'
+
+  # prepend custom cleanup hook
+  local -a cleanup_hooks
+  zstyle -g cleanup_hooks :prompt-theme cleanup
+  zstyle -e :prompt-theme cleanup "prompt_spaceship_cleanup;" "${cleanup_hooks[@]}"
+  # append cleanup hook with builtin func
+  # prompt_cleanup "prompt_spaceship_cleanup"
 }
 
+# TODO: compile helper
+
 # This function removes spaceship hooks and resets the prompts.
-prompt_spaceship_teardown() {
-  add-zsh-hook -D precmd spaceship\*
-  add-zsh-hook -D preexec spaceship\*
-  add-zsh-hook -D chpwd spaceship\*
-  PROMPT='%m%# '
-  RPROMPT=
-  PS2='%_> '
+prompt_spaceship_cleanup() {
+  # prmopt specific cleanup
+  spaceship_vi_mode_disable 2>/dev/null
+  # TODO: cleanup preset conf
+
+  # prompt hooks
+  add-zsh-hook -D precmd  prompt_spaceship\*
+  add-zsh-hook -D preexec prompt_spaceship\*
+  add-zsh-hook -D chpwd   prompt_spaceship\*
+
+  # reset prompt according to prompt_default_setup
+  # +h, override the -h attr given to global special params
+  local +h PS1='%m%# '
+  local +h PS2='%_> '
+  local +h PS3='?# '
+  local +h PS4='+%N:%i> '
+  unset RPS1 RPS2 RPROMPT RPROMPT2
+  prompt_opts=( cr percent sp )
+
+  unset __SS_DATA
+  unset __ss_async_sections
+  unset __ss_custom_sections
   unset __ss_section_cache
   unset __ss_unsafe
 }
+
+prompt_spaceship_setup "$@"

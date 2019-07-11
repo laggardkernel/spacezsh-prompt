@@ -35,8 +35,8 @@ spaceship_vi_mode() {
 
     spaceship::section \
       "$SPACESHIP_VI_MODE_COLOR" \
-      "$SPACESHIP_VI_MODE_PREFIX" \
       "$mode_indicator" \
+      "$SPACESHIP_VI_MODE_PREFIX" \
       "$SPACESHIP_VI_MODE_SUFFIX"
   fi
 }

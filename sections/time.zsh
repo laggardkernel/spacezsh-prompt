@@ -33,7 +33,7 @@ spaceship_time() {
 
   spaceship::section \
     "$SPACESHIP_TIME_COLOR" \
-    "$SPACESHIP_TIME_PREFIX" \
     "$time_str" \
+    "$SPACESHIP_TIME_PREFIX" \
     "$SPACESHIP_TIME_SUFFIX"
 }

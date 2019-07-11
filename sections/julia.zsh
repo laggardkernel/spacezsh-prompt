@@ -31,7 +31,7 @@ spaceship_julia() {
 
   spaceship::section \
     "$SPACESHIP_JULIA_COLOR" \
-    "$SPACESHIP_JULIA_PREFIX" \
     "${SPACESHIP_JULIA_SYMBOL}v${julia_version}" \
+    "$SPACESHIP_JULIA_PREFIX" \
     "$SPACESHIP_JULIA_SUFFIX"
 }

@@ -38,7 +38,7 @@ spaceship_char() {
 
   spaceship::section \
     "$color" \
-    "$SPACESHIP_CHAR_PREFIX" \
     "$char" \
+    "$SPACESHIP_CHAR_PREFIX" \
     "$SPACESHIP_CHAR_SUFFIX"
 }

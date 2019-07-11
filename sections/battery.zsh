@@ -97,8 +97,8 @@ spaceship_battery() {
         $SPACESHIP_BATTERY_SHOW == 'charged' && $battery_status =~ "(charged|full)" ]]; then
     spaceship::section \
       "$battery_color" \
-      "$SPACESHIP_BATTERY_PREFIX" \
       "$battery_symbol$battery_percent%%" \
+      "$SPACESHIP_BATTERY_PREFIX" \
       "$SPACESHIP_BATTERY_SUFFIX"
   fi
 }

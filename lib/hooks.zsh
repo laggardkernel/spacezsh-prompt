@@ -27,7 +27,7 @@ spaceship_exec_time_precmd_hook() {
 }
 
 # Hook to save exit code and prepare prompts
-spaceship::precmd() {
+prompt_spaceship_precmd() {
   # Retrieve exit code of last command to use in exit_code
   # Must be captured before any other command in prompt is executed
   # Must be the very first line in all entry prompt functions, or the value
@@ -57,7 +57,7 @@ spaceship::precmd() {
   spaceship::build_section_cache
 }
 
-spaceship::preexec() {
+prompt_spaceship_preexec() {
   # Stop running prompt async jobs
   if [[ "${__SS_DATA[async]}" == "true" ]]; then
     async_flush_jobs "spaceship_async_worker"
@@ -66,7 +66,7 @@ spaceship::preexec() {
   spaceship_exec_time_preexec_hook
 }
 
-spaceship::chpwd() {
+prompt_spaceship_chpwd() {
   if [[ "${__SS_DATA[async]}" == "true" ]]; then
     async_worker_eval "spaceship_async_worker" 'cd' "$PWD"
   fi

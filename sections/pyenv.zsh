@@ -36,7 +36,7 @@ spaceship_pyenv() {
 
   spaceship::section \
     "$SPACESHIP_PYENV_COLOR" \
-    "$SPACESHIP_PYENV_PREFIX" \
     "${SPACESHIP_PYENV_SYMBOL}${pyenv_status}" \
+    "$SPACESHIP_PYENV_PREFIX" \
     "$SPACESHIP_PYENV_SUFFIX"
 }

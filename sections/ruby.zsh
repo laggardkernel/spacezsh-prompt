@@ -56,7 +56,7 @@ spaceship_ruby() {
 
   spaceship::section \
     "$SPACESHIP_RUBY_COLOR" \
-    "$SPACESHIP_RUBY_PREFIX" \
     "${SPACESHIP_RUBY_SYMBOL}${ruby_version}" \
+    "$SPACESHIP_RUBY_PREFIX" \
     "$SPACESHIP_RUBY_SUFFIX"
 }
