@@ -1,0 +1,21 @@
+#!/usr/bin/env zsh
+# vim: ft=zsh fdm=marker foldlevel=0 sw=2 ts=2 sts=2 et
+#
+# Borrowed from
+# https://github.com/robobenklein/zinc/blob/master/zinc_functions/-zinc-tracked-autoload
+
+# Load an fpath function only if not yet present.
+function track-ss-autoload {
+  for afunc in ${@}; do
+    (( ${+functions[${afunc}]} )) || {
+      builtin autoload -Uz -- $afunc || {
+        printf '%b\n' "\033[0;31mSS: Could not find/load ${afunc}!\033[0;0m" >&2
+      }
+      _SS_AUTOLOADED_FUNCTIONS+=("$afunc")
+    }
+  done
+}
+
+typeset -gaU _SS_AUTOLOADED_FUNCTIONS
+
+track-ss-autoload "$@"

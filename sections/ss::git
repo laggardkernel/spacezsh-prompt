@@ -1,0 +1,53 @@
+#!/usr/bin/env zsh
+# vim: ft=zsh fdm=marker foldlevel=0 sw=2 ts=2 sts=2 et
+
+#
+# Git
+#
+
+# ------------------------------------------------------------------------------
+# Configuration
+# ------------------------------------------------------------------------------
+
+SPACESHIP_GIT_SHOW="${SPACESHIP_GIT_SHOW=true}"
+SPACESHIP_GIT_PREFIX="${SPACESHIP_GIT_PREFIX="on "}"
+SPACESHIP_GIT_SUFFIX="${SPACESHIP_GIT_SUFFIX="$SPACESHIP_PROMPT_DEFAULT_SUFFIX"}"
+SPACESHIP_GIT_SYMBOL="${SPACESHIP_GIT_SYMBOL=" "}"
+
+# ------------------------------------------------------------------------------
+# Dependencies
+# ------------------------------------------------------------------------------
+
+track-ss-autoload "$SPACESHIP_ROOT/sections/ss::git_branch"
+track-ss-autoload "$SPACESHIP_ROOT/sections/ss::git_status"
+
+# ------------------------------------------------------------------------------
+# Section
+# ------------------------------------------------------------------------------
+
+# Show both git branch and git status:
+#   ss::git_branch
+#   ss::git_status
+ss::git() {
+  [[ $SPACESHIP_GIT_SHOW == false ]] && return
+
+  local git_branch git_status
+
+  __SS_DATA[section_result]=""
+  ss::git_branch
+  git_branch="${__SS_DATA[section_result]}"
+
+  __SS_DATA[section_result]=""
+  ss::git_status
+  git_status="${__SS_DATA[section_result]}"
+
+  [[ -z $git_branch ]] && return
+
+  ss::section \
+    'white' \
+    "${git_branch}${git_status}" \
+    "$SPACESHIP_GIT_PREFIX" \
+    "$SPACESHIP_GIT_SUFFIX"
+}
+
+ss::git "$@"

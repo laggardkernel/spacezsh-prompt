@@ -1,15 +1,12 @@
+#!/usr/bin/env zsh
+# vim: ft=zsh fdm=marker foldlevel=0 sw=2 ts=2 sts=2 et
 #
 # Spaceship ZSH
-#
-# Author: Denys Dovhan, denysdovhan.com
-# License: MIT
-# https://github.com/denysdovhan/spaceship-prompt
 
 # Current version of Spaceship
-# Useful for issue reporting
 export SPACESHIP_VERSION="3.11.1"
 
-# Determination of Spaceship working directory
+### Installation location
 # https://git.io/vdBH7
 if [[ -z "$SPACESHIP_ROOT" ]]; then
   if [[ "${(%):-%N}" == '(eval)' ]]; then
@@ -29,23 +26,18 @@ if [[ -z "$SPACESHIP_ROOT" ]]; then
   fi
 fi
 
-# ------------------------------------------------------------------------------
-# ENTRY POINT
-# An entry point of prompt
-# ------------------------------------------------------------------------------
+### ENTRY POINT
 
-spaceship::selfdestruct_setup() {
+ss::selfdestruct_setup() {
   # Test if we already autoloaded the functions
-  (( ${fpath[(I)"${SPACESHIP_ROOT}/lib/autoload"]} )) || {
+  (( ${fpath[(I)"${SPACESHIP_ROOT}"]} )) || {
     fpath+=("${SPACESHIP_ROOT}/lib/autoload")
+    fpath+=("${SPACESHIP_ROOT}/sections")
   }
 
   # remove self from precmd
-  precmd_functions=("${(@)precmd_functions:#spaceship::selfdestruct_setup}")
-  builtin unfunction spaceship::selfdestruct_setup
-
-  # Helper functions
-  autoload -Uz +X spaceship::env
+  precmd_functions=("${(@)precmd_functions:#ss::selfdestruct_setup}")
+  builtin unfunction ss::selfdestruct_setup
 
   # Setup
   autoload -Uz +X prompt_spaceship_setup
@@ -56,9 +48,13 @@ spaceship::selfdestruct_setup() {
     prompt_spaceship_setup
   }
   prompt_spaceship_precmd
+  # zle && zle .reset-prompt && zle -R
 }
 
 autoload -Uz add-zsh-hook
-add-zsh-hook precmd spaceship::selfdestruct_setup
+add-zsh-hook precmd ss::selfdestruct_setup
+
 fpath+=("${SPACESHIP_ROOT}/lib/autoload")
+fpath+=("${SPACESHIP_ROOT}/sections")
+
 autoload -Uz +X prompt_spaceship_setup

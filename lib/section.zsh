@@ -1,6 +1,7 @@
-# vim:ft=zsh ts=2 sw=2 sts=2 et fenc=utf-8
+#!/usr/bin/env zsh
+# vim: ft=zsh fdm=marker foldlevel=0 sw=2 ts=2 sts=2 et
 
-prompt_spaceship_help () {
+function prompt_spaceship_help {
   cat <<'EOF'
 🚀⭐️ A Zsh prompt for Astronauts
 
@@ -17,8 +18,8 @@ spaceship_prompt_opened="$SPACESHIP_PROMPT_FIRST_PREFIX_SHOW"
 
 # Draw prompt section (bold is used as default)
 # USAGE:
-#   spaceship::section <color> <content> [prefix] [suffix]
-spaceship::section() {
+#   ss::section <color> <content> [prefix] [suffix]
+function ss::section {
   local color prefix content suffix
   [[ -n $1 ]] && color="%F{$1}" || color="%f"
   content="$2"
@@ -55,7 +56,7 @@ spaceship::section() {
 # @args
 #   $1 string The command to execute
 #   $* Parameters for the command
-spaceship::async_wrapper() {
+function ss::async_wrapper {
   local command="${1}"
   local result="${2}"
 
@@ -72,7 +73,7 @@ spaceship::async_wrapper() {
 #
 # @args
 #   $1 string, prompt/rprompt, alignment info
-spaceship::build_section_cache() {
+function ss::build_section_cache {
   # Option EXTENDED_GLOB is set locally to force filename generation on
   # argument to conditions, i.e. allow usage of explicit glob qualifier (#q).
   # See the description of filename generation in
@@ -94,24 +95,24 @@ spaceship::build_section_cache() {
       cache_key="${alignment}::${section}"
 
       if ${async}; then
-        async_job "spaceship_async_worker" "spaceship::async_wrapper" "spaceship_${section}" "${section}·|·${alignment}·|·"
+        async_job "spaceship_async_worker" "ss::async_wrapper" "ss::${section}" "${section}·|·${alignment}·|·"
 
         # Placeholder
         __ss_section_cache[${cache_key}]="${section}·|·${alignment}·|·${SPACESHIP_SECTION_PLACEHOLDER}"
       else
         # pre-empty result storage, assuming the section won't be display
         __SS_DATA[section_result]=""
-        spaceship_${section}
+        ss::${section}
         __ss_section_cache[${cache_key}]="${section}·|·${alignment}·|·${__SS_DATA[section_result]}"
       fi
     done
   done
 
   if [[ ${#alignments} == "2" ]]; then
-    spaceship::render
+    ss::render
   else
     # only render the corresponding side of the prompt
-    spaceship::render "${alignment[1]}"
+    ss::render "${alignment[1]}"
   fi
 }
 
@@ -120,16 +121,16 @@ spaceship::build_section_cache() {
 # @args
 #   $1 - section name
 #   $2 - boolean true if render the prompt after cache update
-function spaceship::refresh_cache_item() {
+function ss::refresh_cache_item() {
   [[ -z $1 ]] && return 1
 
   local section="$1"
   local alignment
   local cache result
 
-  if spaceship::section_in_use "${section}" "prompt"; then
+  if ss::section_in_use "${section}" "prompt"; then
     alignment="prompt"
-  elif spaceship::section_in_use "${section}" "rprompt"; then
+  elif ss::section_in_use "${section}" "rprompt"; then
     alignment="rprompt"
   else
     # Unavailable section name
@@ -141,16 +142,16 @@ function spaceship::refresh_cache_item() {
   cache_key="${alignment}::${section}"
 
   if ${async}; then
-    async_job "spaceship_async_worker" "spaceship::async_wrapper" "spaceship_${section}" "${section}·|·${alignment}·|·"
+    async_job "spaceship_async_worker" "ss::async_wrapper" "ss::${section}" "${section}·|·${alignment}·|·"
 
     # Placeholder
     __ss_section_cache[${cache_key}]="${section}·|·${alignment}·|·${SPACESHIP_SECTION_PLACEHOLDER}"
   else
     __SS_DATA[section_result]=""
-    spaceship_${section}
+    ss::${section}
     __ss_section_cache[${cache_key}]="${section}·|·${alignment}·|·${__SS_DATA[section_result]}"
 
-    [[ $2 == "true" ]] && spaceship::render "$alignment"
+    [[ $2 == "true" ]] && ss::render "$alignment"
   fi
 }
 
@@ -164,7 +165,7 @@ function spaceship::refresh_cache_item() {
 #   $4 execution time, floating point e.g. 0.0076138973 seconds
 #   $5 resulting (stderr) error output from job execution
 #   $6 has next result in buffer (0 = buffer empty, 1 = yes)
-spaceship::async_callback() {
+function ss::async_callback {
   local job="$1" ret="$2" output="$3" exec_time="$4" err="$5" has_next="$6"
   local section_meta cache_key
 
@@ -190,7 +191,7 @@ spaceship::async_callback() {
 
   # Delay prompt updates if there's another result in the buffer, which
   # prevents strange states in ZLE
-  [[ "$has_next" == "0" ]] && spaceship::async_render
+  [[ "$has_next" == "0" ]] && ss::async_render
 }
 
 # Spaceship Render function.
@@ -198,7 +199,7 @@ spaceship::async_callback() {
 #
 # @args
 #   $1 - prompt/rprompt
-spaceship::render() {
+function ss::render {
   local RPROMPT_PREFIX RPROMPT_SUFFIX
   local -a alignments=("prompt" "rprompt")
   local -a section_meta
@@ -252,8 +253,8 @@ spaceship::render() {
   done
 }
 
-spaceship::async_render() {
-  spaceship::render "$@"
+function ss::async_render {
+  ss::render "$@"
 
   # .reset-prompt: bypass the zsh-syntax-highlighting wrapper
   # https://github.com/sorin-ionescu/prezto/issues/1026
@@ -263,9 +264,9 @@ spaceship::async_render() {
 
 # PS2
 # Continuation interactive prompt
-spaceship_ps2() {
+function ss::ps2 {
   local char="${SPACESHIP_CHAR_SYMBOL_SECONDARY="$SPACESHIP_CHAR_SYMBOL"}"
-  spaceship::section "$SPACESHIP_CHAR_COLOR_SECONDARY" "$char"
+  ss::section "$SPACESHIP_CHAR_COLOR_SECONDARY" "$char"
   echo -n "${__SS_DATA[section_result]}"
 }
 
@@ -278,7 +279,7 @@ spaceship_ps2() {
 #
 # @args
 #   $1 - prompt/rpromp/""
-spaceship::load_sections() {
+ss::load_sections() {
   local -a alignments=("prompt" "rprompt")
   local -a raw_sections section_meta
   local sections_var section raw_section
@@ -311,14 +312,14 @@ spaceship::load_sections() {
       done
 
       # Prefer custom section over same name builtin section
-      if spaceship::defined "spaceship_$section"; then
+      if ss::defined "ss::${section}"; then
         # Custom section is declared, nothing else to do
         continue
       elif (( ${__ss_custom_sections[(Ie)${section}]} )) \
-        && [[ -f "${SPACESHIP_CUSTOM_SECTION_LOCATION}/${section}.zsh" ]]; then
-        source "${SPACESHIP_CUSTOM_SECTION_LOCATION}/${section}.zsh"
-      elif [[ -f "$SPACESHIP_ROOT/sections/$section.zsh" ]]; then
-        source "$SPACESHIP_ROOT/sections/$section.zsh"
+        && [[ -f "${SPACESHIP_CUSTOM_SECTION_LOCATION}/ss::${section}" ]]; then
+        track-ss-autoload "ss::${section}"
+      elif [[ -f "$SPACESHIP_ROOT/sections/ss::${section}" ]]; then
+        track-ss-autoload "ss::${section}"
       else
         # file not found!
         # If this happens, we remove the section from the configured elements,
@@ -344,27 +345,27 @@ spaceship::load_sections() {
   if ${load_async}; then
     __SS_DATA[async]=true
     # Avoid duplicate sourcing and loading of zsh-async by checking flag ASYNC_INIT_DONE
-    (( ASYNC_INIT_DONE )) || source "${SPACESHIP_ROOT}/modules/zsh-async/async.zsh"
+    (( ASYNC_INIT_DONE )) || { autoload -Uz +X async && async }
   fi
 }
-# spaceship::load_sections
+# ss::load_sections
 
 # ------------------------------------------------------------------------------
 # BACKWARD COMPATIBILITY WARNINGS
 # Show deprecation messages for options that are set, but not supported
 # ------------------------------------------------------------------------------
 
-spaceship::deprecated_check() {
-  spaceship::deprecated SPACESHIP_PROMPT_SYMBOL "Use %BSPACESHIP_CHAR_SYMBOL%b instead."
-  spaceship::deprecated SPACESHIP_BATTERY_ALWAYS_SHOW "Use %BSPACESHIP_BATTERY_SHOW='always'%b instead."
-  spaceship::deprecated SPACESHIP_BATTERY_CHARGING_SYMBOL "Use %BSPACESHIP_BATTERY_SYMBOL_CHARGING%b instead."
-  spaceship::deprecated SPACESHIP_BATTERY_DISCHARGING_SYMBOL "Use %BSPACESHIP_BATTERY_SYMBOL_DISCHARGING%b instead."
-  spaceship::deprecated SPACESHIP_BATTERY_FULL_SYMBOL "Use %BSPACESHIP_BATTERY_SYMBOL_FULL%b instead."
+function ss::deprecated_check {
+  ss::deprecated SPACESHIP_PROMPT_SYMBOL "Use %BSPACESHIP_CHAR_SYMBOL%b instead."
+  ss::deprecated SPACESHIP_BATTERY_ALWAYS_SHOW "Use %BSPACESHIP_BATTERY_SHOW='always'%b instead."
+  ss::deprecated SPACESHIP_BATTERY_CHARGING_SYMBOL "Use %BSPACESHIP_BATTERY_SYMBOL_CHARGING%b instead."
+  ss::deprecated SPACESHIP_BATTERY_DISCHARGING_SYMBOL "Use %BSPACESHIP_BATTERY_SYMBOL_DISCHARGING%b instead."
+  ss::deprecated SPACESHIP_BATTERY_FULL_SYMBOL "Use %BSPACESHIP_BATTERY_SYMBOL_FULL%b instead."
 }
 
 # Runs once when user opens a terminal
 # All preparation before drawing prompt should be done here
-prompt_spaceship_setup() {
+function prompt_spaceship_setup {
   # reset prompt according to prompt_default_setup
   # +h, override the -h attr given to global special params
   local +h PS1='%m%# '
@@ -387,11 +388,8 @@ prompt_spaceship_setup() {
   # Initialize math functions
   zmodload zsh/mathfunc
 
-  # initialize hooks
-  autoload -Uz add-zsh-hook
-
   typeset -gAH __SS_DATA=()
-  # store result from spaceship::section
+  # store result from ss::section
   __SS_DATA[section_result]=""
 
   typeset -gAh __ss_async_sections=()
@@ -416,17 +414,26 @@ prompt_spaceship_setup() {
     fi
   fi
 
+  builtin autoload -Uz +X -- add-zsh-hook track-ss-autoload
+  track-ss-autoload add-ss-hook run-ss-hook
+
   # Always load default conf
   source "$SPACESHIP_ROOT/lib/default.zsh"
   # LIBS
   source "$SPACESHIP_ROOT/lib/utils.zsh"
-  source "$SPACESHIP_ROOT/lib/hooks.zsh"
   # sections.zsh is deprecated, cause it's linked as prompt_spaceship_setup
   # source "$SPACESHIP_ROOT/lib/section.zsh"
-  spaceship::load_sections
-  spaceship::deprecated_check
+  ss::load_sections
+  ss::deprecated_check
+
+  track-ss-autoload ss::env
+  # track-ss-autoload ss::build_section_cache ss::render \
+  #   ss::env
 
   # Hooks
+  track-ss-autoload prompt_spaceship_precmd prompt_spaceship_preexec \
+    prompt_spaceship_chpwd
+
   add-zsh-hook precmd prompt_spaceship_precmd
   add-zsh-hook preexec prompt_spaceship_preexec
   # hook into chpwd for bindkey support
@@ -443,7 +450,7 @@ prompt_spaceship_setup() {
   VIRTUAL_ENV_DISABLE_PROMPT=true
 
   # Expose Spaceship to environment variables
-  PS2='$(spaceship_ps2)'
+  PS2='$(ss::ps2)'
 
   # prepend custom cleanup hook
   local -a cleanup_hooks
@@ -456,9 +463,9 @@ prompt_spaceship_setup() {
 # TODO: compile helper
 
 # This function removes spaceship hooks and resets the prompts.
-prompt_spaceship_cleanup() {
+function prompt_spaceship_cleanup {
   # prmopt specific cleanup
-  spaceship_vi_mode_disable 2>/dev/null
+  ss::vi_mode_disable 2>/dev/null
   # TODO: cleanup preset conf
 
   # prompt hooks

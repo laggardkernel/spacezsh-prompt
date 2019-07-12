@@ -1,0 +1,43 @@
+#!/usr/bin/env zsh
+# vim: ft=zsh fdm=marker foldlevel=0 sw=2 ts=2 sts=2 et
+#
+# Borrowed from official function add-ss-hook
+
+emulate -L zsh
+
+local -a hooktypes
+hooktypes=(
+  ss_chpwd ss_precmd ss_preexec
+)
+local usage="Usage: run-ss-hook hook function\nValid hooks are:\n  $hooktypes"
+
+local opt
+integer help
+
+while getopts "h" opt; do
+  case $opt in
+    (h)
+    help=1
+    ;;
+  esac
+done
+shift $(( OPTIND - 1 ))
+
+if (( help || ${hooktypes[(I)$1]} == 0 )); then
+  print -u$(( 2 - help )) $usage
+  return $(( 1 - help ))
+fi
+
+local hook="${1}_functions"
+local fn="$2"
+
+if (( ${(P)+hook} )); then
+  if (( ${${(P)hook}[(I)$fn]} == 0 )); then
+    typeset -ga $hook
+    set -A $hook ${(P)hook} $fn
+  fi
+else
+  typeset -ga $hook
+  set -A $hook $fn
+fi
+autoload $autoopts -- $fn

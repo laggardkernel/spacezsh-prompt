@@ -1,0 +1,19 @@
+#!/usr/bin/env zsh
+# vim: ft=zsh fdm=marker foldlevel=0 sw=2 ts=2 sts=2 et
+
+function prompt_spaceship_chpwd {
+  if [[ "${__SS_DATA[async]}" == "true" ]]; then
+    async_worker_eval "spaceship_async_worker" 'cd' "$PWD"
+  fi
+
+  # TODO: separate time log
+  # Restart execution time recording once dir is changed
+  [[ $SPACESHIP_EXEC_TIME_SHOW == false ]] && return
+
+  # The Timer is started here, but the end is taken in prompt_spaceship_precmd, as this
+  # method is a precmd hook and runs right before the prompt gets rendered. So we
+  # can calculate the duration there.
+  SPACESHIP_EXEC_TIME_start=${EPOCHREALTIME}
+}
+
+prompt_spaceship_chpwd "$@"
