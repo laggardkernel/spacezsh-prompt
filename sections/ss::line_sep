@@ -12,7 +12,7 @@
 # Should it write prompt in two lines or not?
 ss::line_sep() {
   local NEWLINE=$'\n'
-  [[ $SPACESHIP_PROMPT_SEPARATE_LINE == true ]] && __SS_DATA[section_result]="$NEWLINE"
+  [[ $SPACESHIP_PROMPT_SEPARATE_LINE == true ]] && _SS_DATA[section_result]="$NEWLINE"
 }
 
 ss::line_sep "$@"

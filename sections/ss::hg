@@ -33,13 +33,13 @@ ss::hg() {
 
   local hg_branch hg_status
 
-  __SS_DATA[section_result]=""
+  _SS_DATA[section_result]=""
   ss::hg_branch
-  hg_branch="${__SS_DATA[section_result]}"
+  hg_branch="${_SS_DATA[section_result]}"
 
-  __SS_DATA[section_result]=""
+  _SS_DATA[section_result]=""
   ss::hg_status
-  hg_status="${__SS_DATA[section_result]}"
+  hg_status="${_SS_DATA[section_result]}"
 
   [[ -z $hg_branch ]] && return
 

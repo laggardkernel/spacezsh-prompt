@@ -1,0 +1,8 @@
+#!/usr/bin/env zsh
+# vim: ft=zsh fdm=marker foldlevel=0 sw=2 ts=2 sts=2 et
+
+function ss::is_callable {
+  (( $+commands[$1] || $+functions[$1] || $+aliases[$1] || $+builtins[$1] ))
+}
+
+ss::is_callable "$@"

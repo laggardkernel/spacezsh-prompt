@@ -3,6 +3,8 @@
 #
 # Utility for checking system environment
 
+# TODO: remove cur function, use a better one
+
 function ss::paint {
   local title=$1 content=${@:2}
 
@@ -95,6 +97,6 @@ function ss::env {
   ss::get_term
 }
 
-track-ss-autoload ss::paint ss::get_os ss::get_term ss::get_framework
+# track-ss-autoload ss::paint ss::get_os ss::get_term ss::get_framework
 
 ss::env "$@"

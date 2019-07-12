@@ -1,13 +1,13 @@
 #!/usr/bin/env zsh
 # vim: ft=zsh fdm=marker foldlevel=0 sw=2 ts=2 sts=2 et
 
-function prompt_spaceship_preexec {
-  # Stop running prompt async jobs
-  if [[ "${__SS_DATA[async]}" == "true" ]]; then
-    async_flush_jobs "spaceship_async_worker"
+function prompt_spaceship_chpwd {
+  if [[ "${_SS_DATA[async]}" == "true" ]]; then
+    async_worker_eval "spaceship_async_worker" 'cd' "$PWD"
   fi
 
-  # TODO: separate hook for tim
+  # TODO: separate time log
+  # Restart execution time recording once dir is changed
   [[ $SPACESHIP_EXEC_TIME_SHOW == false ]] && return
 
   # The Timer is started here, but the end is taken in prompt_spaceship_precmd, as this
@@ -16,4 +16,4 @@ function prompt_spaceship_preexec {
   SPACESHIP_EXEC_TIME_start=${EPOCHREALTIME}
 }
 
-prompt_spaceship_preexec "$@"
+prompt_spaceship_chpwd "$@"

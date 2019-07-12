@@ -29,8 +29,8 @@ ss::jobs() {
 
   local jobs_running jobs_suspended jobs_total jobs_print
 
-  jobs_running=${__SS_DATA[jobs_running]:-0}
-  jobs_suspended=${__SS_DATA[jobs_suspended]:-0}
+  jobs_running=${_SS_DATA[jobs_running]:-0}
+  jobs_suspended=${_SS_DATA[jobs_suspended]:-0}
   jobs_total=$(( jobs_running + jobs_suspended ))
 
   (( $jobs_total > 0 )) || return

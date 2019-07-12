@@ -33,13 +33,13 @@ ss::git() {
 
   local git_branch git_status
 
-  __SS_DATA[section_result]=""
+  _SS_DATA[section_result]=""
   ss::git_branch
-  git_branch="${__SS_DATA[section_result]}"
+  git_branch="${_SS_DATA[section_result]}"
 
-  __SS_DATA[section_result]=""
+  _SS_DATA[section_result]=""
   ss::git_status
-  git_status="${__SS_DATA[section_result]}"
+  git_status="${_SS_DATA[section_result]}"
 
   [[ -z $git_branch ]] && return
 

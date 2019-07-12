@@ -78,7 +78,7 @@ function ss::section_in_use {
   [[ -n "$2" ]] && alignments=("$2")
 
   for alignment in "${(@)alignments}"; do
-    sections=(${(@)sections} ${=__SS_DATA[${alignment}_sections]:-})
+    sections=(${(@)sections} ${=_SS_DATA[${alignment}_sections]:-})
   done
   (( ${sections[(Ie)${section}]} ))
 }

@@ -24,14 +24,14 @@ function prompt_spaceship_precmd() {
   # See https://unix.stackexchange.com/questions/68571/show-jobs-count-only-if-it-is-more-than-0
   # http://zsh.sourceforge.net/Doc/Release/Zsh-Modules.html#index-jobstates
   # echo $jobstates
-  __SS_DATA[jobs_running]=${(M)#${jobstates%%:*}:#running}
-  __SS_DATA[jobs_suspended]=${(M)#${jobstates%%:*}:#suspended}
+  _SS_DATA[jobs_running]=${(M)#${jobstates%%:*}:#running}
+  _SS_DATA[jobs_suspended]=${(M)#${jobstates%%:*}:#suspended}
 
   # Stop measuring exec_time, must be the first precmd action
   spaceship_exec_time_precmd_hook
 
   # Restarts the async worker, in order to get an update-to-date shell environment
-  if [[ "${__SS_DATA[async]}" == "true" ]]; then
+  if [[ "${_SS_DATA[async]}" == "true" ]]; then
     async_stop_worker "spaceship_async_worker"
     async_start_worker "spaceship_async_worker" #-n
     # setopt before call register to avoid callback by async_worker_eval
