@@ -54,9 +54,3 @@ ss::selfdestruct_setup() {
 
 autoload -Uz add-zsh-hook
 add-zsh-hook precmd ss::selfdestruct_setup
-
-fpath+=("${SPACESHIP_ROOT}/lib/setups")
-fpath+=("${SPACESHIP_ROOT}/lib/utils")
-fpath+=("${SPACESHIP_ROOT}/sections")
-
-autoload -Uz +X prompt_spaceship_setup
