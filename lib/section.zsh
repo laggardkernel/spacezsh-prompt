@@ -71,7 +71,8 @@ function prompt_spaceship_setup {
   fi
 
   builtin autoload -Uz +X -- add-zsh-hook track-ss-autoload
-  track-ss-autoload add-ss-hook run-ss-hook
+  track-ss-autoload add-ss-hook
+  builtin autoload -Uz +X -- run-ss-hook && _SS_AUTOLOADED+=(run-ss-hook)
 
   # setup functions
   for item in "${SPACESHIP_ROOT}"/lib/setups/ss::*[^.zwc](-.N:t); do
@@ -106,7 +107,7 @@ function prompt_spaceship_setup {
   # Please don't change it until 19 January of 2038. ;)
 
   # Disable false display of command execution time
-  SPACESHIP_EXEC_TIME_start=0x7FFFFFFF
+  _SS_DATA[time_start]=0x7FFFFFFF
 
   # Disable python virtualenv environment prompt prefix
   VIRTUAL_ENV_DISABLE_PROMPT=true

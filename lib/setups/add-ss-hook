@@ -21,9 +21,9 @@ emulate -L zsh
 
 local -a hooktypes
 hooktypes=(
-  ss_chpwd ss_precmd ss_preexec
+  chpwd precmd preexec
 )
-local usage="Usage: add-ss-hook hook function\nValid hooks are:\n  $hooktypes"
+local usage="Usage: add-ss-hook hook function\nValid hooks for ss are:\n  $hooktypes"
 
 local opt
 local -a autoopts
@@ -59,14 +59,14 @@ done
 shift $(( OPTIND - 1 ))
 
 if (( list )); then
-  typeset -mp "(${1:-${(@j:|:)hooktypes}})_functions"
+  typeset -mp "ss_(${1:-${(@j:|:)hooktypes}})_functions"
   return $?
 elif (( help || $# != 2 || ${hooktypes[(I)$1]} == 0 )); then
   print -u$(( 2 - help )) $usage
   return $(( 1 - help ))
 fi
 
-local hook="${1}_functions"
+local hook="ss_${1}_functions"
 local fn="$2"
 
 if (( del )); then

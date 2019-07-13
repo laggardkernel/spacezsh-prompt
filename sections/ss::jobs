@@ -55,4 +55,8 @@ ss::jobs() {
     "$SPACESHIP_JOBS_SUFFIX"
 }
 
+# use hook to record jobs states
+track-ss-autoload ss::jobs_precmd
+add-ss-hook precmd ss::jobs_precmd
+
 ss::jobs "$@"

@@ -1,0 +1,12 @@
+#!/usr/bin/env zsh
+# vim: ft=zsh fdm=marker foldlevel=0 sw=2 ts=2 sts=2 et
+
+function ss::jobs_precmd {
+  # See https://unix.stackexchange.com/questions/68571/show-jobs-count-only-if-it-is-more-than-0
+  # http://zsh.sourceforge.net/Doc/Release/Zsh-Modules.html#index-jobstates
+  # echo $jobstates
+  _SS_DATA[jobs_running]=${(M)#${jobstates%%:*}:#running}
+  _SS_DATA[jobs_suspended]=${(M)#${jobstates%%:*}:#suspended}
+}
+
+ss::jobs_precmd "$@"

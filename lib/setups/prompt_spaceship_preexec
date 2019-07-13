@@ -7,13 +7,9 @@ function prompt_spaceship_preexec {
     async_flush_jobs "spaceship_section_worker"
   fi
 
-  # TODO: separate hook for tim
-  [[ $SPACESHIP_EXEC_TIME_SHOW == false ]] && return
-
-  # The Timer is started here, but the end is taken in prompt_spaceship_precmd, as this
-  # method is a precmd hook and runs right before the prompt gets rendered. So we
-  # can calculate the duration there.
-  SPACESHIP_EXEC_TIME_start=${EPOCHREALTIME}
+  run-ss-hook preexec
 }
+
+typeset -ag ss_preexec_functions
 
 prompt_spaceship_preexec "$@"

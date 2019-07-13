@@ -6,14 +6,9 @@ function prompt_spaceship_chpwd {
     async_worker_eval "spaceship_section_worker" 'cd' "$PWD"
   fi
 
-  # TODO: separate time log
-  # Restart execution time recording once dir is changed
-  [[ $SPACESHIP_EXEC_TIME_SHOW == false ]] && return
-
-  # The Timer is started here, but the end is taken in prompt_spaceship_precmd, as this
-  # method is a precmd hook and runs right before the prompt gets rendered. So we
-  # can calculate the duration there.
-  SPACESHIP_EXEC_TIME_start=${EPOCHREALTIME}
+  run-ss-hook chpwd
 }
+
+typeset -ag ss_chpwd_functions
 
 prompt_spaceship_chpwd "$@"

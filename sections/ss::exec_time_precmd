@@ -1,0 +1,13 @@
+#!/usr/bin/env zsh
+# vim: ft=zsh fdm=marker foldlevel=0 sw=2 ts=2 sts=2 et
+
+# End time recording
+function ss::exec_time_precmd {
+  [[ $SPACESHIP_EXEC_TIME_SHOW == false ]] && return
+
+  _SS_DATA[time_duration]=$((EPOCHREALTIME - _SS_DATA[time_start]))
+  # Reset start time
+  _SS_DATA[time_start]=0x7FFFFFFF
+}
+
+ss::exec_time_precmd "$@"
