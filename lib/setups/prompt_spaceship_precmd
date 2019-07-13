@@ -32,11 +32,11 @@ function prompt_spaceship_precmd() {
 
   # Restarts the async worker, in order to get an update-to-date shell environment
   if [[ "${_SS_DATA[async]}" == "true" ]]; then
-    async_stop_worker "spaceship_async_worker"
-    async_start_worker "spaceship_async_worker" #-n
+    async_stop_worker "spaceship_section_worker"
+    async_start_worker "spaceship_section_worker" #-n
     # setopt before call register to avoid callback by async_worker_eval
-    async_worker_eval "spaceship_async_worker" 'setopt extendedglob'
-    async_register_callback "spaceship_async_worker" "ss::async_callback"
+    async_worker_eval "spaceship_section_worker" 'setopt extendedglob'
+    async_register_callback "spaceship_section_worker" "ss::async_callback"
   fi
 
   ss::build_section_cache

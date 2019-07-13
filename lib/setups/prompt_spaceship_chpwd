@@ -3,7 +3,7 @@
 
 function prompt_spaceship_chpwd {
   if [[ "${_SS_DATA[async]}" == "true" ]]; then
-    async_worker_eval "spaceship_async_worker" 'cd' "$PWD"
+    async_worker_eval "spaceship_section_worker" 'cd' "$PWD"
   fi
 
   # TODO: separate time log

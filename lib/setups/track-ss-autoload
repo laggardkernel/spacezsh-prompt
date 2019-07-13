@@ -11,11 +11,11 @@ function track-ss-autoload {
       builtin autoload -Uz -- $afunc || {
         printf '%b\n' "\033[0;31mSS: Could not find/load ${afunc}!\033[0;0m" >&2
       }
-      _SS_AUTOLOADED_FUNCTIONS+=("$afunc")
+      _SS_AUTOLOADED+=("$afunc")
     }
   done
 }
 
-typeset -gaU _SS_AUTOLOADED_FUNCTIONS
+typeset -gaU _SS_AUTOLOADED
 
 track-ss-autoload "$@"

@@ -21,15 +21,14 @@ EOF
 # Runs once when user opens a terminal
 # All preparation before drawing prompt should be done here
 function prompt_spaceship_setup {
-  local item
-
   # reset prompt according to prompt_default_setup
-  # +h, override the -h attr given to global special params
-  local +h PS1='%m%# '
-  local +h PS2='%_> '
-  local +h PS3='?# '
-  local +h PS4='+%N:%i> '
+  PS1='%m%# '
+  PS2='%_> '
+  PS3='?# '
+  PS4='+%N:%i> '
   unset RPS1 RPS2 RPROMPT RPROMPT2
+
+  local item
 
   # This variable is a magic variable used when loading themes with zsh's prompt
   # function. It will ensure the proper prompt options are set.
@@ -127,29 +126,35 @@ function prompt_spaceship_setup {
 
 # This function removes spaceship hooks and resets the prompts.
 function prompt_spaceship_cleanup {
+  local item
+
+  async_stop_worker "spaceship_section_worker" 2>/dev/null
+
   # prmopt specific cleanup
   ss::vi_mode_disable 2>/dev/null
   # TODO: cleanup preset conf
 
   # prompt hooks
-  add-zsh-hook -D precmd  prompt_spaceship\*
-  add-zsh-hook -D preexec prompt_spaceship\*
-  add-zsh-hook -D chpwd   prompt_spaceship\*
+  add-zsh-hook -D chpwd   prompt_spaceship_\*
+  add-zsh-hook -D precmd  prompt_spaceship_\*
+  add-zsh-hook -D preexec prompt_spaceship_\*
+
+  # setopt localoptions NULL_GLOB
+  for item in ${_SS_AUTOLOADED[@]}; do
+    builtin unfunction -- "$item"
+  done
+
+  unset _ss_async_sections _ss_custom_sections _ss_section_cache _ss_unsafe \
+    ss_{chpwd,precmd,preexec}_functions \
+    _SS_DATA _SS_AUTOLOADED 2>/dev/null
 
   # reset prompt according to prompt_default_setup
-  # +h, override the -h attr given to global special params
-  local +h PS1='%m%# '
-  local +h PS2='%_> '
-  local +h PS3='?# '
-  local +h PS4='+%N:%i> '
+  PS1='%m%# '
+  PS2='%_> '
+  PS3='?# '
+  PS4='+%N:%i> '
   unset RPS1 RPS2 RPROMPT RPROMPT2
   prompt_opts=( cr percent sp )
-
-  unset _SS_DATA
-  unset _ss_async_sections
-  unset _ss_custom_sections
-  unset _ss_section_cache
-  unset _ss_unsafe
 }
 
 prompt_spaceship_setup "$@"

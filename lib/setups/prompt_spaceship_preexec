@@ -4,7 +4,7 @@
 function prompt_spaceship_preexec {
   # Stop running prompt async jobs
   if [[ "${_SS_DATA[async]}" == "true" ]]; then
-    async_flush_jobs "spaceship_async_worker"
+    async_flush_jobs "spaceship_section_worker"
   fi
 
   # TODO: separate hook for tim

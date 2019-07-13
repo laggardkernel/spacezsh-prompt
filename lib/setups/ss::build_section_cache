@@ -30,7 +30,7 @@ function ss::build_section_cache {
       cache_key="${alignment}::${section}"
 
       if ${async}; then
-        async_job "spaceship_async_worker" "ss::async_wrapper" "ss::${section}" "${section}·|·${alignment}·|·"
+        async_job "spaceship_section_worker" "ss::async_wrapper" "ss::${section}" "${section}·|·${alignment}·|·"
 
         # Placeholder
         _ss_section_cache[${cache_key}]="${section}·|·${alignment}·|·${SPACESHIP_SECTION_PLACEHOLDER}"
