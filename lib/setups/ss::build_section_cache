@@ -1,0 +1,54 @@
+#!/usr/bin/env zsh
+# vim: ft=zsh fdm=marker foldlevel=0 sw=2 ts=2 sts=2 et
+
+# Build prompt cache from section functions
+# @description
+#   This function loops through the prompt elements and calls
+#   the related section functions.
+#
+# @args
+#   $1 string, prompt/rprompt, alignment info
+function ss::build_section_cache {
+  # Option EXTENDED_GLOB is set locally to force filename generation on
+  # argument to conditions, i.e. allow usage of explicit glob qualifier (#q).
+  # See the description of filename generation in
+  # http://zsh.sourceforge.net/Doc/Release/Conditional-Expressions.html
+  setopt EXTENDED_GLOB LOCAL_OPTIONS
+
+  local -a alignments=("prompt" "rprompt")
+  local alignment
+  local custom async section cache_key result
+
+  [[ -n "$1" ]] && alignments=("$1")
+
+  for alignment in "${alignments[@]}"; do
+    [[ ${#_SS_DATA[${alignment}_sections]} == "0" ]] && continue
+
+    for section in ${=_SS_DATA[${alignment}_sections]}; do
+      [[ "${_ss_async_sections[${section}]}" == "true" ]] && async=true || async=false
+
+      cache_key="${alignment}::${section}"
+
+      if ${async}; then
+        async_job "spaceship_section_worker" "ss::async_wrapper" "ss::${section}" "${section}·|·${alignment}·|·"
+
+        # Placeholder
+        _ss_section_cache[${cache_key}]="${section}·|·${alignment}·|·${SPACESHIP_SECTION_PLACEHOLDER}"
+      else
+        # pre-empty result storage, assuming the section won't be display
+        _SS_DATA[section_result]=""
+        ss::${section}
+        _ss_section_cache[${cache_key}]="${section}·|·${alignment}·|·${_SS_DATA[section_result]}"
+      fi
+    done
+  done
+
+  if [[ ${#alignments} == "2" ]]; then
+    ss::render
+  else
+    # only render the corresponding side of the prompt
+    ss::render "${alignment[1]}"
+  fi
+}
+
+ss::build_section_cache "$@"

@@ -21,17 +21,17 @@ oneTimeSetUp() {
 test_exists() {
   mock() {}
 
-  assertTrue  "command should exist"     '$(spaceship::exists cd)'
-  assertFalse "command should not exist" '$(spaceship::exists d41d8cd)'
-  assertTrue  "function should exist"    '$(spaceship::exists mock)'
+  assertTrue  "command should exist"     '$(ss::exists cd)'
+  assertFalse "command should not exist" '$(ss::exists d41d8cd)'
+  assertTrue  "function should exist"    '$(ss::exists mock)'
 }
 
 test_defined() {
   mock() {}
 
-  assertFalse "command should not exist"  '$(spaceship::defined cd)'
-  assertTrue  "function should exist"     '$(spaceship::defined mock)'
-  assertFalse "function should not exist" '$(spaceship::defined d41d8cd)'
+  assertFalse "command should not exist"  '$(ss::func_defined cd)'
+  assertTrue  "function should exist"     '$(ss::func_defined mock)'
+  assertFalse "function should not exist" '$(ss::func_defined d41d8cd)'
 }
 
 test_is_git() {
@@ -41,16 +41,16 @@ test_is_git() {
   # Init a Git repo in $REPO
   command git init > /dev/null
 
-  assertTrue "should be a git repo" '$(spaceship::is_git)'
+  assertTrue "should be a git repo" '$(ss::is_git)'
   cd foo
-  assertTrue "foo should be in git repo" '$(spaceship::is_git)'
+  assertTrue "foo should be in git repo" '$(ss::is_git)'
   cd ../..
-  assertFalse "should not be a git repo" '$(spaceship::is_git)'
+  assertFalse "should not be a git repo" '$(ss::is_git)'
 }
 
 test_is_hg() {
   # Skip this test case if Mercurial is not istalled
-  if ! spaceship::exists hg; then
+  if ! ss::exists hg; then
     startSkipping
   fi
 
@@ -59,17 +59,17 @@ test_is_hg() {
   mkdir -p "$REPO/../foo with space"
   cd $REPO
 
-  if spaceship::exists hg; then
+  if ss::exists hg; then
     command hg init
   fi
 
-  assertTrue "should be a hg repo" '$(spaceship::is_hg)'
+  assertTrue "should be a hg repo" '$(ss::is_hg)'
   cd foo
-  assertTrue "foo should be in hg repo" '$(spaceship::is_hg)'
+  assertTrue "foo should be in hg repo" '$(ss::is_hg)'
   cd "../../foo with space"
-  assertFalse "'foo with space' directory should not be in hg repo" '$(spaceship::is_hg)'
+  assertFalse "'foo with space' directory should not be in hg repo" '$(ss::is_hg)'
   cd ../..
-  assertFalse "should not be a hg repo" '$(spaceship::is_hg)'
+  assertFalse "should not be a hg repo" '$(ss::is_hg)'
 
   if isSkipping; then
     endSkipping
@@ -80,14 +80,14 @@ test_deprecated() {
   SPACESHIP_TEST='deprecated'
   local e_expected="%{%B%}SPACESHIP_TEST%{%b%} is deprecated.%{ %}"
   local expected="$(print -P "$e_expected")"
-  local actual=$(spaceship::deprecated SPACESHIP_TEST)
+  local actual=$(ss::deprecated SPACESHIP_TEST)
 
   assertEquals "render deprecation warning" "$expected" "$actual"
 
   local desc="Use SOMETHING instead!"
   local e_expected=$e_expected$desc
   local expected="$(print -P "$e_expected")"
-  local actual=$(spaceship::deprecated SPACESHIP_TEST "$desc")
+  local actual=$(ss::deprecated SPACESHIP_TEST "$desc")
 
   assertEquals "render deprecation warning with description" "$expected" "$actual"
 
@@ -96,7 +96,7 @@ test_deprecated() {
 
 test_displaytime() {
   local expected='14d 6h 56m 7s'
-  local actual=$(spaceship::displaytime 1234567)
+  local actual=$(ss::displaytime 1234567)
 
   assertEquals "$expected" "$actual"
 }
@@ -104,7 +104,7 @@ test_displaytime() {
 test_union() {
   local arr1=('a' 'b' 'c') arr2=('b' 'c' 'd') arr3=('c' 'd' 'e')
   local expected=('a' 'b' 'c' 'd' 'e')
-  local actual=$(spaceship::union $arr1 $arr2 $arr3)
+  local actual=$(ss::union $arr1 $arr2 $arr3)
 
   assertEquals "union of arrays" "$expected" "$actual"
 }

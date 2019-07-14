@@ -1,0 +1,14 @@
+#!/usr/bin/env zsh
+# vim: ft=zsh fdm=marker foldlevel=0 sw=2 ts=2 sts=2 et
+
+# Start time recording
+function ss::exec_time_preexec {
+  [[ $SPACESHIP_EXEC_TIME_SHOW == false ]] && return
+
+  # The Timer is started here, but the end is taken in prompt_spaceship_precmd, as this
+  # method is a precmd hook and runs right before the prompt gets rendered. So we
+  # can calculate the duration there.
+  _SS_DATA[time_start]="${EPOCHREALTIME}"
+}
+
+ss::exec_time_preexec "$@"

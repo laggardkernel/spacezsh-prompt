@@ -2,7 +2,7 @@
 
 This page describes Spaceship API for creating plugins and tweaking Spaceship's behavior.
 
-Spaceship uses `SPACESHIP_` prefix for variables and `spaceship::` prefix for a function to avoid conflicts with other ones. All section, including custom ones, are being required to use `spaceship_` prefix before their name to load properly.
+Spaceship uses `SPACESHIP_` prefix for variables and `ss::` prefix for a function to avoid conflicts with other ones. All section, including custom ones, are being required to use `spaceship_` prefix before their name to load properly.
 
 ## Typical section
 
@@ -43,7 +43,7 @@ spaceship_foobar() {
   [[ $SPACESHIP_FOOBAR_SHOW == false ]] && return
 
   # Check if foobar command is available for execution
-  spaceship::exists foobar || return
+  ss::exists foobar || return
 
   # Show foobar section only when there are foobar-specific files in current
   # working directory.
@@ -67,7 +67,7 @@ spaceship_foobar() {
   [[ -z $foobar_status ]] && return
 
   # Display foobar section
-  spaceship::section \
+  ss::section \
     "$SPACESHIP_FOOBAR_COLOR" \
     "$SPACESHIP_FOOBAR_PREFIX" \
     "$SPACESHIP_FOOBAR_SYMBOL$foobar_status" \
@@ -113,7 +113,7 @@ To load a custom section defined in a file, you should tag the section name with
 
 **Note**: custom section is preferred over core/builtin section with the same name.
 
-## `spaceship::section <color> <content> [prefix] [suffix]`
+## `ss::section <color> <content> [prefix] [suffix]`
 
 This command displays prompt section prefixed with `prefix`, suffixed with `suffix` and `content` painted in `color`. **Bold** style is applied by default.
 
@@ -137,19 +137,19 @@ Both `prefix` and `suffix` are optional. They are equal to empty strings by defa
 ```zsh
 # Display prompt section with prefix and suffix
 # Backslash is used to escape line ending
-spaceship::section \
+ss::section \
   "$SPACESHIP_SECTION_COLOR" \
   "$SPACESHIP_SECTION_SYMBOL$section_content" \
   "$SPACESHIP_SECTION_PREFIX" \
   "$SPACESHIP_SECTION_SUFFIX"
 
 # Display prompt section without prefix and suffix
-spaceship::section "$color" "$SPACESHIP_CHAR_SYMBOL"
+ss::section "$color" "$SPACESHIP_CHAR_SYMBOL"
 ```
 
-## `spaceship::defined <function>`
+## `ss::func_defined <function>`
 
-The same as [`spaceship::exists`](#spaceshipexists-command), but for functions. It returns zero exit code if a `function` has been defined previously and non-zero if `function` hasn't.
+The same as [`ss::exists`](#spaceshipexists-command), but for functions. It returns zero exit code if a `function` has been defined previously and non-zero if `function` hasn't.
 
 You can use this utility to check if a user has previously defined a function or not. Spaceship uses this utility internally to check if a custom section has been defined and available for execution.
 
@@ -161,14 +161,14 @@ You can use this utility to check if a user has previously defined a function or
 
 ```zsh
 # Check if section has been defined
-if spaceship::defined spaceship_section; then
+if ss::func_defined spaceship_section; then
   spaceship_section
 else
   # section is not found
 fi
 ```
 
-## `spaceship::is_git`
+## `ss::is_git`
 
 This utility returns zero exit code if a current working directory is a Git repository and non-zero if it's not.
 
@@ -176,21 +176,21 @@ This utility returns zero exit code if a current working directory is a Git repo
 
 ```zsh
 # Return if current directory is not a git repository
-spaceship::is_git || return
+ss::is_git || return
 ```
 
-## `spaceship::is_hg`
+## `ss::is_hg`
 
-The same as [`spaceship::is_git`](#spaceshipisgit), but for Mercurial repositories. This utility returns zero exit code if a current working directory is a Mercurial repository and non-zero if it's not.
+The same as [`ss::is_git`](#spaceshipisgit), but for Mercurial repositories. This utility returns zero exit code if a current working directory is a Mercurial repository and non-zero if it's not.
 
 ### Example
 
 ```zsh
 # Return if current directory is not a Mercurial repository
-spaceship::is_hg || return
+ss::is_hg || return
 ```
 
-## `spaceship::deprecated <option> [message]`
+## `ss::deprecated <option> [message]`
 
 This utility checks if `option` variable is set and if it is, prints the `message`. The `message` supports escapes to set foreground color, background color and other visual effects. Read more about escapes in [13 Prompt Expansion](http://zsh.sourceforge.net/Doc/Release/Prompt-Expansion.html) section of Zsh documentation.
 
@@ -203,11 +203,11 @@ This utility checks if `option` variable is set and if it is, prints the `messag
 
 ```zsh
 # Check if SPACESHIP_BATTERY_ALWAYS_SHOW is set
-spaceship::deprecated SPACESHIP_BATTERY_ALWAYS_SHOW "Use %BSPACESHIP_BATTERY_SHOW='always'%b instead."
+ss::deprecated SPACESHIP_BATTERY_ALWAYS_SHOW "Use %BSPACESHIP_BATTERY_SHOW='always'%b instead."
 #> SPACESHIP_BATTERY_ALWAYS_SHOW is deprecated. Use SPACESHIP_BATTERY_SHOW='always' instead.
 ```
 
-## `spaceship::displaytime <seconds>`
+## `ss::displaytime <seconds>`
 
 This utility converts `seconds` into a human-readable format. It splits `seconds` into days (`d`), hours (`h`), minutes (`m`) and seconds (`s`).
 
@@ -218,26 +218,6 @@ This utility converts `seconds` into a human-readable format. It splits `seconds
 ### Example
 
 ```zsh
-spaceship::displaytime 123456
+ss::displaytime 123456
 #> 1d 10h 17m 36s
-```
-
-## `spaceship::union <arr1[ arr2[ ...]]>`
-
-A utility for performing a union (intersection) of arrays. It lists the contents found in two or more arrays.
-
-Spaceship uses this utility internally for resolution of sections that need to be sourced.
-
-### Arguments
-
-1. `arr...` — a list of arrays.
-
-### Example
-
-```zsh
-arr1=('a' 'b' 'c')
-arr2=('b' 'c' 'd')
-arr3=('c' 'd' 'e')
-spaceship::union $arr1 $arr2 $arr3
-#> a b c d e
 ```
