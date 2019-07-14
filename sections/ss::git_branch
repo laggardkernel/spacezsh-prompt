@@ -35,7 +35,7 @@ ss::git_branch() {
     "$SPACESHIP_GIT_BRANCH_PREFIX${git_current_branch}$SPACESHIP_GIT_BRANCH_SUFFIX"
 }
 
-autoload -Uz vcs_info
+track-ss-autoload vcs_info
 
 # TODO: fully utilize vcs_info
 zstyle ':vcs_info:git*' formats '%b'

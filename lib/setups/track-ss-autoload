@@ -16,6 +16,6 @@ function track-ss-autoload {
   done
 }
 
-typeset -gaU _SS_AUTOLOADED
+typeset -gaU _SS_AUTOLOADED=(track-ss-autoload)
 
 track-ss-autoload "$@"
