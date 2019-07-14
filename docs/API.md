@@ -147,7 +147,7 @@ ss::section \
 ss::section "$color" "$SPACESHIP_CHAR_SYMBOL"
 ```
 
-## `ss::defined <function>`
+## `ss::func_defined <function>`
 
 The same as [`ss::exists`](#spaceshipexists-command), but for functions. It returns zero exit code if a `function` has been defined previously and non-zero if `function` hasn't.
 
@@ -161,7 +161,7 @@ You can use this utility to check if a user has previously defined a function or
 
 ```zsh
 # Check if section has been defined
-if ss::defined spaceship_section; then
+if ss::func_defined spaceship_section; then
   spaceship_section
 else
   # section is not found
@@ -220,24 +220,4 @@ This utility converts `seconds` into a human-readable format. It splits `seconds
 ```zsh
 ss::displaytime 123456
 #> 1d 10h 17m 36s
-```
-
-## `ss::union <arr1[ arr2[ ...]]>`
-
-A utility for performing a union (intersection) of arrays. It lists the contents found in two or more arrays.
-
-Spaceship uses this utility internally for resolution of sections that need to be sourced.
-
-### Arguments
-
-1. `arr...` — a list of arrays.
-
-### Example
-
-```zsh
-arr1=('a' 'b' 'c')
-arr2=('b' 'c' 'd')
-arr3=('c' 'd' 'e')
-ss::union $arr1 $arr2 $arr3
-#> a b c d e
 ```

@@ -51,7 +51,7 @@
   * [SPACESHIP_ROOT](/docs/API.md#spaceshiproot)
   * [ss::section](/docs/API.md#spaceshipsection-color-prefix-content-suffix)
   * [ss::exists](/docs/API.md#spaceshipexists-command)
-  * [ss::defined](/docs/API.md#spaceshipdefined-function)
+  * [ss::func_defined](/docs/API.md#spaceshipdefined-function)
   * [ss::is_git](/docs/API.md#spaceshipisgit)
   * [ss::is_hg](/docs/API.md#spaceshipishg)
   * [ss::deprecated](/docs/API.md#spaceshipdeprecated-option-message)

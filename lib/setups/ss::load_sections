@@ -38,7 +38,7 @@ ss::load_sections() {
       done
 
       # Prefer custom section over same name builtin section
-      if ss::defined "ss::${section}"; then
+      if ss::func_defined "ss::${section}"; then
         # Custom section is declared, nothing else to do
         continue
       elif (( ${_ss_custom_sections[(Ie)${section}]} )) \

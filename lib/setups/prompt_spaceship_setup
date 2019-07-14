@@ -79,6 +79,11 @@ function prompt_spaceship_setup {
     track-ss-autoload "$item"
   done
 
+  # Utilities
+  for item in "${SPACESHIP_ROOT}"/lib/utils/ss::*[^.zwc](-.N:t); do
+    track-ss-autoload "$item"
+  done
+
   # Always load default conf
   source "$SPACESHIP_ROOT/lib/default.zsh"
   # LIBS
@@ -96,11 +101,6 @@ function prompt_spaceship_setup {
   add-zsh-hook preexec prompt_spaceship_preexec
   # hook into chpwd for bindkey support
   add-zsh-hook chpwd prompt_spaceship_chpwd
-
-  # Utilities
-  for item in "${SPACESHIP_ROOT}"/lib/utils/ss::*[^.zwc](-.N:t); do
-    track-ss-autoload "$item"
-  done
 
   # The value below was set to better support 32-bit CPUs.
   # It's the maximum _signed_ integer value on 32-bit CPUs.

@@ -29,9 +29,9 @@ test_exists() {
 test_defined() {
   mock() {}
 
-  assertFalse "command should not exist"  '$(ss::defined cd)'
-  assertTrue  "function should exist"     '$(ss::defined mock)'
-  assertFalse "function should not exist" '$(ss::defined d41d8cd)'
+  assertFalse "command should not exist"  '$(ss::func_defined cd)'
+  assertTrue  "function should exist"     '$(ss::func_defined mock)'
+  assertFalse "function should not exist" '$(ss::func_defined d41d8cd)'
 }
 
 test_is_git() {

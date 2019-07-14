@@ -8,13 +8,6 @@
 
 # TODO: variable defined, set_default
 
-# Check if function is defined
-# USAGE:
-#   ss::defined <function>
-function ss::defined {
-  typeset -f + "$1" &> /dev/null
-}
-
 # Check if the current directory is in a Git repository.
 # USAGE:
 #   ss::is_git
