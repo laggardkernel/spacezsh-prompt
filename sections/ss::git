@@ -18,8 +18,8 @@ SPACESHIP_GIT_SYMBOL="${SPACESHIP_GIT_SYMBOL=" "}"
 # Dependencies
 # ------------------------------------------------------------------------------
 
-track-ss-autoload "$SPACESHIP_ROOT/sections/ss::git_branch"
-track-ss-autoload "$SPACESHIP_ROOT/sections/ss::git_status"
+track-ss-autoload "ss::git_branch"
+track-ss-autoload "ss::git_status"
 
 # ------------------------------------------------------------------------------
 # Section

@@ -1,0 +1,153 @@
+#!/usr/bin/env zsh
+# vim: ft=zsh fdm=marker foldlevel=0 sw=2 ts=2 sts=2 et
+
+ss::set_default SPACESHIP_VCS_SHOW    "true"
+# ss::set_default SPACESHIP_VCS_PREFIX "on "
+ss::set_default SPACESHIP_VCS_PREFIX ""
+ss::set_default SPACESHIP_VCS_SUFFIX "$SPACESHIP_PROMPT_DEFAULT_SUFFIX"
+ss::set_default SPACESHIP_GIT_SYMBOL " "
+
+ss::set_default SPACESHIP_VCS_BRANCH_SHOW   "true"
+ss::set_default SPACESHIP_VCS_BRANCH_PREFIX "${SPACESHIP_GIT_SYMBOL}"
+ss::set_default SPACESHIP_VCS_BRANCH_SUFFIX ""
+ss::set_default SPACESHIP_VCS_BRANCH_COLOR  "magenta"
+
+ss::set_default SPACESHIP_VCS_STATUS_SHOW   "true"
+ss::set_default SPACESHIP_VCS_STATUS_PREFIX " ["
+ss::set_default SPACESHIP_VCS_STATUS_SUFFIX "]"
+ss::set_default SPACESHIP_VCS_STATUS_COLOR  "red"
+
+# Generic hook functions
+function +vi-vcs-detect-changes() {
+  if [[ -n "${hook_com[staged]}" ]] || [[ -n "${hook_com[unstaged]}" ]]; then
+    VCS_WORKDIR_DIRTY=1
+  else
+    VCS_WORKDIR_DIRTY=0
+  fi
+}
+
+# GIT hook functions
+
+function +vi-git-untracked(){
+  if [[ $(git rev-parse --is-inside-work-tree 2> /dev/null) == 'true' ]] && \
+    git status --porcelain | grep '??' &> /dev/null ; then
+    # This will show the marker if there are any untracked files in repo.
+    # If instead you want to show the marker only if there are untracked
+    # files in $PWD, use:
+    #[[ -n $(git ls-files --others --exclude-standard) ]] ; then
+    hook_com[unstaged]+=$' \u25cc' # '◌'
+  fi
+}
+
+function +vi-git-aheadbehind() {
+  local ahead behind
+  local -a gitstatus
+
+  # for git prior to 1.7
+  # ahead=$(git rev-list origin/${hook_com[branch]}..HEAD | wc -l)
+  ahead=$(git rev-list ${hook_com[branch]}@{upstream}..HEAD 2>/dev/null | wc -l)
+  (( $ahead )) && gitstatus+=( " +${ahead}" )
+
+  # for git prior to 1.7
+  # behind=$(git rev-list HEAD..origin/${hook_com[branch]} | wc -l)
+  behind=$(git rev-list HEAD..${hook_com[branch]}@{upstream} 2>/dev/null | wc -l)
+  (( $behind )) && gitstatus+=( " -${behind}" )
+
+  hook_com[misc]+=${(j:/:)gitstatus}
+}
+
+# HG hook functions
+
+function +vi-hg-branchhead() {
+  local branchheadsfile i_tiphash i_branchname
+  local -a branchheads
+
+  local branchheadsfile=${hook_com[base]}/.hg/branchheads.cache
+
+  # Bail out if any mq patches are applied
+  [[ -s ${hook_com[base]}/.hg/patches/status ]] && return 0
+
+  if [[ -r ${branchheadsfile} ]] ; then
+    while read -r i_tiphash i_branchname ; do
+      branchheads+=( $i_tiphash )
+    done < ${branchheadsfile}
+
+    if [[ ! ${branchheads[(i)${user_data[hash]}]} -le ${#branchheads} ]] ; then
+      hook_com[revision]="^ ${hook_com[revision]}"
+    fi
+  fi
+}
+
+# SVN hook functions
+
+function +vi-svn-detect-changes() {
+  declare -a svn_status
+  svn_status=( "${(@f)$(svn status)}" )
+  if [[ "${(M)#svn_status:#\?*}" -gt 0 ]]; then
+    hook_com[unstaged]+=$' \u25cc' # '◌'
+    VCS_WORKDIR_HALF_DIRTY=1
+  fi
+  if [[ "${(M)#svn_status:#M*}" -gt 0 ]]; then
+    hook_com[unstaged]+=$' \u25cf'
+    VCS_WORKDIR_DIRTY=1
+  fi
+  if [[ "${(M)#svn_status:#A*}" -gt 0 ]]; then
+    hook_com[staged]+=$' \u271a'
+    VCS_WORKDIR_DIRTY=1
+  fi
+}
+
+function ss::vcs {
+  local vcs_branch vcs_status
+  local -a tmp
+
+  vcs_info
+  tmp=("${(s. .)vcs_info_msg_0_}")
+
+  _SS_DATA[section_result]=""
+  ss::section \
+    "$SPACESHIP_VCS_BRANCH_COLOR" \
+    "$SPACESHIP_VCS_BRANCH_PREFIX${tmp[1]}$SPACESHIP_VCS_BRANCH_SUFFIX"
+  vcs_branch="${_SS_DATA[section_result]}"
+
+  if (( ${#tmp} > 1 )); then
+    _SS_DATA[section_result]=""
+    ss::section \
+      "$SPACESHIP_VCS_STATUS_COLOR" \
+      "$SPACESHIP_VCS_STATUS_PREFIX${(j..)tmp[2,-1]}$SPACESHIP_VCS_STATUS_SUFFIX"
+    vcs_status="${_SS_DATA[section_result]}"
+  fi
+
+  ss::section \
+    'white' \
+    "${vcs_branch}${vcs_status}" \
+    "$SPACESHIP_VCS_PREFIX" \
+    "$SPACESHIP_VCS_SUFFIX"
+}
+
+### Init
+track-ss-autoload vcs_info
+zstyle ':vcs_info:*' enable git hg svn
+
+# HACK/TODO ex. from my personal shell
+zstyle ':vcs_info:svn*:*' actionformats '%c%u %F{red}| %a%f'
+zstyle ':vcs_info:*' actionformats '%b %F{red}| %a%f'
+zstyle ':vcs_info:hg*:*' branchformat '%b'
+zstyle ':vcs_info:*' check-for-changes true
+# zstyle ':vcs_info:svn*:*' formats %c%u # causing blank status
+zstyle ':vcs_info:*' formats %b%c%u%m
+zstyle ':vcs_info:hg*:*' get-bookmarks true
+zstyle ':vcs_info:hg*:*' get-revision true
+zstyle ':vcs_info:hg*+gen-hg-bookmark-string:*' hooks hg-bookmarks
+zstyle ':vcs_info:*' stagedstr $' \u271a'   # ✚
+zstyle ':vcs_info:*' unstagedstr $' \u25cf' # ●
+
+# VCS_INFO HOOKS
+zstyle ':vcs_info:git*+set-message:*' hooks \
+  vcs-detect-changes git-untracked git-aheadbehind
+zstyle ':vcs_info:hg*+set-message:*' hooks \
+  vcs-detect-changes hg-branchhead
+zstyle ':vcs_info:svn*+set-message:*' hooks \
+  vcs-detect-changes svn-detect-changes
+
+ss::vcs "$@"
