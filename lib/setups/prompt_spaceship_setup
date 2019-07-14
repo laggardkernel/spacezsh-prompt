@@ -28,6 +28,7 @@ function prompt_spaceship_setup {
   PS4='+%N:%i> '
   unset RPS1 RPS2 RPROMPT RPROMPT2
 
+  setopt localoptions KSH_GLOB
   local item
 
   # This variable is a magic variable used when loading themes with zsh's prompt
@@ -75,17 +76,17 @@ function prompt_spaceship_setup {
   builtin autoload -Uz +X -- run-ss-hook && _SS_AUTOLOADED+=(run-ss-hook)
 
   # setup functions
-  for item in "${SPACESHIP_ROOT}"/lib/setups/ss::*[^.zwc](-.N:t); do
+  for item in "${SPACESHIP_ROOT}"/lib/setups/ss::!(*.zwc)(-.N:t); do
     track-ss-autoload "$item"
   done
 
   # Utilities
-  for item in "${SPACESHIP_ROOT}"/lib/utils/ss::*[^.zwc](-.N:t); do
+  for item in "${SPACESHIP_ROOT}"/lib/utils/ss::!(*.zwc)(-.N:t); do
     track-ss-autoload "$item"
   done
 
   # Always load default conf
-  source "$SPACESHIP_ROOT/lib/default.zsh"
+  source "$SPACESHIP_ROOT/presets/default.zsh"
   # LIBS
   source "$SPACESHIP_ROOT/lib/utils.zsh"
   # sections.zsh is deprecated, cause it's linked as prompt_spaceship_setup
