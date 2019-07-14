@@ -19,10 +19,17 @@ ss::set_default SPACESHIP_VCS_STATUS_COLOR  "red"
 
 
 function ss::vcs {
+  # TODO: use following flags for color control
+  _SS_DATA[vcs_workdir_half_dirty]=1
+  _SS_DATA[vcs_workdir_dirty]=1
+
   local vcs_branch vcs_status
   local -a tmp
 
   vcs_info
+
+  [[ -z $vcs_info_msg_0_ ]] && return
+
   tmp=("${(s. .)vcs_info_msg_0_}")
 
   _SS_DATA[section_result]=""

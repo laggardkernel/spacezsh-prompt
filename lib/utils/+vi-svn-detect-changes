@@ -7,15 +7,15 @@ function +vi-svn-detect-changes {
   svn_status=( "${(@f)$(svn status)}" )
   if [[ "${(M)#svn_status:#\?*}" -gt 0 ]]; then
     hook_com[unstaged]+=$' \u25cc' # '◌'
-    VCS_WORKDIR_HALF_DIRTY=1
+    _SS_DATA[vcs_workdir_half_dirty]=1
   fi
   if [[ "${(M)#svn_status:#M*}" -gt 0 ]]; then
     hook_com[unstaged]+=$' \u25cf'
-    VCS_WORKDIR_DIRTY=1
+    _SS_DATA[vcs_workdir_dirty]=1
   fi
   if [[ "${(M)#svn_status:#A*}" -gt 0 ]]; then
     hook_com[staged]+=$' \u271a'
-    VCS_WORKDIR_DIRTY=1
+    _SS_DATA[vcs_workdir_dirty]=1
   fi
 }
 
