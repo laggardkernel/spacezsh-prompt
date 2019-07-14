@@ -1,0 +1,22 @@
+#!/usr/bin/env zsh
+# vim: ft=zsh fdm=marker foldlevel=0 sw=2 ts=2 sts=2 et
+
+# SVN hook functions for vcs_info
+function +vi-svn-detect-changes {
+  declare -a svn_status
+  svn_status=( "${(@f)$(svn status)}" )
+  if [[ "${(M)#svn_status:#\?*}" -gt 0 ]]; then
+    hook_com[unstaged]+=$' \u25cc' # '◌'
+    VCS_WORKDIR_HALF_DIRTY=1
+  fi
+  if [[ "${(M)#svn_status:#M*}" -gt 0 ]]; then
+    hook_com[unstaged]+=$' \u25cf'
+    VCS_WORKDIR_DIRTY=1
+  fi
+  if [[ "${(M)#svn_status:#A*}" -gt 0 ]]; then
+    hook_com[staged]+=$' \u271a'
+    VCS_WORKDIR_DIRTY=1
+  fi
+}
+
+"+vi-svn-detect-changes" "$@"

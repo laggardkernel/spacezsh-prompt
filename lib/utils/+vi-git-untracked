@@ -1,0 +1,16 @@
+#!/usr/bin/env zsh
+# vim: ft=zsh fdm=marker foldlevel=0 sw=2 ts=2 sts=2 et
+
+# GIT hook functions for vcs_info
+function +vi-git-untracked {
+  if [[ $(git rev-parse --is-inside-work-tree 2> /dev/null) == 'true' ]] && \
+    git status --porcelain | grep '??' &> /dev/null ; then
+    # This will show the marker if there are any untracked files in repo.
+    # If instead you want to show the marker only if there are untracked
+    # files in $PWD, use:
+    #[[ -n $(git ls-files --others --exclude-standard) ]] ; then
+    hook_com[unstaged]+=$' \u25cc' # '◌'
+  fi
+}
+
+"+vi-git-untracked" "$@"

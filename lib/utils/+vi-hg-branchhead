@@ -1,0 +1,26 @@
+#!/usr/bin/env zsh
+# vim: ft=zsh fdm=marker foldlevel=0 sw=2 ts=2 sts=2 et
+
+# HG hook functions for vcs_info
+function +vi-hg-branchhead {
+  local branchheadsfile i_tiphash i_branchname
+  local -a branchheads
+
+  local branchheadsfile=${hook_com[base]}/.hg/branchheads.cache
+
+  # Bail out if any mq patches are applied
+  [[ -s ${hook_com[base]}/.hg/patches/status ]] && return 0
+
+  if [[ -r ${branchheadsfile} ]] ; then
+    while read -r i_tiphash i_branchname ; do
+      branchheads+=( $i_tiphash )
+    done < ${branchheadsfile}
+
+    if [[ ! ${branchheads[(i)${user_data[hash]}]} -le ${#branchheads} ]] ; then
+      hook_com[revision]="^ ${hook_com[revision]}"
+    fi
+  fi
+}
+
+
+"+vi-hg-branchhead" "$@"
