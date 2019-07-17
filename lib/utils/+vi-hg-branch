@@ -1,0 +1,11 @@
+#!/usr/bin/env zsh
+# vim: ft=zsh fdm=marker foldlevel=0 sw=2 ts=2 sts=2 et
+#
+# References
+#   powerlevel9k/segments/vcs/vcs.p9k
+
+function +vi-hg-branch() {
+  hook_com[branch]="${hook_com[branch]//\%/%%}"
+}
+
++vi-hg-branch "$@"

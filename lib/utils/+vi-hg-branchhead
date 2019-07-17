@@ -1,7 +1,13 @@
 #!/usr/bin/env zsh
 # vim: ft=zsh fdm=marker foldlevel=0 sw=2 ts=2 sts=2 et
+#
+# https://github.com/zsh-users/zsh/blob/master/Misc/vcs_info-examples
 
-# HG hook functions for vcs_info
+### hg: Show marker when the working directory is not on a branch head
+# This may indicate that running `hg up` will do something
+# NOTE: the branchheads.cache file is not updated with every Mercurial
+# operation, so it will sometimes give false positives. Think of this more as a
+# hint that you might not be on a branch head instead of the final word.
 function +vi-hg-branchhead {
   local branchheadsfile i_tiphash i_branchname
   local -a branchheads
@@ -16,11 +22,10 @@ function +vi-hg-branchhead {
       branchheads+=( $i_tiphash )
     done < ${branchheadsfile}
 
-    if [[ ! ${branchheads[(i)${user_data[hash]}]} -le ${#branchheads} ]] ; then
+    if [[ ! ${branchheads[(i)${user_data[hash]}]} -le ${#branchheads} ]]; then
       hook_com[revision]="^ ${hook_com[revision]}"
     fi
   fi
 }
 
-
-"+vi-hg-branchhead" "$@"
++vi-hg-branchhead "$@"

@@ -4,10 +4,10 @@
 # Generic hook functions for vcs_info
 function +vi-vcs-detect-changes {
   if [[ -n "${hook_com[staged]}" ]] || [[ -n "${hook_com[unstaged]}" ]]; then
-    _SS_DATA[vcs_workdir_dirty]=1
+    _SS_DATA[vcs_workdir_dirty]=true
   else
-    _SS_DATA[vcs_workdir_dirty]=0
+    _SS_DATA[vcs_workdir_dirty]=false
   fi
 }
 
-"+vi-vcs-detect-changes" "$@"
++vi-vcs-detect-changes "$@"

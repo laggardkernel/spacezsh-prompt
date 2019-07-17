@@ -1,47 +1,110 @@
 #!/usr/bin/env zsh
 # vim: ft=zsh fdm=marker foldlevel=0 sw=2 ts=2 sts=2 et
+#
+# http://zsh.sourceforge.net/Doc/Release/User-Contributions.html#Version-Control-Information
+# https://github.com/zsh-users/zsh/blob/master/Functions/VCS_Info/vcs_info
 
-ss::set_default SPACESHIP_VCS_SHOW    "true"
-# ss::set_default SPACESHIP_VCS_PREFIX "on "
-ss::set_default SPACESHIP_VCS_PREFIX ""
-ss::set_default SPACESHIP_VCS_SUFFIX "$SPACESHIP_PROMPT_DEFAULT_SUFFIX"
 ss::set_default SPACESHIP_GIT_SYMBOL " "
+ss::set_default SPACESHIP_HG_SYMBOL  "☿️ "
+ss::set_default SPACESHIP_SVN_SYMBOL "(svn) "
+# ss::set_default SPACESHIP_HG_SYMBOL  " "
 
-ss::set_default SPACESHIP_VCS_BRANCH_SHOW   "true"
-ss::set_default SPACESHIP_VCS_BRANCH_PREFIX "${SPACESHIP_GIT_SYMBOL}"
-ss::set_default SPACESHIP_VCS_BRANCH_SUFFIX ""
-ss::set_default SPACESHIP_VCS_BRANCH_COLOR  "magenta"
+ss::set_default SPACESHIP_VCS_UNTRACKED "?"
+ss::set_default SPACESHIP_VCS_UNSTAGED  "◌"
+ss::set_default SPACESHIP_VCS_STAGED    "●"
 
-ss::set_default SPACESHIP_VCS_STATUS_SHOW   "true"
+# Option, verbose info of the git repo
+ss::set_default SPACESHIP_VCS_MODIFIED "!"
+ss::set_default SPACESHIP_VCS_RENAMED  "»"
+ss::set_default SPACESHIP_VCS_DELETED  "✘"
+ss::set_default SPACESHIP_VCS_UNMERGED "="
+
+ss::set_default SPACESHIP_VCS_AHEAD    "⇡"
+ss::set_default SPACESHIP_VCS_BEHIND   "⇣"
+ss::set_default SPACESHIP_VCS_STASH    "⍟"
+
+ss::set_default SPACESHIP_VCS_BOOKMARK "🔖"
+ss::set_default SPACESHIP_VCS_TAG      "🏷️"
+
+ss::set_default SPACESHIP_VCS_SHOW_CHANGESET "false"
+ss::set_default SPACESHIP_VCS_GIT_VERBOSE "false"
+
+ss::set_default SPACESHIP_VCS_SHOW   "true"
+ss::set_default SPACESHIP_VCS_PREFIX "on "
+ss::set_default SPACESHIP_VCS_SUFFIX "${SPACESHIP_PROMPT_DEFAULT_SUFFIX}"
+
 ss::set_default SPACESHIP_VCS_STATUS_PREFIX " ["
 ss::set_default SPACESHIP_VCS_STATUS_SUFFIX "]"
-ss::set_default SPACESHIP_VCS_STATUS_COLOR  "red"
 
+ss::set_default SPACESHIP_VCS_COLOR_CLEAN        "green"
+ss::set_default SPACESHIP_VCS_COLOR_MODIFIED     "yellow"
+ss::set_default SPACESHIP_VCS_COLOR_UNTRACKED    "green"
+# TODO: remove color for actionformats
+ss::set_default SPACESHIP_VCS_COLOR_ACTIONFORMAT "red"
+
+# TODO: git remote branch info?
+if ! ss::var_defined SPACESHIP_VCS_GIT_HOOKS; then
+  if [[ ${SPACESHIP_VCS_GIT_VERBOSE} != "true" ]]; then
+    SPACESHIP_VCS_GIT_HOOKS=(
+      vcs-detect-changes
+      git-untracked git-aheadbehind
+      git-stash
+    )
+  else
+    SPACESHIP_VCS_GIT_HOOKS=(
+      vcs-detect-changes
+      git-untracked git-aheadbehind
+      git-modified git-renamed git-deleted
+      git-unmerged
+      git-stash
+    )
+  fi
+fi
+ss::var_defined SPACESHIP_VCS_HG_HOOKS || SPACESHIP_VCS_HG_HOOKS=(
+  vcs-detect-changes
+  hg-branch hg-branchhead
+)
+ss::var_defined SPACESHIP_VCS_SVN_HOOKS || SPACESHIP_VCS_SVN_HOOKS=(
+  svn-detect-changes
+)
 
 function ss::vcs {
-  # TODO: use following flags for color control
-  _SS_DATA[vcs_workdir_half_dirty]=1
-  _SS_DATA[vcs_workdir_dirty]=1
-
-  local vcs_branch vcs_status
-  local -a tmp
+  # flags for section color
+  _SS_DATA[vcs_workdir_half_dirty]=false
+  _SS_DATA[vcs_workdir_dirty]=false
 
   vcs_info
 
   [[ -z $vcs_info_msg_0_ ]] && return
 
+  local vcs_branch vcs_status color
+  local -a tmp
+
+  if [[ "${_SS_DATA[vcs_workdir_dirty]}" == true ]]; then
+    # current_state='modified'
+    color="$SPACESHIP_VCS_COLOR_MODIFIED"
+  else
+    if [[ "${_SS_DATA[vcs_workdir_half_dirty]}" == true ]]; then
+      # current_state='untracked'
+      color="$SPACESHIP_VCS_COLOR_UNTRACKED"
+    else
+      # current_state='clean'
+      color="$SPACESHIP_VCS_COLOR_CLEAN"
+    fi
+  fi
+
   tmp=("${(s. .)vcs_info_msg_0_}")
 
   _SS_DATA[section_result]=""
   ss::section \
-    "$SPACESHIP_VCS_BRANCH_COLOR" \
-    "$SPACESHIP_VCS_BRANCH_PREFIX${tmp[1]}$SPACESHIP_VCS_BRANCH_SUFFIX"
+    "$color" \
+    "${_SS_DATA[vcs_icon]}${tmp[1]}"
   vcs_branch="${_SS_DATA[section_result]}"
 
   if (( ${#tmp} > 1 )); then
     _SS_DATA[section_result]=""
     ss::section \
-      "$SPACESHIP_VCS_STATUS_COLOR" \
+      "$color" \
       "$SPACESHIP_VCS_STATUS_PREFIX${(j..)tmp[2,-1]}$SPACESHIP_VCS_STATUS_SUFFIX"
     vcs_status="${_SS_DATA[section_result]}"
   fi
@@ -54,34 +117,66 @@ function ss::vcs {
 }
 
 # Init
-track-ss-autoload vcs_info
+autoload -Uz -- vcs_info vcs_info_hookadd
 zstyle ':vcs_info:*' enable git hg svn
+# zstyle ':vcs_info:*+*:*' debug true
 
-# HACK/TODO ex. from my personal shell
-zstyle ':vcs_info:svn*:*' actionformats '%c%u %F{red}| %a%f'
-zstyle ':vcs_info:*' actionformats '%b %F{red}| %a%f'
-zstyle ':vcs_info:hg*:*' branchformat '%b'
+# If enabled, this style causes the %c and %u format escapes to show when the
+# working directory has uncommitted changes.
 zstyle ':vcs_info:*' check-for-changes true
-# zstyle ':vcs_info:svn*:*' formats %c%u # causing blank status
-zstyle ':vcs_info:*' formats %b%c%u%m
-zstyle ':vcs_info:hg*:*' get-bookmarks true
-zstyle ':vcs_info:hg*:*' get-revision true
-zstyle ':vcs_info:hg*+gen-hg-bookmark-string:*' hooks hg-bookmarks
-zstyle ':vcs_info:*' stagedstr $' \u271a'   # ✚
-zstyle ':vcs_info:*' unstagedstr $' \u25cf' # ●
 
-# VCS_INFO HOOKS
-zstyle ':vcs_info:git*+set-message:*' hooks \
-  vcs-detect-changes git-untracked git-aheadbehind
-zstyle ':vcs_info:hg*+set-message:*' hooks \
-  vcs-detect-changes hg-branchhead
-zstyle ':vcs_info:svn*+set-message:*' hooks \
-  vcs-detect-changes svn-detect-changes
+# formats: branch, stagedstr, unstagedstr, misc.
+# "formats" are used when "actionformats" aren't used.
+zstyle ':vcs_info:*' formats '%b%c%u%m'
+zstyle ':vcs_info:*' actionformats "%b %F{$SPACESHIP_VCS_COLOR_ACTIONFORMAT}| %a%m%f"
+
+# Show number of applied patches. This is used during merges and rebases
+# %c number of unapplied patches | %n number of applied patched | %a number of all patches
+zstyle ':vcs_info:*' patch-format ' %n/%a'
+
+zstyle ':vcs_info:*' stagedstr   " ${SPACESHIP_VCS_STAGED}"
+zstyle ':vcs_info:*' unstagedstr " ${SPACESHIP_VCS_UNSTAGED}"
+
+if [[ "${SPACESHIP_VCS_SHOW_CHANGESET}" == true ]]; then
+  zstyle ':vcs_info:*' get-revision true # TODO
+fi
+
+# For hg,
+# The `get-revision` function must be turned on for dirty-check to work for Hg
+# With hg, the local revision number and the corresponding global hash are available via %i.
+zstyle ':vcs_info:hg*:*' get-revision true # add revision info
+
+# only show the branch name
+zstyle ':vcs_info:hg*:*' branchformat '%b:%r'
+
+# get a list of current bookmarks from hg. They will be available via the ‘%m’ replacement.
+zstyle ':vcs_info:hg*:*' get-bookmarks true
+
+# For svn, only
+zstyle ':vcs_info:svn*:*' formats '%b%c%u'
+zstyle ':vcs_info:svn*:*' actionformats "%c%u %F{$SPACESHIP_VCS_COLOR_ACTIONFORMAT}| %a%f"
+
+# vcs_info hooks
+#   :vcs_info:vcs-string+hook-name:user-context:repo-root-name
+# register to a static hook regardless of the current context
+vcs_info_hookadd "set-message" vcs-icon
+
+# pick up custom hook functions with env var
+zstyle ':vcs_info:git*+set-message:*' hooks ${SPACESHIP_VCS_GIT_HOOKS}
+
+zstyle ':vcs_info:hg*+set-hgrev-format:*' hooks hg-storerev
+zstyle ':vcs_info:hg*+gen-hg-bookmark-string:*' hooks hg-bookmarks
+zstyle ':vcs_info:hg*+set-message:*' hooks ${SPACESHIP_VCS_HG_HOOKS}
+
+zstyle ':vcs_info:svn*+set-message:*' hooks ${SPACESHIP_VCS_SVN_HOOKS}
 
 # Load hooks for vcs_info
-track-ss-autoload "+vi-vcs-detect-changes" \
-  "+vi-git-untracked" "+vi-git-aheadbehind" \
-  "+vi-hg-branchhead" \
-  "+vi-svn-detect-changes"
+(){
+  setopt localoptions KSH_GLOB
+  local item
+  for item in "${SPACESHIP_ROOT}"/lib/utils/+vi-!(*.zwc)(-.N:t); do
+    track-ss-autoload "$item"
+  done
+}
 
 ss::vcs "$@"

@@ -1,0 +1,14 @@
+#!/usr/bin/env zsh
+# vim: ft=zsh fdm=marker foldlevel=0 sw=2 ts=2 sts=2 et
+#
+# spaceship/sections/git_status
+
+function +vi-git-renamed {
+  [[ -n "${hook_com[index]}" ]] || hook_com[index]=$(command git status --porcelain -b 2> /dev/null)
+
+  if <<< "${hook_com[index]}" command grep '^R[ MD] ' &> /dev/null; then
+    hook_com[unstaged]+=" ${SPACESHIP_VCS_RENAMED}"
+  fi
+}
+
++vi-git-renamed "$@"

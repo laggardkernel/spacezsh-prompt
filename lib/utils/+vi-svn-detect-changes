@@ -1,22 +1,25 @@
 #!/usr/bin/env zsh
 # vim: ft=zsh fdm=marker foldlevel=0 sw=2 ts=2 sts=2 et
+#
+# References
+#   powerlevel9k/segments/vcs/vcs.p9k
 
 # SVN hook functions for vcs_info
 function +vi-svn-detect-changes {
   declare -a svn_status
   svn_status=( "${(@f)$(svn status)}" )
   if [[ "${(M)#svn_status:#\?*}" -gt 0 ]]; then
-    hook_com[unstaged]+=$' \u25cc' # '◌'
-    _SS_DATA[vcs_workdir_half_dirty]=1
+    hook_com[unstaged]+=" ${SPACESHIP_VCS_UNTRACKED}"
+    _SS_DATA[vcs_workdir_half_dirty]=true
   fi
   if [[ "${(M)#svn_status:#M*}" -gt 0 ]]; then
-    hook_com[unstaged]+=$' \u25cf'
-    _SS_DATA[vcs_workdir_dirty]=1
+    hook_com[unstaged]+=" ${SPACESHIP_VCS_UNSTAGED}"
+    _SS_DATA[vcs_workdir_dirty]=true
   fi
   if [[ "${(M)#svn_status:#A*}" -gt 0 ]]; then
-    hook_com[staged]+=$' \u271a'
-    _SS_DATA[vcs_workdir_dirty]=1
+    hook_com[staged]+=" ${SPACESHIP_VCS_STAGED}"
+    _SS_DATA[vcs_workdir_dirty]=false
   fi
 }
 
-"+vi-svn-detect-changes" "$@"
++vi-svn-detect-changes "$@"
