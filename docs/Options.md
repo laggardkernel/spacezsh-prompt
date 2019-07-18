@@ -16,6 +16,7 @@ The default order is:
 
 ```zsh
 SPACESHIP_PROMPT_ORDER=(
+  ssh           # SSH connection indicator
   time          # Time stamps section
   user          # Username section
   dir           # Current directory section
@@ -80,6 +81,15 @@ This group of options defines a behaviour of prompt and standard parameters for 
 | `SPACESHIP_PROMPT_DEFAULT_PREFIX` | `via ` | Default prefix for prompt sections |
 | `SPACESHIP_PROMPT_DEFAULT_SUFFIX` | ` ` | Default suffix for prompt section |
 | `SPACESHIP_RPROMPT_ADD_NEWLINE` | `false` | Make right prompt begins at the same line with the left one |
+
+### SSH
+
+| Variable | Default | Meaning |
+| :------- | :-----: | ------- |
+| `SPACESHIP_SSH_COLOR` | `orangered1` | Color of SSH icon |
+| `SPACESHIP_SSH_SYMBOL` | ` ` | Icon being displayed when connecting via SSH |
+| `SPACESHIP_SSH_PREFIX` |  | Prefix before prompt character |
+| `SPACESHIP_SSH_SUFFIX` | ` ` | Suffix after prompt character |
 
 ### Char
 
