@@ -16,40 +16,46 @@ The default order is:
 
 ```zsh
 SPACESHIP_PROMPT_ORDER=(
-  ssh           # SSH connection indicator
-  time          # Time stamps section
-  user          # Username section
-  dir           # Current directory section
-  host          # Hostname section
-  git           # Git section (git_branch + git_status)
-  hg            # Mercurial section (hg_branch  + hg_status)
-  package       # Package version
-  node          # Node.js section
-  ruby          # Ruby section
-  elixir        # Elixir section
-  xcode         # Xcode section
-  swift         # Swift section
-  golang        # Go section
-  php           # PHP section
-  rust          # Rust section
-  haskell       # Haskell Stack section
-  julia         # Julia section
-  docker        # Docker section
-  aws           # Amazon Web Services section
-  venv          # virtualenv section
-  conda         # conda virtualenv section
-  pyenv         # Pyenv section
-  dotnet        # .NET section
-  ember         # Ember.js section
-  kubecontext   # Kubectl context section
-  terraform     # Terraform workspace section
-  exec_time     # Execution time
-  line_sep      # Line break
-  battery       # Battery level and status
-  vi_mode       # Vi-mode indicator
-  jobs          # Background jobs indicator
-  exit_code     # Exit code section
-  char          # Prompt character
+  ssh                # SSH connection indicator
+  user               # Username section
+  host               # Hostname section
+  dir                # Current directory section
+  git::async         # Git section (git_branch + git_status)
+  hg::async          # Mercurial section (hg_branch  + hg_status)
+  package::async     # Package version
+  node::async        # Node.js section
+  ruby::async        # Ruby section
+  elm::async         # Elm section
+  elixir::async      # Elixir section
+  xcode::async       # Xcode section
+  swift::async       # Swift section
+  golang::async      # Go section
+  php::async         # PHP section
+  rust::async        # Rust section
+  haskell::async     # Haskell Stack section
+  julia::async       # Julia section
+  vagrant::async     # Vagrant section
+  docker::async      # Docker section
+  aws::async         # Amazon Web Services section
+  venv               # virtualenv section
+  conda::async       # conda virtualenv section
+  pyenv::async       # Pyenv section
+  dotnet::async      # .NET section
+  ember::async       # Ember.js section
+  kubecontext::async # Kubectl context section
+  terraform::async   # Terraform workspace section
+  line_sep           # Line break
+  # vi_mode            # Vi-mode indicator
+  # char               # Prompt character
+  vi_char::async
+)
+
+SPACESHIP_RPROMPT_ORDER=(
+  exit_code # Exit code section
+  exec_time # Execution time
+  jobs      # Background jobs indicator
+  battery   # Battery level and status
+  time      # Time stampts section
 )
 ```
 
@@ -82,7 +88,7 @@ This group of options defines a behaviour of prompt and standard parameters for 
 | `SPACESHIP_PROMPT_DEFAULT_SUFFIX` | ` ` | Default suffix for prompt section |
 | `SPACESHIP_RPROMPT_ADD_NEWLINE` | `false` | Make right prompt begins at the same line with the left one |
 
-### SSH
+### SSH (`ssh`)
 
 | Variable | Default | Meaning |
 | :------- | :-----: | ------- |
@@ -91,7 +97,7 @@ This group of options defines a behaviour of prompt and standard parameters for 
 | `SPACESHIP_SSH_PREFIX` |  | Prefix before prompt character |
 | `SPACESHIP_SSH_SUFFIX` | ` ` | Suffix after prompt character |
 
-### Char
+### Char (`char`)
 
 | Variable | Default | Meaning |
 | :------- | :-----: | ------- |
@@ -598,10 +604,27 @@ You can temporarily enable or disable vi-mode with handy functions (just execute
 
 | Function | Meaning |
 | :------- | ------- |
-| `spaceship_vi_mode_enable` | Enable vi-mode for current terminal session |
-| `spaceship_vi_mode_disable` | Disable vi-mode for current terminal session |
+| `ss::vi_mode_enable` | Enable vi-mode for current terminal session |
+| `ss::vi_mode_disable` | Disable vi-mode for current terminal session |
 
 **Note:** For oh-my-zsh users with vi-mode plugin enabled: Add `export RPS1="%{$reset_color%}"` before `source $ZSH/oh-my-zsh.sh` in `.zshrc` to disable default `<<<` NORMAL mode indicator in right prompt.
+
+### Vi-char (`vi_char`)
+
+
+A combination of `char` and `vi_mode` to use prompt character as vi-mode indicator. The idea is borrowed from ZSH framework [Prezto](https://github.com/sorin-ionescu/prezto). All `char` options and part of `vi_mode` options are reused.
+
+
+| Variable | Default | Meaning |
+| :------- | :-----: | ------- |
+| `SPACESHIP_VI_MODE_SHOW` | `true` | Use prompt character as vi-mode indicator or not |
+| `SPACESHIP_VI_MODE_INSERT` | `❯ ` | Prompt char to be shown when in insert mode |
+| `SPACESHIP_VI_MODE_NORMAL` | `❮ ` | Prompt char to be shown when in normal mode |
+
+**Note**:
+
+- Prompt character color is still controlled by `char` to indicator return value of last command.
+- If `SPACESHIP_VI_MODE_SHOW` is set to `false`, prompt character will fallback to `SPACESHIP_CHAR_SYMBOL`.
 
 ### Jobs (`jobs`)
 

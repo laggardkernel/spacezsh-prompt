@@ -38,7 +38,7 @@ if [ -z "$SPACESHIP_PROMPT_ORDER" ]; then
     line_sep           # Line break
     # vi_mode            # Vi-mode indicator
     # char               # Prompt character
-    vi_char::async
+    vi_char::async     # Prompt character as vi-mode indicator
   )
 fi
 
