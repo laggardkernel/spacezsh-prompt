@@ -27,8 +27,7 @@ SPACESHIP_DIR_LOCK_COLOR="${SPACESHIP_DIR_LOCK_COLOR="red"}"
 ss::dir() {
   [[ $SPACESHIP_DIR_SHOW == false ]] && return
 
-  local 'dir' 'trunc_prefix'
-  local vcs_root
+  local vcs_root trunc_prefix dir suffix
 
   # Threat repo root as a top-level directory or not
   if [[ $SPACESHIP_DIR_TRUNC_REPO == true ]] && { \
@@ -60,14 +59,16 @@ ss::dir() {
   fi
 
   if [[ ! -w . ]]; then
-    SPACESHIP_DIR_SUFFIX="%F{$SPACESHIP_DIR_LOCK_COLOR}${SPACESHIP_DIR_LOCK_SYMBOL}%f${SPACESHIP_DIR_SUFFIX}"
+    suffix="%F{$SPACESHIP_DIR_LOCK_COLOR}${SPACESHIP_DIR_LOCK_SYMBOL}%f${SPACESHIP_DIR_SUFFIX}"
+  else
+    suffix="${SPACESHIP_DIR_SUFFIX}"
   fi
 
   ss::section \
     "$SPACESHIP_DIR_COLOR" \
     "$dir" \
     "$SPACESHIP_DIR_PREFIX" \
-    "$SPACESHIP_DIR_SUFFIX"
+    "$suffix"
 }
 
 ss::dir "$@"

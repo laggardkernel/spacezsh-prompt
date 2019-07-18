@@ -8,7 +8,7 @@ _SS_DATA[prompt_opened]="$SPACESHIP_PROMPT_FIRST_PREFIX_SHOW"
 # USAGE:
 #   ss::section <color> <content> [prefix] [suffix]
 function ss::section {
-  local color prefix content suffix
+  local color content prefix suffix
   [[ -n $1 ]] && color="%F{$1}" || color="%f"
   content="$2"
   prefix="$3"
