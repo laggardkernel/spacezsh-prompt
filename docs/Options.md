@@ -47,7 +47,7 @@ SPACESHIP_PROMPT_ORDER=(
   line_sep           # Line break
   # vi_mode            # Vi-mode indicator
   # char               # Prompt character
-  vi_char::async
+  vi_char
 )
 
 SPACESHIP_RPROMPT_ORDER=(
@@ -611,18 +611,20 @@ You can temporarily enable or disable vi-mode with handy functions (just execute
 
 ### Vi-char (`vi_char`)
 
-
-A combination of `char` and `vi_mode` to use prompt character as vi-mode indicator. The idea is borrowed from ZSH framework [Prezto](https://github.com/sorin-ionescu/prezto). All `char` options and part of `vi_mode` options are reused.
-
+A combination of `char` and `vi_mode` to use prompt character as vi-mode indicator. The idea is borrowed from ZSH framework [Prezto](https://github.com/sorin-ionescu/prezto). All `char` options and part of `vi_mode` options are supported.
 
 | Variable | Default | Meaning |
 | :------- | :-----: | ------- |
 | `SPACESHIP_VI_MODE_SHOW` | `true` | Use prompt character as vi-mode indicator or not |
 | `SPACESHIP_VI_MODE_INSERT` | `❯ ` | Prompt char to be shown when in insert mode |
 | `SPACESHIP_VI_MODE_NORMAL` | `❮ ` | Prompt char to be shown when in normal mode |
+| `SPACESHIP_VI_MODE_CURSOR_VICMD` | `block` | Cursor style in Vi's command mode |
+| `SPACESHIP_VI_MODE_CURSOR_VIINS` | `blinking bar` | Cursor style in Vi's insert mode |
 
 **Note**:
 
+- Vi mode is enabled from the 2nd prompt on purpose to avoid the incompatibility between `zsh-syntax-highlighting` and `add-zle-hook-widget`.
+- If you are using tmux but `$TMUX` is not set (e.g., you're running zsh on a remote host), you may need to set `TMUX_PASSTHROUGH=1` to get the cursor styling to work.
 - Prompt character color is still controlled by `char` to indicator return value of last command.
 - If `SPACESHIP_VI_MODE_SHOW` is set to `false`, prompt character will fallback to `SPACESHIP_CHAR_SYMBOL`.
 

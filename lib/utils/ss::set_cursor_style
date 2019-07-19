@@ -1,0 +1,57 @@
+#!/usr/bin/env zsh
+# vim: ft=zsh fdm=marker foldlevel=0 sw=2 ts=2 sts=2 et
+#
+# References
+#   https://github.com/softmoth/zsh-vim-mode
+
+function ss::set_cursor_style {
+  (( ${#@} )) || return 1
+
+  local steady=
+  local shape=
+  local color=
+
+  for setting in "$@"; do
+    case $setting in
+      blinking)  steady=0 ;;
+      steady)    steady=1 ;;
+      block)     shape=1 ;;
+      underline) shape=3 ;;
+      beam|bar)  shape=5 ;;
+      *)         color="$setting" ;;
+    esac
+  done
+
+  # OSC Ps ; Pt BEL
+  #   Ps = 1 2  -> Change text cursor color to Pt.
+  #   Ps = 1 1 2  -> Reset text cursor color.
+
+  if [[ -z $color ]]; then
+    # Reset cursor color
+    ss::send_terminal_sequence "\e]112\a"
+  else
+    # Note: Color is "specified by name or RGB specification as per
+    # XParseColor", according to XTerm docs
+    ss::send_terminal_sequence "\e]12;${color}\a"
+  fi
+
+  # CSI Ps SP q
+  #   Set cursor style (DECSCUSR), VT520.
+  #     Ps = 0  -> blinking block.
+  #     Ps = 1  -> blinking block (default).
+  #     Ps = 2  -> steady block.
+  #     Ps = 3  -> blinking underline.
+  #     Ps = 4  -> steady underline.
+  #     Ps = 5  -> blinking bar (xterm).
+  #     Ps = 6  -> steady bar (xterm).
+
+  if [[ -z $steady && -z $shape ]]; then
+    ss::send_terminal_sequence "\e[0 q"
+  else
+    [[ -z $shape ]] && shape=1
+    [[ -z $steady ]] && steady=1
+    ss::send_terminal_sequence "\e[$((shape + steady)) q"
+  fi
+}
+
+ss::set_cursor_style "$@"

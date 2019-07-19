@@ -3,10 +3,18 @@
 
 # Updates editor information when the keymap changes.
 function ss::vi-mode-keymap-select {
-  # rerender prompt to get vi mode updated
+  # Re-render prompt to get vi mode updated
   ss::refresh_cache_item "vi_char" "true"
 
-  ss::vi_mode_cursor_switch
+  # Update cursor style
+  case "$KEYMAP" in
+    vicmd|visual|vline)
+      ss::set_cursor_style ${(s. .)SPACESHIP_VI_MODE_CURSOR_VICMD}
+      ;;
+    main|viins|*)
+      ss::set_cursor_style ${(s. .)SPACESHIP_VI_MODE_CURSOR_VIINS}
+      ;;
+  esac
 }
 
 ss::vi-mode-keymap-select "$@"
