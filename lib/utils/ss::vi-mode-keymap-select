@@ -1,0 +1,12 @@
+#!/usr/bin/env zsh
+# vim: ft=zsh fdm=marker foldlevel=0 sw=2 ts=2 sts=2 et
+
+# Updates editor information when the keymap changes.
+function ss::vi-mode-keymap-select {
+  # rerender prompt to get vi mode updated
+  ss::refresh_cache_item "vi_char" "true"
+
+  ss::vi_mode_cursor_switch
+}
+
+ss::vi-mode-keymap-select "$@"

@@ -1,0 +1,32 @@
+#!/usr/bin/env zsh
+# vim: ft=zsh fdm=marker foldlevel=0 sw=2 ts=2 sts=2 et
+#
+# Remove conflicting ZLE widgets added by other framework, plugins
+
+# Self destruct setup
+# Remove other conflicting widgets at the 2nd run of precmd,
+# in case the plugins is loaded in Zplugin's turbo mode
+function ss::vi_mode_precmd {
+  # remove self from precmd
+  precmd_functions=("${(@)precmd_functions:#ss::vi_mode_precmd}")
+  builtin unfunction ss::vi_mode_precmd
+  unset _vi_mode_post_setup_count
+
+  # https://github.com/softmoth/zsh-vim-mode/blob/master/zsh-vim-mode.plugin.zsh
+  # remove hooks from zsh-vim-mode, some of them are not compatible with the async renderer
+  # widget touched by vim-mode: isearch-exit isearch-update line-pre-redraw
+  # hooks: vim-mode-precmd
+  # vim_mode_keymap_funcs=(vim-mode-update-prompt vim-mode-set-cursor-style)
+  # add-zsh-hook        precmd      vim-mode-cursor-init-hook
+  # add-zle-hook-widget line-finish vim-mode-cursor-finish-hook
+  autoload -Uz add-zsh-hook add-zle-hook-widget
+
+  add-zsh-hook -D precmd vim-mode-\*
+  local f
+  for f in isearch-exit isearch-update line-pre-redraw line-finish; do
+    add-zle-hook-widget -D "$f" vim-mode-\*
+  done
+  typeset -ag vim_mode_keymap_funcs=()
+}
+
+ss::vi_mode_precmd "$@"
