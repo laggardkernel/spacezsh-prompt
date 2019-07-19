@@ -36,7 +36,7 @@ function ss::refresh_cache_item() {
     ss::${section}
     _ss_section_cache[${cache_key}]="${section}·|·${alignment}·|·${_SS_DATA[section_result]}"
 
-    [[ $2 == "true" ]] && ss::render "$alignment"
+    [[ $2 == "true" ]] && ss::async_render "$alignment"
   fi
 }
 
