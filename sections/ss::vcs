@@ -26,7 +26,9 @@ ss::set_default SPACESHIP_VCS_BOOKMARK "🔖"
 ss::set_default SPACESHIP_VCS_TAG      "🏷️"
 ss::set_default SPACESHIP_SVN_COMMIT   "" #  for nerdfont
 
-ss::set_default SPACESHIP_VCS_GIT_VERBOSE "false"
+ss::set_default SPACESHIP_VCS_VERBOSE     "true"
+ss::set_default SPACESHIP_VCS_GIT_VERBOSE "${SPACESHIP_VCS_VERBOSE}"
+ss::set_default SPACESHIP_VCS_HG_VERBOSE  "${SPACESHIP_VCS_VERBOSE}"
 
 ss::set_default SPACESHIP_VCS_SHOW   "true"
 ss::set_default SPACESHIP_VCS_PREFIX "on "
@@ -63,10 +65,20 @@ if ! ss::var_defined SPACESHIP_VCS_GIT_HOOKS; then
     )
   fi
 fi
-ss::var_defined SPACESHIP_VCS_HG_HOOKS || SPACESHIP_VCS_HG_HOOKS=(
-  vcs-detect-changes
-  hg-branch hg-branchhead
-)
+if ! ss::var_defined SPACESHIP_VCS_HG_HOOKS; then
+  if [[ ${SPACESHIP_VCS_HG_VERBOSE} != "true" ]]; then
+    SPACESHIP_VCS_HG_HOOKS=(
+      vcs-detect-changes
+      hg-branch hg-branchhead hg-untracked
+    )
+  else
+    SPACESHIP_VCS_HG_HOOKS=(
+      vcs-detect-changes
+      hg-branch hg-branchhead hg-untracked
+      hg-modified hg-deleted
+    )
+  fi
+fi
 ss::var_defined SPACESHIP_VCS_SVN_HOOKS || SPACESHIP_VCS_SVN_HOOKS=(
   svn-detect-changes
 )

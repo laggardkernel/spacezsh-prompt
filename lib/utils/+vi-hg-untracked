@@ -1,0 +1,17 @@
+#!/usr/bin/env zsh
+# vim: ft=zsh fdm=marker foldlevel=0 sw=2 ts=2 sts=2 et
+#
+# spaceship/sections/hg_status
+
+# hg: Show marker if there are untracked files in repository
+# Make sure you have added unstaged to your 'formats':  %u
+function +vi-hg-untracked {
+  [[ -n "${hook_com[index]}" ]] || hook_com[index]=$(command hg status 2>/dev/null)
+
+  if <<< "${hook_com[index]}" command grep -E '^\? ' &> /dev/null ; then
+    hook_com[unstaged]+="${SPACESHIP_VCS_UNTRACKED}"
+    _SS_DATA[vcs_workdir_half_dirty]=true
+  fi
+}
+
++vi-hg-untracked "$@"

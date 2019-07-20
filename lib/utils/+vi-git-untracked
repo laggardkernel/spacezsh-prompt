@@ -4,7 +4,7 @@
 # https://github.com/zsh-users/zsh/blob/master/Misc/vcs_info-examples
 
 # git: Show marker if there are untracked files in repository
-# Make sure you have added staged to your 'formats':  %c
+# Make sure you have added unstaged to your 'formats':  %u
 function +vi-git-untracked {
   [[ -n "${hook_com[index]}" ]] || hook_com[index]=$(command git status --porcelain -b 2> /dev/null)
 
