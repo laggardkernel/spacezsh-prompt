@@ -120,19 +120,18 @@ zstyle ':vcs_info:*' enable ${SPACESHIP_VCS_BACKENDS}
 # working directory has uncommitted changes.
 zstyle ':vcs_info:*' check-for-changes true
 
-# TODO: group adjustment for changeset
-# _SS_DATA[vcs_changeset_prefix]=""
-# if [[ "${SPACESHIP_VCS_SHOW_CHANGESET}" == true ]]; then
-#   _SS_DATA[vcs_changeset_prefix]="${SPACESHIP_SVN_COMMIT}%0.${SPACESHIP_VCS_CHANGESET_HASH_LENGTH}i "
-#   # Query commit id, revision number. %i
-#   zstyle ':vcs_info:*' get-revision true
-# fi
+_SS_DATA[vcs_changeset_prefix]=""
+if [[ "${SPACESHIP_VCS_SHOW_CHANGESET}" == true ]]; then
+  _SS_DATA[vcs_changeset_prefix]=" ${SPACESHIP_SVN_COMMIT}%0.${SPACESHIP_VCS_CHANGESET_HASH_LENGTH}i"
+  # Query commit id, revision number. %i
+  zstyle ':vcs_info:*' get-revision true
+fi
 
 # formats: branch, stagedstr, unstagedstr, misc.
 # "formats" are used when "actionformats" aren't used.
-zstyle ':vcs_info:*' formats "%b%c%u%m"
+zstyle ':vcs_info:*' formats "%b${_SS_DATA[vcs_changeset_prefix]}·|·%c%u%m"
 # used if there is a special action going on in your current repository; like an interactive rebase or a merge conflict.
-zstyle ':vcs_info:*' actionformats "%b %F{$SPACESHIP_VCS_COLOR_ACTIONFORMAT}| %a%m%f"
+zstyle ':vcs_info:*' actionformats "%b${_SS_DATA[vcs_changeset_prefix]}·|·%F{$SPACESHIP_VCS_COLOR_ACTIONFORMAT}| %a%m%f"
 
 # Show number of applied patches. This is used during merges and rebases
 # %c number of unapplied patches | %n number of applied patched | %a number of all patches
@@ -154,8 +153,8 @@ zstyle ':vcs_info:hg*:*' branchformat '%b'
 zstyle ':vcs_info:hg*:*' get-bookmarks true
 
 # For svn, only
-zstyle ':vcs_info:svn*:*' formats "%b%c%u"
-zstyle ':vcs_info:svn*:*' actionformats "%c%u %F{$SPACESHIP_VCS_COLOR_ACTIONFORMAT}| %a%f"
+zstyle ':vcs_info:svn*:*' formats "%b${_SS_DATA[vcs_changeset_prefix]}·|·%c%u"
+zstyle ':vcs_info:svn*:*' actionformats "${_SS_DATA[vcs_changeset_prefix]:+${_SS_DATA[vcs_changeset_prefix]}·|·}%c%u %F{$SPACESHIP_VCS_COLOR_ACTIONFORMAT}| %a%f"
 
 # vcs_info hooks
 #   :vcs_info:vcs-string+hook-name:user-context:repo-root-name
