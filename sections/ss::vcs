@@ -45,6 +45,8 @@ ss::set_default SPACESHIP_VCS_COLOR_ACTIONFORMAT "red"
 ss::set_default SPACESHIP_VCS_SHOW_CHANGESET "false"
 ss::set_default SPACESHIP_VCS_CHANGESET_HASH_LENGTH "7"
 
+ss::var_defined SPACESHIP_VCS_BACKENDS || SPACESHIP_VCS_BACKENDS=(git hg svn)
+
 if ! ss::var_defined SPACESHIP_VCS_GIT_HOOKS; then
   if [[ ${SPACESHIP_VCS_GIT_VERBOSE} != "true" ]]; then
     SPACESHIP_VCS_GIT_HOOKS=(
@@ -113,7 +115,7 @@ function ss::vcs {
 # Init
 # zstyle ':vcs_info:*+*:*' debug true
 autoload -Uz -- vcs_info vcs_info_hookadd
-zstyle ':vcs_info:*' enable git hg svn
+zstyle ':vcs_info:*' enable ${SPACESHIP_VCS_BACKENDS}
 
 # If enabled, this style causes the %c and %u format escapes to show when the
 # working directory has uncommitted changes.
