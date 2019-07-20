@@ -10,13 +10,13 @@ function +vi-vcs-icon() {
   local remote
   if [[ "${hook_com[vcs]}" == "git" ]]; then
     # remote=$(command git ls-remote --get-url 2> /dev/null)
-    _SS_DATA[vcs_icon]=${SPACESHIP_GIT_SYMBOL}
+    _SS_DATA[vcs_icon]="${SPACESHIP_GIT_SYMBOL}"
   elif [[ "${hook_com[vcs]}" == "hg" ]]; then
     # remote=$(command hg paths default 2> /dev/null)
-    _SS_DATA[vcs_icon]=${SPACESHIP_HG_SYMBOL}
+    _SS_DATA[vcs_icon]="${SPACESHIP_HG_SYMBOL}"
   elif [[ "${hook_com[vcs]}" == "svn" ]]; then
     # remote="${svninfo[URL]}" # Set by VCS_INFO
-    _SS_DATA[vcs_icon]=${SPACESHIP_SVN_SYMBOL}
+    _SS_DATA[vcs_icon]="${SPACESHIP_SVN_SYMBOL}"
   fi
 }
 

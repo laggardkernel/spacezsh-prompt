@@ -7,7 +7,7 @@ function +vi-git-modified {
   [[ -n "${hook_com[index]}" ]] || hook_com[index]=$(command git status --porcelain -b 2> /dev/null)
 
   if <<< "${hook_com[index]}" command grep '^[ MARC]M ' &> /dev/null; then
-    hook_com[unstaged]+=" ${SPACESHIP_VCS_MODIFIED}"
+    hook_com[unstaged]+="${SPACESHIP_VCS_MODIFIED}"
   fi
 }
 

@@ -13,7 +13,7 @@ function +vi-git-untracked {
     # If instead you want to show the marker only if there are untracked
     # files in $PWD, use:
     #[[ -n $(git ls-files --others --exclude-standard) ]] ; then
-    hook_com[unstaged]+=" ${SPACESHIP_VCS_UNTRACKED}"
+    hook_com[unstaged]+="${SPACESHIP_VCS_UNTRACKED}"
     _SS_DATA[vcs_workdir_half_dirty]=true
   fi
 }

@@ -7,7 +7,7 @@
 function +vi-git-stash {
   if [[ -s "${vcs_comm[gitdir]}/logs/refs/stash" ]] ; then
     local -a stashes=( "${(@f)"$(<${vcs_comm[gitdir]}/logs/refs/stash)"}" )
-    hook_com[misc]+=" ${SPACESHIP_VCS_STASH}${#stashes}"
+    hook_com[misc]+="${SPACESHIP_VCS_STASH}${#stashes}"
   fi
 }
 

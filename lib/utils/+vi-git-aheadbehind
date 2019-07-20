@@ -12,12 +12,12 @@ function +vi-git-aheadbehind {
   # for git prior to 1.7
   # ahead=$(git rev-list origin/${hook_com[branch]}..HEAD | wc -l)
   ahead=$(command git rev-list --count "${hook_com[branch]}"@{upstream}..HEAD 2>/dev/null)
-  (( $ahead )) && gitstatus+=( " ${SPACESHIP_VCS_AHEAD}${ahead}" )
+  (( $ahead )) && gitstatus+=( "${SPACESHIP_VCS_AHEAD}${ahead}" )
 
   # for git prior to 1.7
   # behind=$(git rev-list HEAD..origin/${hook_com[branch]} | wc -l)
   behind=$(command git rev-list --count HEAD.."${hook_com[branch]}"@{upstream} 2>/dev/null)
-  (( $behind )) && gitstatus+=( " ${SPACESHIP_VCS_BEHIND}${behind}" )
+  (( $behind )) && gitstatus+=( "${SPACESHIP_VCS_BEHIND}${behind}" )
 
   hook_com[misc]+=${(j:/:)gitstatus}
 }

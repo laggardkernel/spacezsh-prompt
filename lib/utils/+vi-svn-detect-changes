@@ -9,15 +9,15 @@ function +vi-svn-detect-changes {
   declare -a svn_status
   svn_status=( "${(@f)$(svn status)}" )
   if [[ "${(M)#svn_status:#\?*}" -gt 0 ]]; then
-    hook_com[unstaged]+=" ${SPACESHIP_VCS_UNTRACKED}"
+    hook_com[unstaged]+="${SPACESHIP_VCS_UNTRACKED}"
     _SS_DATA[vcs_workdir_half_dirty]=true
   fi
   if [[ "${(M)#svn_status:#M*}" -gt 0 ]]; then
-    hook_com[unstaged]+=" ${SPACESHIP_VCS_UNSTAGED}"
+    hook_com[unstaged]+="${SPACESHIP_VCS_UNSTAGED}"
     _SS_DATA[vcs_workdir_dirty]=true
   fi
   if [[ "${(M)#svn_status:#A*}" -gt 0 ]]; then
-    hook_com[staged]+=" ${SPACESHIP_VCS_STAGED}"
+    hook_com[staged]+="${SPACESHIP_VCS_STAGED}"
     _SS_DATA[vcs_workdir_dirty]=false
   fi
 }

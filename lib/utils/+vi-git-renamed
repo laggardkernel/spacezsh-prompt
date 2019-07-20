@@ -7,7 +7,7 @@ function +vi-git-renamed {
   [[ -n "${hook_com[index]}" ]] || hook_com[index]=$(command git status --porcelain -b 2> /dev/null)
 
   if <<< "${hook_com[index]}" command grep '^R[ MD] ' &> /dev/null; then
-    hook_com[unstaged]+=" ${SPACESHIP_VCS_RENAMED}"
+    hook_com[unstaged]+="${SPACESHIP_VCS_RENAMED}"
   fi
 }
 
