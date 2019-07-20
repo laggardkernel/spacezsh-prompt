@@ -25,8 +25,8 @@ ss::set_default SPACESHIP_VCS_STASH    "⍟"
 
 ss::set_default SPACESHIP_VCS_BOOKMARK "🔖"
 ss::set_default SPACESHIP_VCS_TAG      "🏷️"
+ss::set_default SPACESHIP_SVN_COMMIT   "" #  for nerdfont
 
-ss::set_default SPACESHIP_VCS_SHOW_CHANGESET "false"
 ss::set_default SPACESHIP_VCS_GIT_VERBOSE "false"
 
 ss::set_default SPACESHIP_VCS_SHOW   "true"
@@ -39,10 +39,12 @@ ss::set_default SPACESHIP_VCS_STATUS_SUFFIX "]"
 ss::set_default SPACESHIP_VCS_COLOR_CLEAN        "green"
 ss::set_default SPACESHIP_VCS_COLOR_MODIFIED     "yellow"
 ss::set_default SPACESHIP_VCS_COLOR_UNTRACKED    "green"
-# TODO: remove color for actionformats
 ss::set_default SPACESHIP_VCS_COLOR_ACTIONFORMAT "red"
 
-# TODO: git remote branch info?
+# WIP
+ss::set_default SPACESHIP_VCS_SHOW_CHANGESET "false"
+ss::set_default SPACESHIP_VCS_CHANGESET_HASH_LENGTH "7"
+
 if ! ss::var_defined SPACESHIP_VCS_GIT_HOOKS; then
   if [[ ${SPACESHIP_VCS_GIT_VERBOSE} != "true" ]]; then
     SPACESHIP_VCS_GIT_HOOKS=(
@@ -69,10 +71,13 @@ ss::var_defined SPACESHIP_VCS_SVN_HOOKS || SPACESHIP_VCS_SVN_HOOKS=(
 )
 
 function ss::vcs {
+  [[ "$SPACESHIP_VCS_SHOW" == "true" ]] || return
+
   # flags for section color
   _SS_DATA[vcs_workdir_half_dirty]=false
   _SS_DATA[vcs_workdir_dirty]=false
 
+  # check repo status
   vcs_info
 
   [[ -z $vcs_info_msg_0_ ]] && return
@@ -94,40 +99,38 @@ function ss::vcs {
   fi
 
   tmp=("${(s. .)vcs_info_msg_0_}")
+  vcs_branch="${_SS_DATA[vcs_icon]}${tmp[1]}"
+  (( ${#tmp} > 1 )) \
+    && vcs_status="$SPACESHIP_VCS_STATUS_PREFIX${(j..)tmp[2,-1]}$SPACESHIP_VCS_STATUS_SUFFIX"
 
-  _SS_DATA[section_result]=""
   ss::section \
     "$color" \
-    "${_SS_DATA[vcs_icon]}${tmp[1]}"
-  vcs_branch="${_SS_DATA[section_result]}"
-
-  if (( ${#tmp} > 1 )); then
-    _SS_DATA[section_result]=""
-    ss::section \
-      "$color" \
-      "$SPACESHIP_VCS_STATUS_PREFIX${(j..)tmp[2,-1]}$SPACESHIP_VCS_STATUS_SUFFIX"
-    vcs_status="${_SS_DATA[section_result]}"
-  fi
-
-  ss::section \
-    'white' \
     "${vcs_branch}${vcs_status}" \
     "$SPACESHIP_VCS_PREFIX" \
     "$SPACESHIP_VCS_SUFFIX"
 }
 
 # Init
+# zstyle ':vcs_info:*+*:*' debug true
 autoload -Uz -- vcs_info vcs_info_hookadd
 zstyle ':vcs_info:*' enable git hg svn
-# zstyle ':vcs_info:*+*:*' debug true
 
 # If enabled, this style causes the %c and %u format escapes to show when the
 # working directory has uncommitted changes.
 zstyle ':vcs_info:*' check-for-changes true
 
+# TODO: group adjustment for changeset
+# _SS_DATA[vcs_changeset_prefix]=""
+# if [[ "${SPACESHIP_VCS_SHOW_CHANGESET}" == true ]]; then
+#   _SS_DATA[vcs_changeset_prefix]="${SPACESHIP_SVN_COMMIT}%0.${SPACESHIP_VCS_CHANGESET_HASH_LENGTH}i "
+#   # Query commit id, revision number. %i
+#   zstyle ':vcs_info:*' get-revision true
+# fi
+
 # formats: branch, stagedstr, unstagedstr, misc.
 # "formats" are used when "actionformats" aren't used.
-zstyle ':vcs_info:*' formats '%b%c%u%m'
+zstyle ':vcs_info:*' formats "%b%c%u%m"
+# used if there is a special action going on in your current repository; like an interactive rebase or a merge conflict.
 zstyle ':vcs_info:*' actionformats "%b %F{$SPACESHIP_VCS_COLOR_ACTIONFORMAT}| %a%m%f"
 
 # Show number of applied patches. This is used during merges and rebases
@@ -137,23 +140,20 @@ zstyle ':vcs_info:*' patch-format ' %n/%a'
 zstyle ':vcs_info:*' stagedstr   " ${SPACESHIP_VCS_STAGED}"
 zstyle ':vcs_info:*' unstagedstr " ${SPACESHIP_VCS_UNSTAGED}"
 
-if [[ "${SPACESHIP_VCS_SHOW_CHANGESET}" == true ]]; then
-  zstyle ':vcs_info:*' get-revision true # TODO
-fi
-
 # For hg,
 # The `get-revision` function must be turned on for dirty-check to work for Hg
 # With hg, the local revision number and the corresponding global hash are available via %i.
 zstyle ':vcs_info:hg*:*' get-revision true # add revision info
 
+# TODO: add branch icon if tag info display is supported
 # only show the branch name
-zstyle ':vcs_info:hg*:*' branchformat '%b:%r'
+zstyle ':vcs_info:hg*:*' branchformat '%b'
 
 # get a list of current bookmarks from hg. They will be available via the ‘%m’ replacement.
 zstyle ':vcs_info:hg*:*' get-bookmarks true
 
 # For svn, only
-zstyle ':vcs_info:svn*:*' formats '%b%c%u'
+zstyle ':vcs_info:svn*:*' formats "%b%c%u"
 zstyle ':vcs_info:svn*:*' actionformats "%c%u %F{$SPACESHIP_VCS_COLOR_ACTIONFORMAT}| %a%f"
 
 # vcs_info hooks
