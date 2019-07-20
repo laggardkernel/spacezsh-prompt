@@ -113,7 +113,7 @@ function ss::vcs {
 
   tmp=("${(@s:·|·:)vcs_info_msg_0_}")
   vcs_branch="${_SS_DATA[vcs_icon]}${tmp[1]}"
-  (( ${#tmp} > 1 )) \
+  [[ -n "${tmp[2]}" ]] \
     && vcs_status="${SPACESHIP_VCS_STATUS_PREFIX}${tmp[2]}${SPACESHIP_VCS_STATUS_SUFFIX}"
 
   ss::section \
