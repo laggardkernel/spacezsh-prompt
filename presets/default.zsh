@@ -16,6 +16,8 @@ if [ -z "$SPACESHIP_PROMPT_ORDER" ]; then
     # hg::async          # deprecated
 
     # package::async     # Package version
+    # gradle::async      # Gradle section
+    # maven::async       # Maven section
     # node::async        # Node.js section
     # ruby::async        # Ruby section
     # elm::async         # Elm section

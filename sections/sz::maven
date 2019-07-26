@@ -1,0 +1,85 @@
+#!/usr/bin/env zsh
+# vim: ft=zsh fdm=marker foldlevel=0 sw=2 ts=2 sts=2 et
+
+#
+# Maven
+#
+# Apache Maven is a software project management and comprehension tool.
+# Link: https://maven.apache.org/
+
+# ------------------------------------------------------------------------------
+# Configuration
+# ------------------------------------------------------------------------------
+
+SPACESHIP_MAVEN_SHOW="${SPACESHIP_MAVEN_SHOW=true}"
+SPACESHIP_MAVEN_PREFIX="${SPACESHIP_MAVEN_PREFIX="$SPACESHIP_PROMPT_DEFAULT_PREFIX"}"
+SPACESHIP_MAVEN_SUFFIX="${SPACESHIP_MAVEN_SUFFIX="$SPACESHIP_PROMPT_DEFAULT_SUFFIX"}"
+SPACESHIP_MAVEN_SYMBOL="${SPACESHIP_MAVEN_SYMBOL="𝑚 "}"
+SPACESHIP_MAVEN_DEFAULT_VERSION="${SPACESHIP_MAVEN_DEFAULT_VERSION=""}"
+SPACESHIP_MAVEN_COLOR="${SPACESHIP_MAVEN_COLOR="yellow"}"
+
+SPACESHIP_MAVEN_JVM_SHOW="${SPACESHIP_MAVEN_JVM_SHOW=true}"
+SPACESHIP_MAVEN_JVM_PREFIX="${SPACESHIP_MAVEN_JVM_PREFIX="$SPACESHIP_PROMPT_DEFAULT_PREFIX"}"
+SPACESHIP_MAVEN_JVM_SUFFIX="${SPACESHIP_MAVEN_JVM_SUFFIX="$SPACESHIP_PROMPT_DEFAULT_SUFFIX"}"
+SPACESHIP_MAVEN_JVM_SYMBOL="${SPACESHIP_MAVEN_JVM_SYMBOL="☕️ "}"
+SPACESHIP_MAVEN_JVM_DEFAULT_VERSION="${SPACESHIP_MAVEN_JVM_DEFAULT_VERSION=""}"
+SPACESHIP_MAVEN_JVM_COLOR="${SPACESHIP_MAVEN_JVM_COLOR="magenta"}"
+
+# ------------------------------------------------------------------------------
+# Utils
+# ------------------------------------------------------------------------------
+sz::maven::versions() {
+  local maven_exe="$1" maven_version_output maven_version jvm_version
+
+  maven_version_output=$("$maven_exe" --version)
+  maven_version=$(<<< "$maven_version_output" command awk '{ if ($2 ~ /^Maven/) { print "v" $3 } }')
+  jvm_version=$(<<< "$maven_version_output" command awk '{ if ($1 ~ /^Java/) { print "v" substr($3, 1, length($3)-1) } }')
+
+  print maven "$maven_version" jvm "$jvm_version"
+}
+
+# ------------------------------------------------------------------------------
+# Section
+# ------------------------------------------------------------------------------
+
+# Show current version of maven.
+sz::maven() {
+  [[ $SPACESHIP_MAVEN_SHOW == false ]] && return
+
+  local maven_dir maven_exe
+  if maven_dir="$(sz::upsearch mvnw)"; then
+    maven_exe="$maven_dir/mvnw"
+  elif maven_dir="$(sz::upsearch pom.xml)"; then
+    maven_exe="mvn"
+  else
+    return
+  fi
+
+  local -A maven_versions
+  maven_versions=($(sz::maven::versions "$maven_exe"))
+
+  [[ "${maven_versions[maven]}" == "$SPACESHIP_MAVEN_DEFAULT_VERSION" ]] && return
+
+  local jvm_info
+
+  if [[ $SPACESHIP_MAVEN_JVM_SHOW == false ]] || \
+    [[ "${maven_versions[jvm]}" == "$SPACESHIP_MAVEN_JVM_DEFAULT_VERSION" ]]; then
+      jvm_info=""
+  else
+    _SS_DATA[section_result]=""
+    sz::section \
+      "$SPACESHIP_MAVEN_JVM_COLOR" \
+      "$SPACESHIP_MAVEN_JVM_SYMBOL${maven_versions[jvm]}" \
+      "$SPACESHIP_MAVEN_JVM_PREFIX" \
+      "$SPACESHIP_MAVEN_JVM_SUFFIX"
+    jvm_info="${_SS_DATA[section_result]}"
+  fi
+
+  sz::section \
+    "$SPACESHIP_MAVEN_COLOR" \
+    "$SPACESHIP_MAVEN_SYMBOL${maven_versions[maven]}$SPACESHIP_MAVEN_SUFFIX`
+    `${jvm_info}" \
+    "$SPACESHIP_MAVEN_PREFIX"
+}
+
+sz::maven "$@"
