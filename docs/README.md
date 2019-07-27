@@ -9,6 +9,7 @@
   * [Username (user)](/docs/Options.md#username-user)
   * [Hostname (host)](/docs/Options.md#hostname-host)
   * [Directory (dir)](/docs/Options.md#directory-dir)
+  * [VCS (vcs)](/docs/Options.md#vcs-vcs)
   * [Git (git)](/docs/Options.md#git-git)
     * [Git branch (git_branch)](/docs/Options.md#git-branch-gitbranch)
     * [Git status (git_status)](/docs/Options.md#git-status-gitstatus)
