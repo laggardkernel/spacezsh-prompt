@@ -90,13 +90,14 @@ function ss::vcs {
   # flags for section color
   _SS_DATA[vcs_workdir_half_dirty]=false
   _SS_DATA[vcs_workdir_dirty]=false
+  _SS_DATA[vcs_in_action]=false
 
   # check repo status
   vcs_info
 
   [[ -z $vcs_info_msg_0_ ]] && return
 
-  local vcs_branch vcs_status color
+  local vcs_branch vcs_status color result
   local -a tmp
 
   if [[ "${_SS_DATA[vcs_workdir_dirty]}" == true ]]; then
@@ -114,14 +115,33 @@ function ss::vcs {
 
   tmp=("${(@s:·|·:)vcs_info_msg_0_}")
   vcs_branch="${_SS_DATA[vcs_icon]}${tmp[1]}"
-  [[ -n "${tmp[2]}" ]] \
-    && vcs_status="${SPACESHIP_VCS_STATUS_PREFIX}${tmp[2]}${SPACESHIP_VCS_STATUS_SUFFIX}"
+  vcs_status="${tmp[2]## }"; vcs_status="${vcs_status%% }"
+  [[ -n "${vcs_status}" ]] \
+    && vcs_status="${SPACESHIP_VCS_STATUS_PREFIX}${vcs_status}${SPACESHIP_VCS_STATUS_SUFFIX}"
 
-  ss::section \
-    "$color" \
-    "${vcs_branch}${vcs_status}" \
-    "$SPACESHIP_VCS_PREFIX" \
-    "$SPACESHIP_VCS_SUFFIX"
+  if [[ "${_SS_DATA[vcs_in_action]}" != true ]]; then
+    ss::section \
+      "$color" \
+      "${vcs_branch}${vcs_status}" \
+      "$SPACESHIP_VCS_PREFIX" \
+      "$SPACESHIP_VCS_SUFFIX"
+  else
+    ss::section \
+      "$color" \
+      "${vcs_branch}" \
+      "$SPACESHIP_VCS_PREFIX" \
+      ""
+
+    result="${_SS_DATA[section_result]}"
+    color="$SPACESHIP_VCS_COLOR_ACTIONFORMAT"
+
+    ss::section \
+      "$color" \
+      "${vcs_status}" \
+      "" \
+      "$SPACESHIP_VCS_SUFFIX"
+    _SS_DATA[section_result]="${result}${_SS_DATA[section_result]}"
+  fi
 }
 
 # Init
@@ -144,11 +164,13 @@ fi
 # "formats" are used when "actionformats" aren't used.
 zstyle ':vcs_info:*' formats "%b${_SS_DATA[vcs_changeset_prefix]}·|·%c%u%m"
 # used if there is a special action going on in your current repository; like an interactive rebase or a merge conflict.
-zstyle ':vcs_info:*' actionformats "%b${_SS_DATA[vcs_changeset_prefix]}·|·%F{$SPACESHIP_VCS_COLOR_ACTIONFORMAT}| %a%m%f"
+# separate %a and %m with a space
+zstyle ':vcs_info:*' actionformats "%b${_SS_DATA[vcs_changeset_prefix]}·|·%a %m"
 
-# Show number of applied patches. This is used during merges and rebases
+# Patch information, used by the %m expando in formats and actionformats
+# for the git and hg backends. This is used during merges, rebases and cherry-pick
 # %c number of unapplied patches | %n number of applied patched | %a number of all patches
-zstyle ':vcs_info:*' patch-format ' %n/%a'
+zstyle ':vcs_info:*' patch-format '%n/%a'
 
 zstyle ':vcs_info:*' stagedstr   "${SPACESHIP_VCS_STAGED}"
 zstyle ':vcs_info:*' unstagedstr "${SPACESHIP_VCS_UNSTAGED}"
@@ -167,12 +189,12 @@ zstyle ':vcs_info:hg*:*' get-bookmarks true
 
 # For svn, only
 zstyle ':vcs_info:svn*:*' formats "%b${_SS_DATA[vcs_changeset_prefix]}·|·%c%u"
-zstyle ':vcs_info:svn*:*' actionformats "${_SS_DATA[vcs_changeset_prefix]:+${_SS_DATA[vcs_changeset_prefix]}·|·}%c%u %F{$SPACESHIP_VCS_COLOR_ACTIONFORMAT}| %a%f"
+zstyle ':vcs_info:svn*:*' actionformats "${_SS_DATA[vcs_changeset_prefix]:+${_SS_DATA[vcs_changeset_prefix]}·|·}%c%u %a"
 
 # vcs_info hooks
 #   :vcs_info:vcs-string+hook-name:user-context:repo-root-name
 # register to a static hook regardless of the current context
-vcs_info_hookadd "set-message" vcs-icon
+vcs_info_hookadd "set-message" vcs-icon vcs-detect-actions
 
 # pick up custom hook functions with env var
 zstyle ':vcs_info:git*+set-message:*' hooks ${SPACESHIP_VCS_GIT_HOOKS}
