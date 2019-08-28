@@ -9,29 +9,29 @@ _SS_DATA[prompt_opened]="$SPACESHIP_PROMPT_FIRST_PREFIX_SHOW"
 #   ss::section <color> <content> [prefix] [suffix]
 function ss::section {
   local color content prefix suffix
+  local result=""
+
   [[ -n $1 ]] && color="%F{$1}" || color="%f"
   content="$2"
   prefix="$3"
   suffix="$4"
 
-  local result=""
-
-  result+="%{%B%}" # set bold
-  if [[ ${_SS_DATA[prompt_opened]} == true ]] && [[ $SPACESHIP_PROMPT_PREFIXES_SHOW == true ]]; then
-    restult+="$prefix"
+  if [[ ${_SS_DATA[prompt_opened]} == true ]] \
+    && [[ $SPACESHIP_PROMPT_PREFIXES_SHOW == true ]] \
+    && [[ -n "$prefix" ]]; then
+    # set prefix bold
+    result+="%{%B%}${prefix}%{%b%}"
   fi
   _SS_DATA[prompt_opened]="true"
-  result+="%{%b%}" # unset bold
+  result+="%{%B${color}%}" # set color
+  result+="$content"       # section content
+  result+="%{%b%f%}"       # unset color
 
-  result+="%{%B$color%}" # set color
-  result+="$content"     # section content
-  result+="%{%b%f%}"     # unset color
-
-  result+="%{%B%}" # reset bold, if it was diabled before
-  if [[ $SPACESHIP_PROMPT_SUFFIXES_SHOW == true ]]; then
-    result+="$suffix"
+  if [[ $SPACESHIP_PROMPT_SUFFIXES_SHOW == true ]] \
+    && [[ -n "$suffix" ]]; then
+    # reset bold, if it was diabled before
+    result+="%{%B%}${suffix}%{%b%}"
   fi
-  result+="%{%b%}" # unset bold
 
   # pass the result out with the global variable
   _SS_DATA[section_result]="$result"
