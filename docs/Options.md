@@ -20,8 +20,9 @@ SPACESHIP_PROMPT_ORDER=(
   user               # Username section
   host               # Hostname section
   dir                # Current directory section
-  git::async         # Git section (git_branch + git_status)
-  hg::async          # Mercurial section (hg_branch  + hg_status)
+  vcs::async         # Version control system section
+  # git::async         # Git section (git_branch + git_status)
+  # hg::async          # Mercurial section (hg_branch  + hg_status)
   package::async     # Package version
   node::async        # Node.js section
   ruby::async        # Ruby section
@@ -173,6 +174,48 @@ If current directory is write-protected or if current user has not enough rights
 | `SPACESHIP_DIR_COLOR` | `cyan` | Color of directory section |
 | `SPACESHIP_DIR_LOCK_SYMBOL` | ![·](https://user-images.githubusercontent.com/10276208/46248218-4af95d80-c434-11e8-8e25-595d792503f1.png) | The symbol displayed if directory is write-protected (requires powerline patched font) |
 | `SPACESHIP_DIR_LOCK_COLOR` | `red` | Color for the lock symbol |
+
+### VCS (`vcs`)
+
+VCS section displays different repo states. Now it supports `git`, `hg` and `svn`. It consists of a branch part and a status part.
+
+| Variable | Default | Meaning |
+| :------- | :-----: | ------- |
+| `SPACESHIP_VCS_SHOW` | `true` | Show VCS section |
+| `SPACESHIP_VCS_PREFIX` | `on·` | Prefix before VCS section |
+| `SPACESHIP_VCS_SUFFIX` | `$SPACESHIP_PROMPT_DEFAULT_SUFFIX` | Suffix after VCS section |
+| `SPACESHIP_VCS_STATUS_PREFIX` | ` [` | Prefix used to wrap around the status part |
+| `SPACESHIP_VCS_STATUS_SUFFIX` | `]` | Suffix used to wrap around the status part |
+| `SPACESHIP_VCS_BACKENDS` | `(git hg svn)` | Repo types being supported (defined as an array) |
+| `SPACESHIP_GIT_SYMBOL` | ` ` | Character to be shown for a git repo |
+| `SPACESHIP_HG_SYMBOL` | `☿️ ` | Character to be shown for a mercurial repo |
+| `SPACESHIP_SVN_SYMBOL` | `(svn) ` | Character to be shown for a SVN repo |
+| `SPACESHIP_VCS_UNTRACKED` | `?` | Indicator for untracked status |
+| `SPACESHIP_VCS_UNSTAGED` | `◌` | Indicator for unstaged status |
+| `SPACESHIP_VCS_STAGED` | `●` | Indicator for staged status |
+| `SPACESHIP_VCS_COLOR_CLEAN` | `green` | Prompt color when the repo status is clean |
+| `SPACESHIP_VCS_COLOR_MODIFIED` | `yellow` | Prompt color when the repo status is modified |
+| `SPACESHIP_VCS_COLOR_UNTRACKED` | `green` | Prompt color when the repo status is untracked |
+| `SPACESHIP_VCS_COLOR_ACTIONFORMAT` | `red` | Prompt color when a special action is going on in the repo, like interactive rebase or merging confilict |
+| `SPACESHIP_VCS_AHEAD` | `⇡` | Indicator for unpushed changes (ahead of remote branch) |
+| `SPACESHIP_VCS_BEHIND` | `⇣` | Indicator for unpulled changes (behind of remote branch) |
+| `SPACESHIP_VCS_STASHED` | `$` |Indicator for stashed changes |
+| `SPACESHIP_VCS_BOOKMARK` | `🔖` | Indicator for mercurial bookmarks |
+| `SPACESHIP_VCS_TAG` | `🏷️` | Indicator for tagged commits |
+
+VCS checks the untracked, unstaged and staged states of a local repo by default. Verbose local states could be enabled for git and mercurial repositories with following options.
+
+| Variable | Default | Meaning |
+| :------- | :-----: | ------- |
+| `SPACESHIP_VCS_VERBOSE` | `false` | Show verbose states for local repo |
+| `SPACESHIP_VCS_GIT_VERBOSE` | `${SPACESHIP_VCS_VERBOSE}` | Show verbose states for git repo |
+| `SPACESHIP_VCS_HG_VERBOSE` | `${SPACESHIP_VCS_VERBOSE}` | Show verbose states for mercurial repo |
+| `SPACESHIP_VCS_MODIFIED` | `!` | Indicator for modified files |
+| `SPACESHIP_VCS_RENAMED` | `»` | Indicator for renamed files |
+| `SPACESHIP_VCS_DELETED` | `✘` | Indicator for deleted files |
+| `SPACESHIP_VCS_UNMERGED` | `=` | Indicator for unstaged files |
+| `SPACESHIP_VCS_SHOW_CHANGESET` | `false` | Show changeset |
+| `SPACESHIP_VCS_CHANGESET_HASH_LENGTH` | `7` | Changeset length |
 
 ### Git (`git`)
 

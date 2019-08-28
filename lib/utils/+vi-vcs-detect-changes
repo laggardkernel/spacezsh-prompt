@@ -1,0 +1,13 @@
+#!/usr/bin/env zsh
+# vim: ft=zsh fdm=marker foldlevel=0 sw=2 ts=2 sts=2 et
+
+# Generic hook functions for vcs_info
+function +vi-vcs-detect-changes {
+  if [[ -n "${hook_com[staged]}" ]] || [[ -n "${hook_com[unstaged]}" ]]; then
+    _SS_DATA[vcs_workdir_dirty]=true
+  else
+    _SS_DATA[vcs_workdir_dirty]=false
+  fi
+}
+
++vi-vcs-detect-changes "$@"

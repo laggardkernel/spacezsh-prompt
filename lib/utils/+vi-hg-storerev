@@ -1,0 +1,19 @@
+#!/usr/bin/env zsh
+# vim: ft=zsh fdm=marker foldlevel=0 sw=2 ts=2 sts=2 et
+#
+# https://github.com/zsh-users/zsh/blob/master/Misc/vcs_info-examples
+
+### hg: Show marker when the working directory is not on a branch head
+# This may indicate that running `hg up` will do something
+# NOTE: the branchheads.cache file is not updated with every Mercurial
+# operation, so it will sometimes give false positives. Think of this more as a
+# hint that you might not be on a branch head instead of the final word.
+
+# The hash is available in the hgrev-format hook, store a copy of it in the
+# user_data array so we can access it in function `+vi-hg-branchhead`.
+function +vi-hg-storerev {
+  # user_data is an array defined by vcs_info, available to vcs_info hook funcs
+  user_data[hash]=${hook_com[hash]}
+}
+
++vi-hg-storerev "$@"

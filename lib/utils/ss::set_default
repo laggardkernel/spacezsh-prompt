@@ -1,6 +1,6 @@
 #!/usr/bin/env zsh
 # vim: ft=zsh fdm=marker foldlevel=0 sw=2 ts=2 sts=2 et
-# 
+#
 # Borrowed from p9k
 
 ###############################################################
@@ -23,7 +23,7 @@ function ss::set_default() {
   local varname="$1"
   local default_value="$2"
 
-  [[ ! -z "${(tP)varname:-}" ]] || typeset -g "$varname"="$default_value"
+  [[ -n "${(tP)varname:-}" ]] || typeset -g "$varname"="$default_value"
 }
 
 ss::set_default "$@"

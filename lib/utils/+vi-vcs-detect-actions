@@ -1,0 +1,13 @@
+#!/usr/bin/env zsh
+# vim: ft=zsh fdm=marker foldlevel=0 sw=2 ts=2 sts=2 et
+
+# Generic hook functions for vcs_info
+function +vi-vcs-detect-actions {
+  if [[ -n "${hook_com[action]}" ]]; then
+    _SS_DATA[vcs_in_action]=true
+  else
+    _SS_DATA[vcs_in_action]=false
+  fi
+}
+
++vi-vcs-detect-actions "$@"

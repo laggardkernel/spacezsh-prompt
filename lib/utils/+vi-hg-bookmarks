@@ -1,0 +1,33 @@
+#!/usr/bin/env zsh
+# vim: ft=zsh fdm=marker foldlevel=0 sw=2 ts=2 sts=2 et
+#
+# http://zsh.sourceforge.net/Doc/Release/User-Contributions.html#vcs_005finfo-Examples
+# https://github.com/zsh-users/zsh/blob/master/Functions/VCS_Info/Backends/VCS_INFO_get_data_hg
+
+# Prepend bookmark icon
+function +vi-hg-bookmarks {
+  if [[ -n "${hgbmarks[@]}" ]]; then
+    ### Do exact the default action in VCS_INFO_get_data_hg
+    # If there is an active bookmark, annotate it and put it first.
+    if [[ -n $curbm ]] ; then
+        hgbmarks[(i)$curbm]=()
+        hgbmarks[1,0]="${curbm}*"
+    fi
+    hgbmstring=${(j:, :)hgbmarks}
+    # Deannotate the array, in case later code expects it to be valid.
+    # (The order is not restored.)
+    [[ -n $curbm ]] && hgbmarks[1]=${${hgbmarks[1]}[1,-2]}
+
+    ### Prepend bookmark icon
+    hook_com[hg-bookmark-string]=" ${SPACESHIP_VCS_BOOKMARK}${hgbmarks[@]}"
+  fi
+
+  # And to signal that we want to use the string we
+  # just generated, set the special variable `ret' to
+  # something other than the default zero:
+  ret=1
+
+  return 0
+}
+
++vi-hg-bookmarks "$@"

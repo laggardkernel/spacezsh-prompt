@@ -1,0 +1,23 @@
+#!/usr/bin/env zsh
+# vim: ft=zsh fdm=marker foldlevel=0 sw=2 ts=2 sts=2 et
+#
+# References
+#   powerlevel9k/segments/vcs/vcs.p9k
+
+# Choose icon according to current backend
+function +vi-vcs-icon() {
+  # TODO: merge icon into brach info %b
+  local remote
+  if [[ "${hook_com[vcs]}" == "git" ]]; then
+    # remote=$(command git ls-remote --get-url 2> /dev/null)
+    _SS_DATA[vcs_icon]="${SPACESHIP_GIT_SYMBOL}"
+  elif [[ "${hook_com[vcs]}" == "hg" ]]; then
+    # remote=$(command hg paths default 2> /dev/null)
+    _SS_DATA[vcs_icon]="${SPACESHIP_HG_SYMBOL}"
+  elif [[ "${hook_com[vcs]}" == "svn" ]]; then
+    # remote="${svninfo[URL]}" # Set by VCS_INFO
+    _SS_DATA[vcs_icon]="${SPACESHIP_SVN_SYMBOL}"
+  fi
+}
+
++vi-vcs-icon "$@"

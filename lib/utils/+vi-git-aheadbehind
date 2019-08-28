@@ -1,0 +1,25 @@
+#!/usr/bin/env zsh
+# vim: ft=zsh fdm=marker foldlevel=0 sw=2 ts=2 sts=2 et
+#
+# https://github.com/zsh-users/zsh/blob/master/Misc/vcs_info-examples
+
+# git: Show +N/-N when your local branch is ahead-of or behind remote HEAD.
+# Make sure you have added misc to your 'formats':  %m
+function +vi-git-aheadbehind {
+  local ahead behind
+  local -a gitstatus
+
+  # for git prior to 1.7
+  # ahead=$(git rev-list origin/${hook_com[branch]}..HEAD | wc -l)
+  ahead=$(command git rev-list --count "${hook_com[branch]}"@{upstream}..HEAD 2>/dev/null)
+  (( $ahead )) && gitstatus+=( "${SPACESHIP_VCS_AHEAD}${ahead}" )
+
+  # for git prior to 1.7
+  # behind=$(git rev-list HEAD..origin/${hook_com[branch]} | wc -l)
+  behind=$(command git rev-list --count HEAD.."${hook_com[branch]}"@{upstream} 2>/dev/null)
+  (( $behind )) && gitstatus+=( "${SPACESHIP_VCS_BEHIND}${behind}" )
+
+  hook_com[misc]+=${(j:/:)gitstatus}
+}
+
++vi-git-aheadbehind "$@"

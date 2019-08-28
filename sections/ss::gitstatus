@@ -71,19 +71,19 @@ ss::gitstatus_status() {
     INDEX=$(command git status --porcelain -b 2> /dev/null)
 
     # Check for modified files
-    if $(<<< "$INDEX" command grep '^[ MARC]M ' &> /dev/null); then
+    if <<< "$INDEX" command grep '^[ MARC]M ' &> /dev/null; then
       git_status="$SPACESHIP_GIT_STATUS_MODIFIED$git_status"
     fi
 
     # Check for renamed files
-    if $(<<< "$INDEX" command grep '^R[ MD] ' &> /dev/null); then
+    if <<< "$INDEX" command grep '^R[ MD] ' &> /dev/null; then
       git_status="$SPACESHIP_GIT_STATUS_RENAMED$git_status"
     fi
 
     # Check for deleted files
-    if $(<<< "$INDEX" command grep '^[MARCDU ]D ' &> /dev/null); then
+    if <<< "$INDEX" command grep '^[MARCDU ]D ' &> /dev/null; then
       git_status="$SPACESHIP_GIT_STATUS_DELETED$git_status"
-    elif $(<<< "$INDEX" command grep '^D[ UM] ' &> /dev/null); then
+    elif <<< "$INDEX" command grep '^D[ UM] ' &> /dev/null; then
       git_status="$SPACESHIP_GIT_STATUS_DELETED$git_status"
     fi
   fi

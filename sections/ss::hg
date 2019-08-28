@@ -18,8 +18,8 @@ SPACESHIP_HG_SYMBOL="${SPACESHIP_HG_SYMBOL="☿ "}"
 # Dependencies
 # ------------------------------------------------------------------------------
 
-track-ss-autoload "$SPACESHIP_ROOT/sections/ss::hg_branch"
-track-ss-autoload "$SPACESHIP_ROOT/sections/ss::hg_status"
+track-ss-autoload "ss::hg_branch"
+track-ss-autoload "ss::hg_status"
 
 # ------------------------------------------------------------------------------
 # Section

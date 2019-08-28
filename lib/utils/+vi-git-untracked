@@ -1,0 +1,21 @@
+#!/usr/bin/env zsh
+# vim: ft=zsh fdm=marker foldlevel=0 sw=2 ts=2 sts=2 et
+#
+# https://github.com/zsh-users/zsh/blob/master/Misc/vcs_info-examples
+
+# git: Show marker if there are untracked files in repository
+# Make sure you have added unstaged to your 'formats':  %u
+function +vi-git-untracked {
+  [[ -n "${hook_com[index]}" ]] || hook_com[index]=$(command git status --porcelain -b 2> /dev/null)
+
+  if <<< "${hook_com[index]}" command grep '??' &> /dev/null ; then
+    # This will show the marker if there are any untracked files in repo.
+    # If instead you want to show the marker only if there are untracked
+    # files in $PWD, use:
+    #[[ -n $(git ls-files --others --exclude-standard) ]] ; then
+    hook_com[unstaged]+="${SPACESHIP_VCS_UNTRACKED}"
+    _SS_DATA[vcs_workdir_half_dirty]=true
+  fi
+}
+
++vi-git-untracked "$@"

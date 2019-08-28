@@ -1,0 +1,14 @@
+#!/usr/bin/env zsh
+# vim: ft=zsh fdm=marker foldlevel=0 sw=2 ts=2 sts=2 et
+#
+# References
+#   powerlevel9k/segments/vcs/vcs.p9k
+
+function +vi-git-stash {
+  if [[ -s "${vcs_comm[gitdir]}/logs/refs/stash" ]] ; then
+    local -a stashes=( "${(@f)"$(<${vcs_comm[gitdir]}/logs/refs/stash)"}" )
+    hook_com[misc]+="${SPACESHIP_VCS_STASHED}${#stashes}"
+  fi
+}
+
++vi-git-stash "$@"
