@@ -24,7 +24,7 @@ function ss::build_section_cache {
   for alignment in "${alignments[@]}"; do
     [[ ${#_SS_DATA[${alignment}_sections]} == "0" ]] && continue
 
-    for section in ${=_SS_DATA[${alignment}_sections]}; do
+    for section in ${(s/ /)_SS_DATA[${alignment}_sections]}; do
       [[ "${_ss_async_sections[${section}]}" == "true" ]] && async=true || async=false
 
       cache_key="${alignment}::${section}"
