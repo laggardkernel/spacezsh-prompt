@@ -20,7 +20,7 @@ function ss::render {
     # Reset prompt storage
     _ss_unsafe[$alignment]=""
 
-    for section in ${=_SS_DATA[${alignment}_sections]}; do
+    for section in ${(s/ /)_SS_DATA[${alignment}_sections]}; do
       cache_key="${alignment}::${section}"
       section_meta=("${(@s:·|·:)${_ss_section_cache[${cache_key}]}}")
       # [[ -z "${section_meta[3]}" ]] && continue # Skip if section is empty
