@@ -102,6 +102,8 @@ function prompt_spaceship_setup {
   add-zsh-hook preexec prompt_spaceship_preexec
   # hook into chpwd for bindkey support
   add-zsh-hook chpwd prompt_spaceship_chpwd
+  # redraw prompt once pwd is changed in zle widgets
+  add-zsh-hook chpwd prompt_spaceship_precmd
 
   # The value below was set to better support 32-bit CPUs.
   # It's the maximum _signed_ integer value on 32-bit CPUs.
