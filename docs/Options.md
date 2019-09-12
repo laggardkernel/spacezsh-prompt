@@ -138,8 +138,8 @@ You can temporarily enable or disable vi-mode with handy functions (just execute
 
 | Function | Meaning |
 | :------- | ------- |
-| `ss::vi_mode_setup` | Enable vi-mode for current terminal session (run by default) |
-| `ss::vi_mode_cleanup` | Disable vi-mode for current terminal session |
+| `sz::vi_mode_setup` | Enable vi-mode for current terminal session (run by default) |
+| `sz::vi_mode_cleanup` | Disable vi-mode for current terminal session |
 
 **Note**:
 
@@ -702,8 +702,8 @@ You can temporarily enable or disable vi-mode with handy functions (just execute
 
 | Function | Meaning |
 | :------- | ------- |
-| `ss::vi_mode_enable` | Enable vi-mode for current terminal session |
-| `ss::vi_mode_disable` | Disable vi-mode for current terminal session |
+| `sz::vi_mode_enable` | Enable vi-mode for current terminal session |
+| `sz::vi_mode_disable` | Disable vi-mode for current terminal session |
 
 **Note:** For oh-my-zsh users with vi-mode plugin enabled: Add `export RPS1="%{$reset_color%}"` before `source $ZSH/oh-my-zsh.sh` in `.zshrc` to disable default `<<<` NORMAL mode indicator in right prompt.
 

@@ -1,0 +1,11 @@
+#!/usr/bin/env zsh
+# vim: ft=zsh fdm=marker foldlevel=0 sw=2 ts=2 sts=2 et
+
+# Check if function is defined
+# USAGE:
+#   sz::func_defined <function>
+function sz::func_defined {
+  typeset -f + "$1" &> /dev/null
+}
+
+sz::func_defined "$@"

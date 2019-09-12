@@ -1,7 +1,7 @@
 #!/usr/bin/env zsh
 # vim: ft=zsh fdm=marker foldlevel=0 sw=2 ts=2 sts=2 et
 #
-# spaceship/sections/hg_status
+# spacezsh/sections/hg_status
 
 # hg: Show marker if there are untracked files in repository
 # Make sure you have added unstaged to your 'formats':  %u

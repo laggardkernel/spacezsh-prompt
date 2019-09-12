@@ -1,0 +1,14 @@
+#!/usr/bin/env zsh
+# vim: ft=zsh fdm=marker foldlevel=0 sw=2 ts=2 sts=2 et
+
+function prompt_spacezsh_chpwd {
+  if [[ "${_SS_DATA[async]}" == "true" ]]; then
+    async_worker_eval "spacezsh_section_worker" 'cd' "$PWD"
+  fi
+
+  run-sz-hook chpwd
+}
+
+typeset -ag sz_chpwd_functions
+
+prompt_spacezsh_chpwd "$@"

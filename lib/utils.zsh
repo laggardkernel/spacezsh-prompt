@@ -10,16 +10,16 @@
 
 # Check if the current directory is in a Git repository.
 # USAGE:
-#   ss::is_git
-function ss::is_git {
+#   sz::is_git
+function sz::is_git {
   # See https://git.io/fp8Pa for related discussion
   [[ $(command git rev-parse --is-inside-work-tree 2>/dev/null) == true ]]
 }
 
 # Check if the current directory is in a Mercurial repository.
 # USAGE:
-#   ss::is_hg
-function ss::is_hg {
+#   sz::is_hg
+function sz::is_hg {
   local root="$PWD"
 
   while [[ "$root" ]] && [[ ! -d "$root/.hg" ]]; do
@@ -31,8 +31,8 @@ function ss::is_hg {
 
 # Print message backward compatibility warning
 # USAGE:
-#  ss::deprecated <deprecated> [message]
-function ss::deprecated {
+#  sz::deprecated <deprecated> [message]
+function sz::deprecated {
   [[ -n $1 ]] || return
   local deprecated=$1 message=$2
   local deprecated_value=${(P)deprecated} # the value of variable name $deprecated
@@ -43,8 +43,8 @@ function ss::deprecated {
 # Display seconds in human readable fromat
 # Based on http://stackoverflow.com/a/32164707/3859566
 # USAGE:
-#   ss::displaytime <seconds>
-function ss::displaytime {
+#   sz::displaytime <seconds>
+function sz::displaytime {
   local T=$1
   local D=$((T/60/60/24))
   local H=$((T/60/60%24))
@@ -62,7 +62,7 @@ function ss::displaytime {
 # @args
 #   $1 string The section to be tested.
 #   $2 prompt/rprompt/"" The alignment info
-function ss::section_in_use {
+function sz::section_in_use {
   local section="$1"
   local -a sections
   local alignment
@@ -83,7 +83,7 @@ function ss::section_in_use {
 #   $2 file/dir, type to be searched
 # @return
 #   The 1st path where the file/folder has been found
-function ss::upsearch {
+function sz::upsearch {
   local search_type=""
   local root="$PWD"
 

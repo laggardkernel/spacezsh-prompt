@@ -1,0 +1,26 @@
+#!/usr/bin/env zsh
+# vim: ft=zsh fdm=marker foldlevel=0 sw=2 ts=2 sts=2 et
+#
+# References
+#   https://github.com/softmoth/zsh-vim-mode
+
+function sz::send_terminal_sequence {
+    local sequence="$1"
+    local is_tmux
+
+    # Allow forcing TMUX_PASSTHROUGH on. For example, if running tmux locally and
+    # running zsh remotely, where $TMUX is not set (and shouldn't be).
+    if [[ -n $TMUX_PASSTHROUGH ]] || [[ -n $TMUX ]]; then
+        is_tmux=1
+    fi
+
+    if [[ -n $is_tmux ]]; then
+        # Double each escape (see zshbuiltins(1) echo for backslash escapes)
+        # And wrap it in the TMUX DCS passthrough
+        sequence=${sequence//\\(e|x27|033|u001[bB]|U0000001[bB])/\\e\\e}
+        sequence="\ePtmux;$sequence\e\\"
+    fi
+    print -n "$sequence"
+}
+
+sz::send_terminal_sequence "$@"

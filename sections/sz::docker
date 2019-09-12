@@ -1,0 +1,76 @@
+#!/usr/bin/env zsh
+# vim: ft=zsh fdm=marker foldlevel=0 sw=2 ts=2 sts=2 et
+
+#
+# Docker
+#
+# Docker automates the repetitive tasks of setting up development environments
+# Link: https://www.docker.com
+
+# ------------------------------------------------------------------------------
+# Configuration
+# ------------------------------------------------------------------------------
+
+SPACESHIP_DOCKER_SHOW="${SPACESHIP_DOCKER_SHOW=true}"
+SPACESHIP_DOCKER_PREFIX="${SPACESHIP_DOCKER_PREFIX="on "}"
+SPACESHIP_DOCKER_SUFFIX="${SPACESHIP_DOCKER_SUFFIX="$SPACESHIP_PROMPT_DEFAULT_SUFFIX"}"
+SPACESHIP_DOCKER_SYMBOL="${SPACESHIP_DOCKER_SYMBOL="🐳 "}"
+SPACESHIP_DOCKER_COLOR="${SPACESHIP_DOCKER_COLOR="cyan"}"
+SPACESHIP_DOCKER_VERBOSE="${SPACESHIP_DOCKER_VERBOSE=false}"
+
+# ------------------------------------------------------------------------------
+# Section
+# ------------------------------------------------------------------------------
+
+sz::docker_compose_file_exists() {
+  [[ -n "$COMPOSE_FILE" ]] || return 1
+
+  # Better support for docker environment vars: https://docs.docker.com/compose/reference/envvars/
+
+  # Use COMPOSE_PATH_SEPARATOR or colon as default
+  local separator=${COMPOSE_PATH_SEPARATOR:-":"}
+
+  # COMPOSE_FILE may have several filenames separated by colon, test all of them
+  local filenames=("${(@ps/$separator/)COMPOSE_FILE}")
+
+  # Must ensure all compose files exist
+  # https://github.com/docker/docker.github.io/issues/5472
+  for filename in $filenames; do
+    if ! sz::upsearch "$filename" >/dev/null; then
+      return 1
+    fi
+  done
+  return 0
+}
+
+# Show current Docker version and connected machine
+sz::docker() {
+  [[ $SPACESHIP_DOCKER_SHOW == false ]] && return
+
+  (( $+commands[docker] )) || return
+
+  # Show Docker status only for Docker-specific folders
+  sz::upsearch "Dockerfile" >/dev/null \
+    || sz::upsearch "docker-compose.yml" >/dev/null \
+    || sz::docker_compose_file_exists \
+    || [[ -f "/.dockerenv" ]] \
+    || return
+
+  # if docker daemon isn't running you'll get an error saying it can't connect
+  local docker_version=$(docker version -f "{{.Server.Version}}" 2>/dev/null)
+  [[ -z $docker_version ]] && return
+
+  [[ $SPACESHIP_DOCKER_VERBOSE == false ]] && docker_version=${docker_version%-*}
+
+  if [[ -n $DOCKER_MACHINE_NAME ]]; then
+    docker_version+=" via ($DOCKER_MACHINE_NAME)"
+  fi
+
+  sz::section \
+    "$SPACESHIP_DOCKER_COLOR" \
+    "${SPACESHIP_DOCKER_SYMBOL}v${docker_version}" \
+    "$SPACESHIP_DOCKER_PREFIX" \
+    "$SPACESHIP_DOCKER_SUFFIX"
+}
+
+sz::docker "$@"

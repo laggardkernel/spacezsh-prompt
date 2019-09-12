@@ -1,0 +1,43 @@
+#!/usr/bin/env zsh
+# vim: ft=zsh fdm=marker foldlevel=0 sw=2 ts=2 sts=2 et
+
+# Exchange result of prompt_<section> function in the cache and
+# trigger re-rendering of prompt.
+#
+# @args
+#   $1 job name, e.g. the function passed to async_job
+#   $2 return code
+#   $3 resulting (stdout) output from job execution
+#   $4 execution time, floating point e.g. 0.0076138973 seconds
+#   $5 resulting (stderr) error output from job execution
+#   $6 has next result in buffer (0 = buffer empty, 1 = yes)
+function sz::async_callback {
+  local job="$1" ret="$2" output="$3" exec_time="$4" err="$5" has_next="$6"
+  local section_meta cache_key
+
+  # ignore the async evals used to alter worker environment
+  if [[ "${job}" == "[async/eval]" ]] || \
+     [[ "${job}" == ";" ]] || \
+     [[ "${job}" == "[async]" ]]; then
+    return
+  fi
+
+  # split input $output into an array - see https://unix.stackexchange.com/a/28873
+  section_meta=("${(@s:·|·:)output}") # split on delimiter "·|·" (@s:<delim>:)
+  cache_key="${section_meta[2]}::${section_meta[1]}"
+
+  # Skip prompt re-rendering if both placeholder and section content are empty,
+  # or section cache is unchanged
+  if [[ "$SPACESHIP_SECTION_PLACEHOLDER" == "${section_meta[3]}" ]] \
+    || [[ "${_sz_section_cache[${cache_key}]}" == "$output" ]]; then
+    return
+  else
+    _sz_section_cache[${cache_key}]="${output}"
+  fi
+
+  # Delay prompt updates if there's another result in the buffer, which
+  # prevents strange states in ZLE
+  [[ "$has_next" == "0" ]] && sz::async_render
+}
+
+sz::async_callback "$@"
