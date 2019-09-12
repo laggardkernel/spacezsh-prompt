@@ -28,6 +28,7 @@
   * [Rust (rust)](/docs/Options.md#rust-rust)
   * [Haskell (haskell)](/docs/Options.md#haskell-haskell)
   * [Julia (julia)](/docs/Options.md#julia-julia)
+  * [Vagrant (vagrant)](/docs/Options.md#vagrant-vagrant)
   * [Docker (docker)](/docs/Options.md#docker-docker)
   * [Amazon Web Services (aws)](/docs/Options.md#amazon-web-services-aws-aws)
   * [Virtualenv (venv)](/docs/Options.md#virtualenv-venv)

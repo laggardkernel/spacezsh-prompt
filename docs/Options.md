@@ -460,6 +460,23 @@ Julia section is shown only in directories that contain file with `.jl` extensio
 | `SPACESHIP_JULIA_SYMBOL` | `ஃ·` | Character to be shown before Julia version |
 | `SPACESHIP_JULIA_COLOR` | `green` | Color of Julia section |
 
+### Vagrant (`vagrant`)
+
+Vagrant section is shown only in directories that contain `Vagrantfile`. It's used as a virtual machine status indicator.
+
+The environment variable `VAGRANT_VAGRANTFILE` for custom Vagrant conf file is supported too.
+
+| Variable | Default | Meaning |
+| :------- | :-----: | ------- |
+| `SPACESHIP_VAGRANT_SHOW` | `true` | Show current Vagrant virtual machine status or not |
+| `SPACESHIP_VAGRANT_PREFIX` | `on ` | Prefix before the Vagrant section |
+| `SPACESHIP_VAGRANT_SUFFIX` | `$SPACESHIP_PROMPT_DEFAULT_SUFFIX` | Suffix after the Docker section |
+| `SPACESHIP_VAGRANT_SYMBOL` | `Ｖ` | Character to be shown before Docker version |
+| `SPACESHIP_VAGRANT_COLOR_ON` | `27` (blue) | Color of Vagrant section when machine is on |
+| `SPACESHIP_VAGRANT_COLOR_OFF` | `247` (grey) | Color of Vagrant section when machine is off |
+| `SPACESHIP_VAGRANT_COLOR_SUSPENDED` | `214` (orange) | Color of Vagrant section when machine is suspended |
+| `SPACESHIP_VAGRANT_VERBOSE` | `true` | Show virtual machine status text or not. |
+
 ### Docker (`docker`)
 
 Docker section is shown only in directories that contain `Dockerfile` or it's possible to run `docker-compose`.
