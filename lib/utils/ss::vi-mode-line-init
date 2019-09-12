@@ -12,17 +12,19 @@ function ss::vi-mode-line-init {
   fi
 
   # Rer-ender prompt to get vi mode updated
-  ss::refresh_cache_item "vi_char" "true"
+  ss::refresh_cache_item "char" "true"
 
-  # Update cursor style
-  case "$KEYMAP" in
-    vicmd|visual|vline)
-      ss::set_cursor_style ${(s. .)SPACESHIP_VI_MODE_CURSOR_VICMD}
-      ;;
-    main|viins|*)
-      ss::set_cursor_style ${(s. .)SPACESHIP_VI_MODE_CURSOR_VIINS}
-      ;;
-  esac
+  if [[ $SPACESHIP_VI_MODE_CURSOR == true ]]; then
+    # Update cursor style
+    case "$KEYMAP" in
+      vicmd|visual|vline)
+        ss::set_cursor_style ${(s. .)SPACESHIP_VI_MODE_CURSOR_NORMAL}
+        ;;
+      main|viins|*)
+        ss::set_cursor_style ${(s. .)SPACESHIP_VI_MODE_CURSOR_INSERT}
+        ;;
+    esac
+  fi
 }
 
 ss::vi-mode-line-init "$@"

@@ -36,9 +36,8 @@ if [ -z "$SPACESHIP_PROMPT_ORDER" ]; then
     kubecontext::async # Kubectl context section
     terraform::async   # Terraform workspace section
     line_sep           # Line break
-    # vi_mode            # Vi-mode indicator
-    # char               # Prompt character
-    vi_char            # Prompt character as vi-mode indicator
+    # vi_mode           # deprecated
+    char               # Prompt character, with vi-mode indicator integrated
   )
 fi
 
