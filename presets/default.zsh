@@ -11,8 +11,9 @@ if [ -z "$SPACESHIP_PROMPT_ORDER" ]; then
     user               # Username section
     host               # Hostname section
     dir                # Current directory section
-    git::async         # Git section (git_branch + git_status)
-    hg::async          # Mercurial section (hg_branch  + hg_status)
+    vcs::async         # Version control system section (git, hg, svn)
+    # git::async         # deprecated
+    # hg::async          # deprecated
     package::async     # Package version
     node::async        # Node.js section
     ruby::async        # Ruby section

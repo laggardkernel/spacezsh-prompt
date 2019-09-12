@@ -10,6 +10,14 @@ function ss::deprecated_check {
   ss::deprecated SPACESHIP_BATTERY_CHARGING_SYMBOL "Use %BSPACESHIP_BATTERY_SYMBOL_CHARGING%b instead."
   ss::deprecated SPACESHIP_BATTERY_DISCHARGING_SYMBOL "Use %BSPACESHIP_BATTERY_SYMBOL_DISCHARGING%b instead."
   ss::deprecated SPACESHIP_BATTERY_FULL_SYMBOL "Use %BSPACESHIP_BATTERY_SYMBOL_FULL%b instead."
+  # New deprecation added in 4.x
+  if (( $+functions[ss::git] )) || (( $+functions[ss::git_branch])) || (( $+functions[ss::git_status] )) \
+    || (( $+functions[ss::hg] )) || (( $+functions[ss::hg_branch])) || (( $+functions[ss::hg_status] )); then
+    print -P "%{%B%}git and hg%{%b%} are deprecated. Use section %{%B%}vcs%{%b%} instead. Check the doc for detail."
+  fi
+  if (( $+functions[ss::vi_mode] )); then
+    print -P "%{%B%}vi_mode%{%b%} is deprecated and integrated into %{%B%}char%{%b%}. Check the doc for detail."
+  fi
 }
 
 ss::deprecated_check "$@"
