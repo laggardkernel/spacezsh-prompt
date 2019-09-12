@@ -136,6 +136,7 @@ function prompt_spaceship_cleanup {
 
   # prmopt specific cleanup
   ss::vi_mode_disable 2>/dev/null
+  ss::vi_mode_cleanup 2>/dev/null
   # TODO: cleanup preset conf
 
   # prompt hooks

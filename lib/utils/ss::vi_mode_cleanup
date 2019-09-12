@@ -2,12 +2,13 @@
 # vim: ft=zsh fdm=marker foldlevel=0 sw=2 ts=2 sts=2 et
 
 # Disable vi mode and change back to emacs mode.
-function ss::vi_mode_disable() {
+function ss::vi_mode_cleanup() {
   local item
 
   # Disable mode indicator in prompt by removing related widgets
   for item in keymap-select line-init line-finish; do
-    add-zle-hook-widget -D ss::vi-mode-${item}
+    # -d for exact match, -D for pattern match
+    add-zle-hook-widget -d ${item} ss::vi-mode-${item}
   done
 
   bindkey -e
