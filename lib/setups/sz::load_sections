@@ -38,7 +38,7 @@ sz::load_sections() {
       done
 
       # Prefer custom section over same name builtin section
-      if sz::func_defined "sz::${section}"; then
+      if (( $+functions[sz::${section}] )); then
         # Custom section is declared, nothing else to do
         continue
       elif (( ${_sz_custom_sections[(Ie)${section}]} )) \

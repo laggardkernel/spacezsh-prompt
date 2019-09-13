@@ -147,27 +147,6 @@ sz::section \
 sz::section "$color" "$SPACESHIP_CHAR_SYMBOL"
 ```
 
-## `sz::func_defined <function>`
-
-The same as [`sz::exists`](#szexists), but for functions. It returns zero exit code if a `function` has been defined previously and non-zero if `function` hasn't.
-
-You can use this utility to check if a user has previously defined a function or not. Spacezsh uses this utility internally to check if a custom section has been defined and available for execution.
-
-### Arguments
-
-1. `function` _Required_ — a function that needs to be checked.
-
-### Example
-
-```zsh
-# Check if section has been defined
-if sz::func_defined sz::section; then
-  sz::section
-else
-  # section is not found
-fi
-```
-
 ## `sz::is_git`
 
 This utility returns zero exit code if a current working directory is a Git repository and non-zero if it's not.

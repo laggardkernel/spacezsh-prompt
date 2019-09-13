@@ -54,8 +54,6 @@
   * [SPACESHIP_ROOT](/docs/API.md#spaceship_root)
   * [SPACESHIP_CUSTOM_SECTION_LOCATION](/docs/API.md#spaceship_custom_section_location)
   * [sz::section](/docs/API.md#szsection-color-content-prefix-suffix)
-  * [sz::exists](/docs/API.md#szexists)
-  * [sz::func_defined](/docs/API.md#szfunc_defined-function)
   * [sz::is_git](/docs/API.md#szis_git)
   * [sz::is_hg](/docs/API.md#szis_hg)
   * [sz::deprecated](/docs/API.md#szdeprecated-option-message)

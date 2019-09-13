@@ -10,11 +10,16 @@ None.
 ## [4.4.0] - 2019-09-12
 ### Added
 - Rename project as "Spacezsh".
+- `CHANGELOG.md`
+- Fix `README.md` and other documentations.
 
 ### Fixed
 - Redraw prompt on working directory changes with hook `chpwd`, where hook `precmd` is not triggered.
 - Fix battery status query from [@Runrioter](https://github.com/denysdovhan/spaceship-prompt/pull/640).
 - Replace `${=}` with `(s)` for word splitting to avoid `IFS` overridden in the outer scope.
+
+### Removed
+- Remove `sz::func_defined`. `(($functions[foo]))` is faster than `typeset -f + "foo"`. Do things in the ZSH way.
 
 ## [4.3.0] - 2019-08-28
 ### Added
@@ -33,7 +38,7 @@ None.
 ### Added
 - `autoload` function: setup functions, library functions, sections, borrowed from [robobenklein/zinc](https://github.com/robobenklein/zinc).
 - Hook support for sections, borrowed from [robobenklein/zinc](https://github.com/robobenklein/zinc) and [`add-zsh-hook`](https://github.com/zsh-users/zsh/blob/master/Functions/Misc/add-zsh-hook).
-- New utility functions: `ss::func_defined`, `ss::set_default`, `ss::var_defined`.
+- New utility functions: `ss::set_default`, `ss::var_defined`.
 
 ### Changed
 - Enable async for sections in the "default" conf.
@@ -80,7 +85,7 @@ None.
 - Reset and redisplay prompt to avoid previous prompt being eaten up in async mode.
 
 ### Removed
-- Remove utility `spaceship::exists`.
+- Remove utility `spaceship::exists`. `(($+commands[foo]))` is faster than `command -v foo` in ZSH. Do things in the ZSH way.
 
 [Unreleased]: https://github.com/laggardkernel/spacezsh-prompt/compare/HEAD...v4.4.0
 [4.4.0]: https://github.com/laggardkernel/spacezsh-prompt/compare/v4.4.0...v4.3.0
