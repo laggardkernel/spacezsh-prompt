@@ -4,7 +4,7 @@
 # Spacezsh
 
 # Current version of Spaceship
-export SPACESHIP_VERSION="3.11.1"
+export SPACESHIP_VERSION="4.4.0"
 
 ### Installation location
 # https://git.io/vdBH7

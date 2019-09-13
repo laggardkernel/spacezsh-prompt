@@ -3,13 +3,12 @@
 
 function prompt_spacezsh_help {
   cat <<'EOF'
-🚀⭐️ A ZSH prompt for Astronauts
+🚀⭐️ An async prompt does things in the ZSH way.
 
   prompt spacezsh
 
-Spacezsh is a minimalistic, powerful and extremely customizable Zsh prompt.
-It combines everything you may need for convenient work, without unnecessary
-complications, like a real spacezsh.
+Spacefish is a minimalistic, powerful and extremely customizable Z Shell prompt.
+It combines everything you may need for convenient work, without unnecessary complications, like a real spacezsh.
 EOF
 }
 
