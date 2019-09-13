@@ -3,7 +3,7 @@
 #
 # Spacezsh
 
-# Current version of Spaceship
+# Current version of Spacezsh
 export SPACESHIP_VERSION="4.4.0"
 
 ### Installation location
@@ -48,8 +48,8 @@ sz::selfdestruct_setup() {
   } || {
     prompt_spacezsh_setup
   }
+  prompt_spacezsh_preexec
   prompt_spacezsh_precmd
-  # zle && zle .reset-prompt && zle -R
 }
 
 autoload -Uz add-zsh-hook
