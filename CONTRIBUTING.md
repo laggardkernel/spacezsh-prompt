@@ -4,13 +4,13 @@ First of all, thank you for contributing. Any contribution is highly appreciated
 
 ## Philosophy
 
-There's a simple philosophy behind the Spaceship:
+There's a simple philosophy behind the Spacezsh:
 
 * **Show only what's needed.** The prompt should not be overloaded, it shows only what user needs at the moment (current directory, git branch, etc).
 * **Work out of the box.** The prompt should work right after installation without any additional configuration. Install it and use it.
 * **Be configurable.** It works without configuration, but if a configuration is needed, it provides an easy-to-use interface for customization.
 
-Please, keep this simple rules in mind while you're contributing to Spaceship.
+Please, keep this simple rules in mind while you're contributing to Spacezsh.
 
 ## Setup
 
@@ -25,7 +25,7 @@ Please, keep this simple rules in mind while you're contributing to Spaceship.
 
 ## Sections
 
-Spaceship supports most of the popular programming languages, runtimes, version managers, etc. If it doesn't support something that you need, feel free to open a pull request, but answer these questions for yourself before:
+Spacezsh supports most of the popular programming languages, runtimes, version managers, etc. If it doesn't support something that you need, feel free to open a pull request, but answer these questions for yourself before:
 
 ### Will it clutter the prompt?
 
@@ -52,12 +52,12 @@ Every additional section will slow down the prompt a little bit. If your section
 
 All options of prompt follow a specific pattern so that it is easy to remember: `SPACESHIP_SECTION_<OPTION>[_PROPERTY]`. The rule is simple: when naming new properties, keep unique parts of the name to the end.
 
-* **Good:** 
+* **Good:**
   ```
     SPACESHIP_GIT_STATUS_COLOR_BEHIND
     SPACESHIP_GIT_STATUS_COLOR_DIVERGED
   ```
-* **Bad:** 
+* **Bad:**
   ```
     SPACESHIP_GIT_STATUS_BEHIND_COLOR
     SPACESHIP_GIT_STATUS_DIVERGED_COLOR

@@ -1,0 +1,53 @@
+#!/usr/bin/env zsh
+# vim: ft=zsh fdm=marker foldlevel=0 sw=2 ts=2 sts=2 et
+
+#
+# Mercurial (hg)
+#
+
+# ------------------------------------------------------------------------------
+# Configuration
+# ------------------------------------------------------------------------------
+
+SPACESHIP_HG_SHOW="${SPACESHIP_HG_SHOW=true}"
+SPACESHIP_HG_PREFIX="${SPACESHIP_HG_PREFIX="on "}"
+SPACESHIP_HG_SUFFIX="${SPACESHIP_HG_SUFFIX="$SPACESHIP_PROMPT_DEFAULT_SUFFIX"}"
+SPACESHIP_HG_SYMBOL="${SPACESHIP_HG_SYMBOL="☿ "}"
+
+# ------------------------------------------------------------------------------
+# Dependencies
+# ------------------------------------------------------------------------------
+
+track-sz-autoload "sz::hg_branch"
+track-sz-autoload "sz::hg_status"
+
+# ------------------------------------------------------------------------------
+# Section
+# ------------------------------------------------------------------------------
+
+# Show both hg branch and hg status:
+#   sz::hg_branch
+#   sz::hg_status
+sz::hg() {
+  [[ $SPACESHIP_HG_SHOW == false ]] && return
+
+  local hg_branch hg_status
+
+  _SS_DATA[section_result]=""
+  sz::hg_branch
+  hg_branch="${_SS_DATA[section_result]}"
+
+  _SS_DATA[section_result]=""
+  sz::hg_status
+  hg_status="${_SS_DATA[section_result]}"
+
+  [[ -z $hg_branch ]] && return
+
+  sz::section \
+    'white' \
+    "${hg_branch}${hg_status}" \
+    "$SPACESHIP_HG_PREFIX" \
+    "$SPACESHIP_HG_SUFFIX"
+}
+
+sz::hg "$@"

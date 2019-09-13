@@ -1,13 +1,13 @@
 {
-  "name": "spaceship-prompt",
-  "version": "3.11.1",
-  "description": "A Zsh prompt for Astronauts.",
+  "name": "spacezsh-prompt",
+  "version": "4.4.0",
+  "description": "An async prompt does things in the ZSH way.",
   "files": [
     "lib",
     "scripts",
     "sections",
-    "spaceship.zsh",
-    "spaceship.zsh-theme"
+    "spacezsh.zsh",
+    "spacezsh.zsh-theme"
   ],
   "scripts": {
     "postinstall": "./scripts/install.sh",
@@ -22,21 +22,22 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/denysdovhan/spaceship-prompt.git"
+    "url": "git+https://github.com/laggardkernel/spacezsh-prompt.git"
   },
   "keywords": [
+    "async",
     "prompt",
     "shell",
     "zsh",
     "zsh-theme",
     "terminal"
   ],
-  "author": "Denys Dovhan <email@denysdovhan.com> (http://denysdovhan.com/)",
+  "author": "laggardkernel <laggardkernel@gmail.com>",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/denysdovhan/spaceship-prompt/issues"
+    "url": "https://github.com/laggardkernel/spacezsh-prompt/issues"
   },
-  "homepage": "https://github.com/denysdovhan/spaceship-prompt#readme",
+  "homepage": "https://github.com/laggardkernel/spacezsh-prompt#readme",
   "devDependencies": {
     "gitbook-cli": "^2.3.2",
     "gitbook-plugin-anchorjs": "^1.1.1",

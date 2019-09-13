@@ -18,22 +18,6 @@ oneTimeSetUp() {
 # TEST CASES
 # ------------------------------------------------------------------------------
 
-test_exists() {
-  mock() {}
-
-  assertTrue  "command should exist"     '$(ss::exists cd)'
-  assertFalse "command should not exist" '$(ss::exists d41d8cd)'
-  assertTrue  "function should exist"    '$(ss::exists mock)'
-}
-
-test_defined() {
-  mock() {}
-
-  assertFalse "command should not exist"  '$(ss::func_defined cd)'
-  assertTrue  "function should exist"     '$(ss::func_defined mock)'
-  assertFalse "function should not exist" '$(ss::func_defined d41d8cd)'
-}
-
 test_is_git() {
   local REPO="$SHUNIT_TMPDIR/utils/is_git"
   mkdir -p $REPO/foo
@@ -50,7 +34,7 @@ test_is_git() {
 
 test_is_hg() {
   # Skip this test case if Mercurial is not istalled
-  if ! ss::exists hg; then
+  if ! (( $+commands[hg] )); then
     startSkipping
   fi
 
@@ -59,7 +43,7 @@ test_is_hg() {
   mkdir -p "$REPO/../foo with space"
   cd $REPO
 
-  if ss::exists hg; then
+  if (( $+commands[hg] )); then
     command hg init
   fi
 
@@ -99,14 +83,6 @@ test_displaytime() {
   local actual=$(ss::displaytime 1234567)
 
   assertEquals "$expected" "$actual"
-}
-
-test_union() {
-  local arr1=('a' 'b' 'c') arr2=('b' 'c' 'd') arr3=('c' 'd' 'e')
-  local expected=('a' 'b' 'c' 'd' 'e')
-  local actual=$(ss::union $arr1 $arr2 $arr3)
-
-  assertEquals "union of arrays" "$expected" "$actual"
 }
 
 # ------------------------------------------------------------------------------

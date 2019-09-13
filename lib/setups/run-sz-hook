@@ -1,0 +1,37 @@
+#!/usr/bin/env zsh
+# vim: ft=zsh fdm=marker foldlevel=0 sw=2 ts=2 sts=2 et
+#
+# Borrowed from official function add-sz-hook
+
+emulate -L zsh
+
+local -a hooktypes
+hooktypes=(
+  chpwd precmd preexec
+)
+local usage="Usage: run-sz-hook hook function\nValid hooks for ss are:\n  $hooktypes"
+
+local opt
+integer help
+
+while getopts "h" opt; do
+  case $opt in
+    (h)
+    help=1
+    ;;
+  esac
+done
+shift $(( OPTIND - 1 ))
+
+if (( help || ${hooktypes[(I)$1]} == 0 )); then
+  print -u$(( 2 - help )) $usage
+  return $(( 1 - help ))
+fi
+
+local hook="sz_${1}_functions"
+local args="${@:2}"
+local f=""
+
+for f in ${(P)hook}; do
+  $f ${@:2}
+done

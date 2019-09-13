@@ -1,0 +1,40 @@
+#!/usr/bin/env zsh
+# vim: ft=zsh fdm=marker foldlevel=0 sw=2 ts=2 sts=2 et
+
+# Internal variable for checking if prompt is opened
+_SS_DATA[prompt_opened]="$SPACESHIP_PROMPT_FIRST_PREFIX_SHOW"
+
+# Draw prompt section (bold is used as default)
+# USAGE:
+#   sz::section <color> <content> [prefix] [suffix]
+function sz::section {
+  local color content prefix suffix
+  local result=""
+
+  [[ -n $1 ]] && color="%F{$1}" || color="%f"
+  content="$2"
+  prefix="$3"
+  suffix="$4"
+
+  if [[ ${_SS_DATA[prompt_opened]} == true ]] \
+    && [[ $SPACESHIP_PROMPT_PREFIXES_SHOW == true ]] \
+    && [[ -n "$prefix" ]]; then
+    # set prefix bold
+    result+="%{%B%}${prefix}%{%b%}"
+  fi
+  _SS_DATA[prompt_opened]="true"
+  result+="%{%B${color}%}" # set color
+  result+="$content"       # section content
+  result+="%{%b%f%}"       # unset color
+
+  if [[ $SPACESHIP_PROMPT_SUFFIXES_SHOW == true ]] \
+    && [[ -n "$suffix" ]]; then
+    # reset bold, if it was diabled before
+    result+="%{%B%}${suffix}%{%b%}"
+  fi
+
+  # pass the result out with the global variable
+  _SS_DATA[section_result]="$result"
+}
+
+sz::section "$@"

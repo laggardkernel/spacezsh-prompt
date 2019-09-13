@@ -1,0 +1,30 @@
+#!/usr/bin/env zsh
+# vim: ft=zsh fdm=marker foldlevel=0 sw=2 ts=2 sts=2 et
+
+# Disables terminal application mode and updates editor information.
+function sz::vi-mode-line-finish {
+  # prezto/modules/completion
+  # The terminal must be in application mode when ZLE is active for $terminfo
+  # values to be valid.
+  if (( $+terminfo[rmkx] )); then
+    # Disable terminal application mode.
+    echoti rmkx
+  fi
+
+  # Re-render prompt to get vi mode updated
+  sz::refresh_cache_item "char" "true"
+
+  if [[ $SPACESHIP_VI_MODE_CURSOR == true ]]; then
+    # Update cursor style
+    case "$KEYMAP" in
+      vicmd|visual|vline)
+        sz::set_cursor_style ${(s. .)SPACESHIP_VI_MODE_CURSOR_NORMAL}
+        ;;
+      main|viins|*)
+        sz::set_cursor_style ${(s. .)SPACESHIP_VI_MODE_CURSOR_INSERT}
+        ;;
+    esac
+  fi
+}
+
+sz::vi-mode-line-finish "$@"
