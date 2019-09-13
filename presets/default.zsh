@@ -14,28 +14,30 @@ if [ -z "$SPACESHIP_PROMPT_ORDER" ]; then
     vcs::async         # Version control system section (git, hg, svn)
     # git::async         # deprecated
     # hg::async          # deprecated
-    package::async     # Package version
-    node::async        # Node.js section
-    ruby::async        # Ruby section
-    elm::async         # Elm section
-    elixir::async      # Elixir section
-    xcode::async       # Xcode section
-    swift::async       # Swift section
-    golang::async      # Go section
-    php::async         # PHP section
-    rust::async        # Rust section
-    haskell::async     # Haskell Stack section
-    julia::async       # Julia section
-    vagrant::async     # Vagrant section
-    docker::async      # Docker section
-    aws::async         # Amazon Web Services section
-    venv               # virtualenv section
-    conda::async       # conda virtualenv section
-    pyenv::async       # Pyenv section
-    dotnet::async      # .NET section
-    ember::async       # Ember.js section
-    kubecontext::async # Kubectl context section
-    terraform::async   # Terraform workspace section
+
+    # package::async     # Package version
+    # node::async        # Node.js section
+    # ruby::async        # Ruby section
+    # elm::async         # Elm section
+    # elixir::async      # Elixir section
+    # xcode::async       # Xcode section
+    # swift::async       # Swift section
+    # golang::async      # Go section
+    # php::async         # PHP section
+    # rust::async        # Rust section
+    # haskell::async     # Haskell Stack section
+    # julia::async       # Julia section
+    # vagrant::async     # Vagrant section
+    # docker::async      # Docker section
+    # aws::async         # Amazon Web Services section
+    # venv               # virtualenv section
+    # conda::async       # conda virtualenv section
+    # pyenv::async       # Pyenv section
+    # dotnet::async      # .NET section
+    # ember::async       # Ember.js section
+    # kubecontext::async # Kubectl context section
+    # terraform::async   # Terraform workspace section
+
     line_sep           # Line break
     # vi_mode           # deprecated
     char               # Prompt character, with vi-mode indicator integrated

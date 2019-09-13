@@ -13,6 +13,9 @@ None.
 - `CHANGELOG.md`
 - Fix `README.md` and other documentations.
 
+### Changed
+- Reduce number of sections enable in the default conf. Give the option back to users.
+
 ### Fixed
 - Redraw prompt on working directory changes with hook `chpwd`, where hook `precmd` is not triggered.
 - Fix battery status query from [@Runrioter](https://github.com/denysdovhan/spaceship-prompt/pull/640).
