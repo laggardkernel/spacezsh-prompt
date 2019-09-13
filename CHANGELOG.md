@@ -90,9 +90,9 @@ None.
 ### Removed
 - Remove utility `spaceship::exists`. `(($+commands[foo]))` is faster than `command -v foo` in ZSH. Do things in the ZSH way.
 
-[Unreleased]: https://github.com/laggardkernel/spacezsh-prompt/compare/HEAD...v4.4.0
-[4.4.0]: https://github.com/laggardkernel/spacezsh-prompt/compare/v4.4.0...v4.3.0
-[4.3.0]: https://github.com/laggardkernel/spacezsh-prompt/compare/v4.3.0...v4.2.0
-[4.2.0]: https://github.com/laggardkernel/spacezsh-prompt/compare/v4.2.0...v4.1.0
-[4.1.0]: https://github.com/laggardkernel/spacezsh-prompt/compare/v4.1.0...v4.0.0
+[Unreleased]: https://github.com/laggardkernel/spacezsh-prompt/compare/v4.4.0...HEAD
+[4.4.0]: https://github.com/laggardkernel/spacezsh-prompt/compare/v4.3.0...v4.4.0
+[4.3.0]: https://github.com/laggardkernel/spacezsh-prompt/compare/v4.2.0...v4.3.0
+[4.2.0]: https://github.com/laggardkernel/spacezsh-prompt/compare/v4.1.0...v4.2.0
+[4.1.0]: https://github.com/laggardkernel/spacezsh-prompt/compare/v4.0.0...v4.1.0
 [4.0.0]: https://github.com/laggardkernel/spacezsh-prompt/compare/8ccc6fb...v4.0.0
