@@ -1,0 +1,15 @@
+#!/usr/bin/env zsh
+# vim: ft=zsh fdm=marker foldlevel=0 sw=2 ts=2 sts=2 et
+
+function prompt_spacezsh_preexec {
+  # Stop running prompt async jobs
+  if [[ "${_SS_DATA[async]}" == "true" ]]; then
+    async_flush_jobs "spacezsh_section_worker"
+  fi
+
+  run-sz-hook preexec
+}
+
+typeset -ag sz_preexec_functions
+
+prompt_spacezsh_preexec "$@"

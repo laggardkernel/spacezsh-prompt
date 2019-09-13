@@ -21,34 +21,35 @@ SPACESHIP_PROMPT_ORDER=(
   host               # Hostname section
   dir                # Current directory section
   vcs::async         # Version control system section
-  # git::async         # Git section (git_branch + git_status)
-  # hg::async          # Mercurial section (hg_branch  + hg_status)
-  package::async     # Package version
-  node::async        # Node.js section
-  ruby::async        # Ruby section
-  elm::async         # Elm section
-  elixir::async      # Elixir section
-  xcode::async       # Xcode section
-  swift::async       # Swift section
-  golang::async      # Go section
-  php::async         # PHP section
-  rust::async        # Rust section
-  haskell::async     # Haskell Stack section
-  julia::async       # Julia section
-  vagrant::async     # Vagrant section
-  docker::async      # Docker section
-  aws::async         # Amazon Web Services section
-  venv               # virtualenv section
-  conda::async       # conda virtualenv section
-  pyenv::async       # Pyenv section
-  dotnet::async      # .NET section
-  ember::async       # Ember.js section
-  kubecontext::async # Kubectl context section
-  terraform::async   # Terraform workspace section
+  # git::async         # deprecated
+  # hg::async          # deprecated
+
+  # package::async     # Package version
+  # node::async        # Node.js section
+  # ruby::async        # Ruby section
+  # elm::async         # Elm section
+  # elixir::async      # Elixir section
+  # xcode::async       # Xcode section
+  # swift::async       # Swift section
+  # golang::async      # Go section
+  # php::async         # PHP section
+  # rust::async        # Rust section
+  # haskell::async     # Haskell Stack section
+  # julia::async       # Julia section
+  # vagrant::async     # Vagrant section
+  # docker::async      # Docker section
+  # aws::async         # Amazon Web Services section
+  # venv               # virtualenv section
+  # conda::async       # conda virtualenv section
+  # pyenv::async       # Pyenv section
+  # dotnet::async      # .NET section
+  # ember::async       # Ember.js section
+  # kubecontext::async # Kubectl context section
+  # terraform::async   # Terraform workspace section
+
   line_sep           # Line break
-  # vi_mode            # Vi-mode indicator
-  # char               # Prompt character
-  vi_char
+  # vi_mode            # deprecated
+  char               # Prompt character, with vi-mode indicator integrated
 )
 
 SPACESHIP_RPROMPT_ORDER=(
@@ -104,12 +105,51 @@ This group of options defines a behaviour of prompt and standard parameters for 
 | :------- | :-----: | ------- |
 | `SPACESHIP_CHAR_PREFIX` | ` ` | Prefix before prompt character |
 | `SPACESHIP_CHAR_SUFFIX` | ` ` | Suffix after prompt character |
-| `SPACESHIP_CHAR_SYMBOL` | `➜ ` | Prompt character to be shown before any command |
-| `SPACESHIP_CHAR_SYMBOL_ROOT` | `$SPACESHIP_CHAR_SYMBOL` | Prompt character to be shown before any command for the root user |
-| `SPACESHIP_CHAR_SYMBOL_SECONDARY` | `$SPACESHIP_CHAR_SYMBOL` | Secondary prompt character to be shown for incomplete commands |
+| `SPACESHIP_CHAR_SYMBOL` | `$SPACESHIP_VI_MODE_INSERT` | Prompt character to be shown before any command (when vi mode is disabled) |
+| `SPACESHIP_CHAR_SYMBOL_ROOT` | `$SPACESHIP_CHAR_SYMBOL` | Prompt character to be shown before any command for the root user (when vi mode is disabled) |
+| `SPACESHIP_CHAR_SYMBOL_SECONDARY` | `...` | Secondary prompt character to be shown for incomplete commands |
 | `SPACESHIP_CHAR_COLOR_SUCCESS` | `green` | Color of prompt character if last command completes successfully |
 | `SPACESHIP_CHAR_COLOR_FAILURE` | `red` | Color of prompt character if last command returns non-zero exit-code |
 | `SPACESHIP_CHAR_COLOR_SECONDARY` | `yellow` | Color of secondary prompt character |
+
+A integration of `char` and `vi_mode` to use prompt character as vi-mode indicator. The idea is borrowed from ZSH framework [Prezto](https://github.com/sorin-ionescu/prezto).
+
+The other indicator for vi-mode is the cursor style change.
+| Variable | Default | Meaning |
+| :------- | :-----: | ------- |
+| `SPACESHIP_VI_MODE_SHOW` | `true` | Use prompt character as vi-mode indicator or not |
+| `SPACESHIP_VI_MODE_INSERT` | `❯ ` | Prompt char to be shown when in insert mode |
+| `SPACESHIP_VI_MODE_NORMAL` | `❮ ` | Prompt char to be shown when in normal mode |
+| `SPACESHIP_VI_MODE_CURSOR` | `true` | Enable curosr style change on mode change or not|
+| `SPACESHIP_VI_MODE_CURSOR_NORMAL` | `block` | Cursor style in the normal/command mode |
+| `SPACESHIP_VI_MODE_CURSOR_INSERT` | `blinking bar` | Cursor style in the insert mode |
+
+The prompt character in vi-mode is set a new value `❯ `. If you wanna get back the old character in vi-mode. Use the config below,
+
+```shell
+# default in 4.x
+# SPACESHIP_VI_MODE_INSERT='❯ '
+# SPACESHIP_VI_MODE_NORMAL='❮ '
+
+# revert back chars in 3.x
+SPACESHIP_VI_MODE_INSERT='➜  '
+SPACESHIP_VI_MODE_NORMAL='[N]'
+```
+
+You can temporarily enable or disable vi-mode with handy functions (just execute them in terminal as any other regular command):
+
+| Function | Meaning |
+| :------- | ------- |
+| `sz::vi_mode_setup` | Enable vi-mode for current terminal session (run by default) |
+| `sz::vi_mode_cleanup` | Disable vi-mode for current terminal session |
+
+**Note**:
+
+- For oh-my-zsh users with vi-mode plugin enabled: Add `export RPS1="%{$reset_color%}"` before `source $ZSH/oh-my-zsh.sh` in `.zshrc` to disable default `<<<` NORMAL mode indicator in right prompt.
+- Vi mode indicator is enabled from the 2nd prompt on purpose to avoid the incompatibility between `zsh-syntax-highlighting` and `add-zle-hook-widget`.
+- If you are using tmux but `$TMUX` is not set (e.g., you're running zsh on a remote host), you may need to set `TMUX_PASSTHROUGH=1` to get the cursor styling to work.
+- Prompt character color is still controlled by `char` to indicate return value of last command.
+- If `SPACESHIP_VI_MODE_SHOW` is set to `false`, prompt character will fallback to `SPACESHIP_CHAR_SYMBOL`.
 
 ### Time (`time`)
 
@@ -460,6 +500,23 @@ Julia section is shown only in directories that contain file with `.jl` extensio
 | `SPACESHIP_JULIA_SYMBOL` | `ஃ·` | Character to be shown before Julia version |
 | `SPACESHIP_JULIA_COLOR` | `green` | Color of Julia section |
 
+### Vagrant (`vagrant`)
+
+Vagrant section is shown only in directories that contain `Vagrantfile`. It's used as a virtual machine status indicator.
+
+The environment variable `VAGRANT_VAGRANTFILE` for custom Vagrant conf file is supported too.
+
+| Variable | Default | Meaning |
+| :------- | :-----: | ------- |
+| `SPACESHIP_VAGRANT_SHOW` | `true` | Show current Vagrant virtual machine status or not |
+| `SPACESHIP_VAGRANT_PREFIX` | `on ` | Prefix before the Vagrant section |
+| `SPACESHIP_VAGRANT_SUFFIX` | `$SPACESHIP_PROMPT_DEFAULT_SUFFIX` | Suffix after the Docker section |
+| `SPACESHIP_VAGRANT_SYMBOL` | `Ｖ` | Character to be shown before Docker version |
+| `SPACESHIP_VAGRANT_COLOR_ON` | `27` (blue) | Color of Vagrant section when machine is on |
+| `SPACESHIP_VAGRANT_COLOR_OFF` | `247` (grey) | Color of Vagrant section when machine is off |
+| `SPACESHIP_VAGRANT_COLOR_SUSPENDED` | `214` (orange) | Color of Vagrant section when machine is suspended |
+| `SPACESHIP_VAGRANT_VERBOSE` | `true` | Show virtual machine status text or not. |
+
 ### Docker (`docker`)
 
 Docker section is shown only in directories that contain `Dockerfile` or it's possible to run `docker-compose`.
@@ -647,29 +704,10 @@ You can temporarily enable or disable vi-mode with handy functions (just execute
 
 | Function | Meaning |
 | :------- | ------- |
-| `ss::vi_mode_enable` | Enable vi-mode for current terminal session |
-| `ss::vi_mode_disable` | Disable vi-mode for current terminal session |
+| `sz::vi_mode_enable` | Enable vi-mode for current terminal session |
+| `sz::vi_mode_disable` | Disable vi-mode for current terminal session |
 
 **Note:** For oh-my-zsh users with vi-mode plugin enabled: Add `export RPS1="%{$reset_color%}"` before `source $ZSH/oh-my-zsh.sh` in `.zshrc` to disable default `<<<` NORMAL mode indicator in right prompt.
-
-### Vi-char (`vi_char`)
-
-A combination of `char` and `vi_mode` to use prompt character as vi-mode indicator. The idea is borrowed from ZSH framework [Prezto](https://github.com/sorin-ionescu/prezto). All `char` options and part of `vi_mode` options are supported.
-
-| Variable | Default | Meaning |
-| :------- | :-----: | ------- |
-| `SPACESHIP_VI_MODE_SHOW` | `true` | Use prompt character as vi-mode indicator or not |
-| `SPACESHIP_VI_MODE_INSERT` | `❯ ` | Prompt char to be shown when in insert mode |
-| `SPACESHIP_VI_MODE_NORMAL` | `❮ ` | Prompt char to be shown when in normal mode |
-| `SPACESHIP_VI_MODE_CURSOR_VICMD` | `block` | Cursor style in Vi's command mode |
-| `SPACESHIP_VI_MODE_CURSOR_VIINS` | `blinking bar` | Cursor style in Vi's insert mode |
-
-**Note**:
-
-- Vi mode is enabled from the 2nd prompt on purpose to avoid the incompatibility between `zsh-syntax-highlighting` and `add-zle-hook-widget`.
-- If you are using tmux but `$TMUX` is not set (e.g., you're running zsh on a remote host), you may need to set `TMUX_PASSTHROUGH=1` to get the cursor styling to work.
-- Prompt character color is still controlled by `char` to indicator return value of last command.
-- If `SPACESHIP_VI_MODE_SHOW` is set to `false`, prompt character will fallback to `SPACESHIP_CHAR_SYMBOL`.
 
 ### Jobs (`jobs`)
 

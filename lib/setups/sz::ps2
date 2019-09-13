@@ -1,0 +1,12 @@
+#!/usr/bin/env zsh
+# vim: ft=zsh fdm=marker foldlevel=0 sw=2 ts=2 sts=2 et
+
+# PS2
+# Continuation interactive prompt
+function sz::ps2 {
+  local char="${SPACESHIP_CHAR_SYMBOL_SECONDARY="$SPACESHIP_CHAR_SYMBOL"}"
+  sz::section "$SPACESHIP_CHAR_COLOR_SECONDARY" "$char"
+  echo -n "${_SS_DATA[section_result]}"
+}
+
+sz::ps2 "$@"

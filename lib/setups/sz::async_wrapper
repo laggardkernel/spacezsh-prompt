@@ -1,0 +1,21 @@
+#!/usr/bin/env zsh
+# vim: ft=zsh fdm=marker foldlevel=0 sw=2 ts=2 sts=2 et
+
+# Get result from custom section without
+# Takes the result of the sections computation and echos it,
+# so that ZSH-Async can grab it.
+#
+# @args
+#   $1 string The command to execute
+#   $* Parameters for the command
+function sz::async_wrapper {
+  local command="${1}"
+  local result="${2}"
+
+  _SS_DATA[section_result]=""
+  shift 1
+  ${command} "$@"
+  echo -n "${result}${_SS_DATA[section_result]}"
+}
+
+sz::async_wrapper "$@"

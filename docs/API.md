@@ -1,15 +1,15 @@
 # API
 
-This page describes Spaceship API for creating plugins and tweaking Spaceship's behavior.
+This page describes Spacezsh API for creating plugins and tweaking Spacezsh's behavior.
 
-Spaceship uses `SPACESHIP_` prefix for variables and `ss::` prefix for a function to avoid conflicts with other ones. All section, including custom ones, are being required to use `spaceship_` prefix before their name to load properly.
+Spacezsh uses `sz::` prefix for variables and `sz::` prefix for a function to avoid conflicts with other ones. All section, including custom ones, are being required to use `sz::` prefix before their name to load properly.
 
 ## Typical section
 
-Below is an example of a typical section for Spaceship. Pay attention to a few crucial moments:
+Below is an example of a typical section for Spacezsh. Pay attention to a few crucial moments:
 
-* Define options for customization. Their names should start with `SPACESHIP_`.
-* Section's name should start with `spaceship_`.
+* Define options for customization. Their names should start with `sz::`.
+* Section's name should start with `sz::`.
 * Show section only where it's needed (in directories which contains specific files, when a specific command is available, etc).
 
 Take a look at [Contribution guidelines](../CONTRIBUTING.md) for further information.
@@ -36,14 +36,14 @@ SPACESHIP_FOOBAR_COLOR="${SPACESHIP_FOOBAR_COLOR="white"}"
 # ------------------------------------------------------------------------------
 
 # Show foobar status
-# spaceship_ prefix before section's name is required!
+# sz:: prefix before section's name is required!
 # Otherwise this section won't be loaded.
-spaceship_foobar() {
+sz::foobar() {
   # If SPACESHIP_FOOBAR_SHOW is false, don't show foobar section
   [[ $SPACESHIP_FOOBAR_SHOW == false ]] && return
 
   # Check if foobar command is available for execution
-  ss::exists foobar || return
+  (( $+commands[foobar] )) || return
 
   # Show foobar section only when there are foobar-specific files in current
   # working directory.
@@ -67,7 +67,7 @@ spaceship_foobar() {
   [[ -z $foobar_status ]] && return
 
   # Display foobar section
-  ss::section \
+  sz::section \
     "$SPACESHIP_FOOBAR_COLOR" \
     "$SPACESHIP_FOOBAR_PREFIX" \
     "$SPACESHIP_FOOBAR_SYMBOL$foobar_status" \
@@ -77,7 +77,7 @@ spaceship_foobar() {
 
 ## `SPACESHIP_VERSION`
 
-An environment variable that defines the version of currently running Spaceship prompt version. Can be used for issue reporting or debugging purposes.
+An environment variable that defines the version of currently running Spacezsh prompt version. Can be used for issue reporting or debugging purposes.
 
 Accessible to any program or script running in a current shell session.
 
@@ -90,9 +90,9 @@ echo $SPACESHIP_VERSION
 
 ## `SPACESHIP_ROOT`
 
-> **Attention!** Do not modify the value of this variable! Changing the value may cause the damage to Spaceship installation!
+> **Attention!** Do not modify the value of this variable! Changing the value may cause the damage to Spacezsh installation!
 
-An environment variable that defines the path to Spaceship prompt installation. Spaceship uses this variable for resolving path to sections and utils.
+An environment variable that defines the path to Spacezsh prompt installation. Spacezsh uses this variable for resolving path to sections and utils.
 
 Accessible to any program or script running in a current shell session.
 
@@ -100,20 +100,20 @@ Accessible to any program or script running in a current shell session.
 
 ```zsh
 echo $SPACESHIP_ROOT
-#> /path/to/spaceship-prompt
+#> /path/to/spacezsh-prompt
 ```
 
 ## `SPACESHIP_CUSTOM_SECTION_LOCATION`
 
-Path where custom section files are auto sourced. Defaults to `$HOME/.config/spaceship/sections`.
+Path where custom section files are auto sourced. Defaults to `$HOME/.config/spacezsh/sections`.
 
-Custom section name and function name should follow the same pattern as the built/core sections. To be specific, a custom section named `foobar` should be rendered with function `spaceship_foobar` and stored in file `${SPACESHIP_CUSTOM_SECTION_LOCATION}/foobar.zsh`.
+Custom section name and function name should follow the same pattern as the built/core sections. To be specific, a custom section named `foobar` should be rendered with function `sz::foobar` and stored in file `${SPACESHIP_CUSTOM_SECTION_LOCATION}/foobar.zsh`.
 
-To load a custom section defined in a file, you should tag the section name with `custom` (like `foobar::custom`) in the array `SPACESHIP_PROMPT_ORDER`. Tag `custom` is only required for custom section sourced from a file by Spaceship. If you've sourced the file manually before spaceship is loaded, there's no need to use the tag `custom`.
+To load a custom section defined in a file, you should tag the section name with `custom` (like `foobar::custom`) in the array `SPACESHIP_PROMPT_ORDER`. Tag `custom` is only required for custom section sourced from a file by Spacezsh. If you've sourced the file manually before spacezsh is loaded, there's no need to use the tag `custom`.
 
 **Note**: custom section is preferred over core/builtin section with the same name.
 
-## `ss::section <color> <content> [prefix] [suffix]`
+## `sz::section <color> <content> [prefix] [suffix]`
 
 This command displays prompt section prefixed with `prefix`, suffixed with `suffix` and `content` painted in `color`. **Bold** style is applied by default.
 
@@ -137,38 +137,17 @@ Both `prefix` and `suffix` are optional. They are equal to empty strings by defa
 ```zsh
 # Display prompt section with prefix and suffix
 # Backslash is used to escape line ending
-ss::section \
+sz::section \
   "$SPACESHIP_SECTION_COLOR" \
   "$SPACESHIP_SECTION_SYMBOL$section_content" \
   "$SPACESHIP_SECTION_PREFIX" \
   "$SPACESHIP_SECTION_SUFFIX"
 
 # Display prompt section without prefix and suffix
-ss::section "$color" "$SPACESHIP_CHAR_SYMBOL"
+sz::section "$color" "$SPACESHIP_CHAR_SYMBOL"
 ```
 
-## `ss::func_defined <function>`
-
-The same as [`ss::exists`](#spaceshipexists-command), but for functions. It returns zero exit code if a `function` has been defined previously and non-zero if `function` hasn't.
-
-You can use this utility to check if a user has previously defined a function or not. Spaceship uses this utility internally to check if a custom section has been defined and available for execution.
-
-### Arguments
-
-1. `function` _Required_ — a function that needs to be checked.
-
-### Example
-
-```zsh
-# Check if section has been defined
-if ss::func_defined spaceship_section; then
-  spaceship_section
-else
-  # section is not found
-fi
-```
-
-## `ss::is_git`
+## `sz::is_git`
 
 This utility returns zero exit code if a current working directory is a Git repository and non-zero if it's not.
 
@@ -176,21 +155,21 @@ This utility returns zero exit code if a current working directory is a Git repo
 
 ```zsh
 # Return if current directory is not a git repository
-ss::is_git || return
+sz::is_git || return
 ```
 
-## `ss::is_hg`
+## `sz::is_hg`
 
-The same as [`ss::is_git`](#spaceshipisgit), but for Mercurial repositories. This utility returns zero exit code if a current working directory is a Mercurial repository and non-zero if it's not.
+The same as [`sz::is_git`](#szis-git), but for Mercurial repositories. This utility returns zero exit code if a current working directory is a Mercurial repository and non-zero if it's not.
 
 ### Example
 
 ```zsh
 # Return if current directory is not a Mercurial repository
-ss::is_hg || return
+sz::is_hg || return
 ```
 
-## `ss::deprecated <option> [message]`
+## `sz::deprecated <option> [message]`
 
 This utility checks if `option` variable is set and if it is, prints the `message`. The `message` supports escapes to set foreground color, background color and other visual effects. Read more about escapes in [13 Prompt Expansion](http://zsh.sourceforge.net/Doc/Release/Prompt-Expansion.html) section of Zsh documentation.
 
@@ -203,11 +182,11 @@ This utility checks if `option` variable is set and if it is, prints the `messag
 
 ```zsh
 # Check if SPACESHIP_BATTERY_ALWAYS_SHOW is set
-ss::deprecated SPACESHIP_BATTERY_ALWAYS_SHOW "Use %BSPACESHIP_BATTERY_SHOW='always'%b instead."
+sz::deprecated SPACESHIP_BATTERY_ALWAYS_SHOW "Use %BSPACESHIP_BATTERY_SHOW='always'%b instead."
 #> SPACESHIP_BATTERY_ALWAYS_SHOW is deprecated. Use SPACESHIP_BATTERY_SHOW='always' instead.
 ```
 
-## `ss::displaytime <seconds>`
+## `sz::displaytime <seconds>`
 
 This utility converts `seconds` into a human-readable format. It splits `seconds` into days (`d`), hours (`h`), minutes (`m`) and seconds (`s`).
 
@@ -218,6 +197,6 @@ This utility converts `seconds` into a human-readable format. It splits `seconds
 ### Example
 
 ```zsh
-ss::displaytime 123456
+sz::displaytime 123456
 #> 1d 10h 17m 36s
 ```
