@@ -103,8 +103,8 @@ This group of options defines a behaviour of prompt and standard parameters for 
 | :------- | :-----: | ------- |
 | `SPACESHIP_CHAR_PREFIX` | ` ` | Prefix before prompt character |
 | `SPACESHIP_CHAR_SUFFIX` | ` ` | Suffix after prompt character |
-| `SPACESHIP_CHAR_SYMBOL` | `➜ ` | Prompt character to be shown before any command |
-| `SPACESHIP_CHAR_SYMBOL_ROOT` | `$SPACESHIP_CHAR_SYMBOL` | Prompt character to be shown before any command for the root user |
+| `SPACESHIP_CHAR_SYMBOL` | `$SPACESHIP_VI_MODE_INSERT` | Prompt character to be shown before any command (when vi mode is disabled) |
+| `SPACESHIP_CHAR_SYMBOL_ROOT` | `$SPACESHIP_CHAR_SYMBOL` | Prompt character to be shown before any command for the root user (when vi mode is disabled) |
 | `SPACESHIP_CHAR_SYMBOL_SECONDARY` | `...` | Secondary prompt character to be shown for incomplete commands |
 | `SPACESHIP_CHAR_COLOR_SUCCESS` | `green` | Color of prompt character if last command completes successfully |
 | `SPACESHIP_CHAR_COLOR_FAILURE` | `red` | Color of prompt character if last command returns non-zero exit-code |
