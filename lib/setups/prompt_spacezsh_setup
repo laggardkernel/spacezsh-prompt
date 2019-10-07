@@ -7,8 +7,8 @@ function prompt_spacezsh_help {
 
   prompt spacezsh
 
-Spacefish is a minimalistic, powerful and extremely customizable Z Shell prompt.
-It combines everything you may need for convenient work, without unnecessary complications, like a real spacezsh.
+Spacezsh is a minimalistic, powerful and extremely customizable Z Shell prompt.
+It combines everything you may need for convenient work, without unnecessary complications.
 EOF
 }
 
