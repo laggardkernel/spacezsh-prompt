@@ -88,7 +88,7 @@ main() {
   #     # Note: SPACESHIP_RPROMPT_ORDER and SPACESHIP_PROMPT_ORDER configuration may have multiple lines
   #     # which are grouped by `(`, `)`
   #     sed '/^# Set Spaceship ZSH as a prompt$/d' "$ZSHRC" | \
-  #     sed '/^autoload -U promptinit; promptinit$/d' | \
+  #     sed '/^autoload -Uz promptinit; promptinit$/d' | \
   #     sed '/^prompt spaceship$/d' | \
   #     sed  -E '/^SPACESHIP_R?PROMPT_ORDER=\([^)]*$/,/^[^(]*)/d' | \
   #     sed '/^SPACESHIP_.*$/d' > "$ZSHRC.bak" && \
