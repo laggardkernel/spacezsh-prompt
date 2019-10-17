@@ -15,6 +15,9 @@ function sz::build_section_cache {
   # http://zsh.sourceforge.net/Doc/Release/Conditional-Expressions.html
   setopt EXTENDED_GLOB LOCAL_OPTIONS
 
+  # Temporary solution for share var between master and the async worker
+  echo "prompt_opened=$SPACESHIP_PROMPT_FIRST_PREFIX_SHOW" >| "${_SS_DATA[section_var_file]}"
+
   local -a alignments=("prompt" "rprompt")
   local alignment
   local custom async section cache_key result

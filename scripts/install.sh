@@ -109,7 +109,7 @@ main() {
   # Enabling statements for ~/.zshrc
   msg="
   # Set Spaceship ZSH as a prompt
-  autoload -U promptinit; promptinit
+  autoload -Uz promptinit; promptinit
   prompt spaceship"
 
   # Check if appending was successful and perform corresponding actions

@@ -13,7 +13,7 @@
 #   sz::is_git
 function sz::is_git {
   # See https://git.io/fp8Pa for related discussion
-  [[ $(command git rev-parse --is-inside-work-tree 2>/dev/null) == true ]]
+  command git rev-parse --is-inside-work-tree &>/dev/null
 }
 
 # Check if the current directory is in a Mercurial repository.
