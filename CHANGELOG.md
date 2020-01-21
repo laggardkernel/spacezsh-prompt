@@ -7,6 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## TODO
 - Improve repo detection support in section `dir`
 - Rewrite `sz::section` to avoid pass variable from the worker back to the main shell
+- Remove the totally useless prepositions
 
 ## [Unreleased]
 ### Changed

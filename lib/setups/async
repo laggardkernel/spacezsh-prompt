@@ -68,7 +68,7 @@ _async_worker() {
 	# worker. For example: `fork failed: resource temporarily unavailable`.
 	# Some older versions of zsh might also print malloc errors (know to happen
 	# on at least zsh 5.0.2 and 5.0.8) likely due to kill signals.
-	exec 2>/dev/null
+	# exec 2>/dev/null
 
 	# When a zpty is deleted (using -d) all the zpty instances created before
 	# the one being deleted receive a SIGHUP, unless we catch it, the async
