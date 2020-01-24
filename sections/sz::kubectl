@@ -1,0 +1,93 @@
+#!/usr/bin/env zsh
+# vim: ft=zsh fdm=marker foldlevel=0 sw=2 ts=2 sts=2 et
+
+#
+#  Kubernetes (kubectl)
+#
+# Kubernetes is an open-source system for deployment, scaling,
+# and management of containerized applications.
+# Link: https://kubernetes.io/
+
+# ------------------------------------------------------------------------------
+# Configuration
+# ------------------------------------------------------------------------------
+
+SPACESHIP_KUBECTL_SHOW="${SPACESHIP_KUBECTL_SHOW=true}"
+SPACESHIP_KUBECTL_PREFIX="${SPACESHIP_KUBECTL_PREFIX="at "}"
+SPACESHIP_KUBECTL_SUFFIX="${SPACESHIP_KUBECTL_SUFFIX="$SPACESHIP_PROMPT_DEFAULT_SUFFIX"}"
+SPACESHIP_KUBECTL_COLOR="${SPACESHIP_KUBECTL_COLOR="white"}"
+# Additional space is added because ☸️ is much bigger than the other symbols
+# See: https://github.com/denysdovhan/spaceship-prompt/pull/432
+SPACESHIP_KUBECTL_SYMBOL="${SPACESHIP_KUBECTL_SYMBOL="☸️  "}"
+
+SPACESHIP_KUBECONTEXT_SHOW="${SPACESHIP_KUBECONTEXT_SHOW=true}"
+SPACESHIP_KUBECONTEXT_PREFIX="${SPACESHIP_KUBECONTEXT_PREFIX=""}"
+SPACESHIP_KUBECONTEXT_SUFFIX="${SPACESHIP_KUBECONTEXT_SUFFIX="$SPACESHIP_PROMPT_DEFAULT_SUFFIX"}"
+SPACESHIP_KUBECONTEXT_COLOR="${SPACESHIP_KUBECONTEXT_COLOR="cyan"}"
+SPACESHIP_KUBECONTEXT_NAMESPACE_SHOW="${SPACESHIP_KUBECONTEXT_NAMESPACE_SHOW=true}"
+SPACESHIP_KUBECONTEXT_COLOR_GROUPS=(${SPACESHIP_KUBECONTEXT_COLOR_GROUPS=})
+
+SPACESHIP_KUBECTL_VERSION_SHOW="${SPACESHIP_KUBECTL_VERSION_SHOW=false}"
+SPACESHIP_KUBECTL_VERSION_PREFIX="${SPACESHIP_KUBECTL_VERSION_PREFIX=""}"
+SPACESHIP_KUBECTL_VERSION_SUFFIX="${SPACESHIP_KUBECTL_VERSION_SUFFIX="$SPACESHIP_PROMPT_DEFAULT_SUFFIX"}"
+SPACESHIP_KUBECTL_VERSION_COLOR="${SPACESHIP_KUBECTL_VERSION_COLOR="cyan"}"
+
+# ------------------------------------------------------------------------------
+# Section
+# ------------------------------------------------------------------------------
+
+# Show current context in kubectl
+sz::kubectl() {
+  [[ $SPACESHIP_KUBECTL_SHOW == false ]] && return
+
+  (( $+commands[kubectl] )) || return
+  local kube_context=""
+  local kube_version=""
+
+  if [[ $SPACESHIP_KUBECONTEXT_SHOW == true ]]; then
+    kube_context=$(kubectl config current-context 2>/dev/null)
+
+    if [[ -n $kube_context && $SPACESHIP_KUBECONTEXT_NAMESPACE_SHOW == true ]]; then
+      local kube_namespace=$(kubectl config view --minify --output 'jsonpath={..namespace}' 2>/dev/null)
+      [[ -n $kube_namespace && "$kube_namespace" != "default" ]] && kube_context="$kube_context ($kube_namespace)"
+    fi
+
+    # Apply custom color to section if $kube_context matches a pattern defined in SPACESHIP_KUBECONTEXT_COLOR_GROUPS array.
+    # See Options.md for usage example.
+    local len=${#SPACESHIP_KUBECONTEXT_COLOR_GROUPS[@]}
+    local it_to=$((len / 2))
+    local 'section_color' 'i'
+    for ((i = 1; i <= $it_to; i++)); do
+      local idx=$(((i - 1) * 2))
+      local color="${SPACESHIP_KUBECONTEXT_COLOR_GROUPS[$idx + 1]}"
+      local pattern="${SPACESHIP_KUBECONTEXT_COLOR_GROUPS[$idx + 2]}"
+      if [[ "$kube_context" =~ "$pattern" ]]; then
+        section_color=$color
+        break
+      fi
+    done
+  fi
+
+  # Display kube version to avoid hostname misunderstand in denysdovhan/spaceship-prompt issue 748,
+  # which is a stupid idea and the folllowing command is slow.
+  if [[ $SPACESHIP_KUBECONTEXT_SHOW == true ]]; then
+    # if kubectl can't connect kubernetes cluster, kubernetes version section will be not shown
+    kubectl_version=$(kubectl version --short 2>/dev/null | grep "Server Version" | sed 's/Server Version: \(.*\)/\1/')
+  fi
+
+  if [[ -z $kube_context && -z $kubectl_version ]]; then
+    return
+  elif [[ -n $kube_context && -n $kubectl_version ]]; then
+    kube_version="${kube_version} "
+  fi
+
+  [[ -z "$section_color" ]] && section_color=$SPACESHIP_KUBECONTEXT_COLOR
+
+  sz::section \
+    "$section_color" \
+    "${SPACESHIP_KUBECONTEXT_SYMBOL}${kubectl_version}${kube_context}" \
+    "$SPACESHIP_KUBECONTEXT_PREFIX" \
+    "$SPACESHIP_KUBECONTEXT_SUFFIX"
+}
+
+sz::kubectl "$@"

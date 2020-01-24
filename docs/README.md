@@ -37,7 +37,7 @@
   * [Pyenv (pyenv)](/docs/Options.md#pyenv-pyenv)
   * [.NET (dotnet)](/docs/Options.md#net-dotnet)
   * [Ember (ember)](/docs/Options.md#emberjs-ember)
-  * [Kubectl context (kubecontext)](/docs/Options.md#kubectl-context-kubecontext)
+  * [Kubernetes (kubectl)](/docs/Options.md#kubernetes-kubectl)
   * [Terraform workspace (terraform)](/docs/Options.md#terraform-workspace-terraform)
   * [Execution time (exec_time)](/docs/Options.md#execution-time-exec_time)
   * [Battery (battery)](/docs/Options.md#battery-battery)
