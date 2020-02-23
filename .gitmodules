@@ -1,8 +1,9 @@
 [submodule "modules/shunit2"]
 	path = modules/shunit2
 	url = https://github.com/kward/shunit2.git
-	update = merge
+	update = rebase
 [submodule "modules/gitstatus"]
 	path = modules/gitstatus
 	url = https://github.com/romkatv/gitstatus.git
-	update = merge
+	update = rebase
+	shallow = true
