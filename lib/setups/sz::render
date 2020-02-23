@@ -29,9 +29,13 @@ function sz::render {
 
     # left/right specific
     if [[ $alignment == "prompt" ]]; then
-      # Allow iTerm integration to work
-      [[ "${ITERM_SHELL_INTEGRATION_INSTALLED:-}" == "Yes" ]] \
-        && _sz_unsafe[prompt]="%{$(iterm2_prompt_mark)%}${_sz_unsafe[prompt]}"
+      # Fix iTerm integration in async mode
+      if [[ "${ITERM_SHELL_INTEGRATION_INSTALLED:-}" == "Yes" ]]; then
+        # Disable default prompt marker added by iTerm2 integration and add it
+        # manually during each async rendering
+        ITERM2_SHOULD_DECORATE_PROMPT=""
+        _sz_unsafe[prompt]="%{$(iterm2_prompt_mark)%}${_sz_unsafe[prompt]}%{$(iterm2_prompt_end)%}"
+      fi
 
       local NEWLINE=$'\n'
 

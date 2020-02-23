@@ -15,6 +15,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 - Use a temp file to pass var back from the worker pseudo shell, which fixes #1, #2
+- iTerm2 integration: avoid duplicate marker
 
 ## [4.4.0] - 2019-09-12
 ### Added
