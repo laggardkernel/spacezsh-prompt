@@ -42,7 +42,7 @@ sz::selfdestruct_setup() {
 
   # Setup
   autoload -Uz +X prompt_spacezsh_setup
-  autoload -Uz +X promptinit 2>&1 >/dev/null && {
+  autoload -Uz +X promptinit &>/dev/null && {
     promptinit
     prompt spacezsh
   } || {

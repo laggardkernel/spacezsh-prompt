@@ -38,7 +38,7 @@ SPACESHIP_BATTERY_THRESHOLD="${SPACESHIP_BATTERY_THRESHOLD=10}"
 sz::battery() {
   [[ $SPACESHIP_BATTERY_SHOW == false ]] && return
 
-  local battery_data battery_percent battery_status battery_color
+  local battery_data battery_status_and_percent battery_percent battery_status battery_color
 
   if (( $+commands[pmset] )); then
     battery_data=$(pmset -g batt | grep "InternalBattery")
@@ -54,12 +54,14 @@ sz::battery() {
     # Return if no battery
     [[ -z $battery_data ]] && return
 
-    battery_percent="$( <<< $battery_data awk '{print $4}' )"
+    battery_status_and_percent="$(<<< $battery_data sed 's/Battery [0-9]*: \(.*\), \([0-9]*\)%.*/\1:\2/')"
+    battery_status_and_percent_array=("${(@s/:/)battery_status_and_percent}")
+    battery_status=$battery_status_and_percent_array[1]:l
+    battery_percent=$battery_status_and_percent_array[2]
 
     # If battery is 0% charge, battery likely doesn't exist.
-    [[ $battery_percent == "0%," ]] && return
+    [[ $battery_percent == "0%" ]] && return
 
-    battery_status="$( <<< $battery_data awk '{print tolower($3)}' | tr -d ',')"
   elif (( $+commands[upower] )); then
     local battery=$(command upower -e | grep battery | head -1)
 

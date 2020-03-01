@@ -127,7 +127,7 @@ test_dir_trunc_git_submodule() {
   command touch sample.txt
   command git add sample.txt >/dev/null
   command git commit -m "Add sample file" >/dev/null
-  command git submodule add $SUBMODULE 2&>/dev/null
+  command git submodule add $SUBMODULE &>/dev/null
 
   cd dir4
 

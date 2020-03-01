@@ -35,7 +35,7 @@ if [ -z "$SPACESHIP_PROMPT_ORDER" ]; then
     # pyenv::async       # Pyenv section
     # dotnet::async      # .NET section
     # ember::async       # Ember.js section
-    # kubecontext::async # Kubectl context section
+    # kubectl::async     # Kubectl context section
     # terraform::async   # Terraform workspace section
 
     line_sep           # Line break

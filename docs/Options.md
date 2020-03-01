@@ -44,7 +44,7 @@ SPACESHIP_PROMPT_ORDER=(
   # pyenv::async       # Pyenv section
   # dotnet::async      # .NET section
   # ember::async       # Ember.js section
-  # kubecontext::async # Kubectl context section
+  # kubectl::async     # Kubectl context section
   # terraform::async   # Terraform workspace section
 
   line_sep           # Line break
@@ -259,7 +259,7 @@ VCS checks the untracked, unstaged and staged states of a local repo by default.
 
 ### Git (`git`)
 
-Git section is consists with `git_branch` and `git_status` subsections. It is shown only in Git repositories.
+Git section consists of `git_branch` and `git_status` subsections. It is shown only in Git repositories.
 
 | Variable | Default | Meaning |
 | :------- | :-----: | ------- |
@@ -527,12 +527,18 @@ The environment variable `COMPOSE_PATH_SEPARATOR` is supported too. For more inf
 
 | Variable | Default | Meaning |
 | :------- | :-----: | ------- |
-| `SPACESHIP_DOCKER_SHOW` | `true` | Show current Docker version and connected docker-machine or not |
+| `SPACESHIP_DOCKER_SHOW` | `true` | Show current Docker version or not |
 | `SPACESHIP_DOCKER_PREFIX` | `on ` | Prefix before the Docker section |
 | `SPACESHIP_DOCKER_SUFFIX` | `$SPACESHIP_PROMPT_DEFAULT_SUFFIX` | Suffix after the Docker section |
 | `SPACESHIP_DOCKER_SYMBOL` | `🐳·` | Character to be shown before Docker version |
 | `SPACESHIP_DOCKER_COLOR` | `cyan` | Color of Docker section |
 | `SPACESHIP_DOCKER_VERBOSE` | `false` | Show complete Docker version |
+
+| Variable | Default | Meaning |
+| :------- | :-----: | ------- |
+| `SPACESHIP_DOCKER_CONTEXT_SHOW` | `true` | Show current Docker context or not |
+| `SPACESHIP_DOCKER_CONTEXT_PREFIX` | `·(` | Prefix before the Docker context section |
+| `SPACESHIP_DOCKER_CONTEXT_SUFFIX` | `)` | Suffix after the Docker context section |
 
 ### Amazon Web Services (AWS) (`aws`)
 
@@ -606,7 +612,28 @@ Ember.js section is shown only in directories that contain a `ember-cli-build.js
 | `SPACESHIP_EMBER_SYMBOL` | `🐹·` | Character to be shown before Ember.js version |
 | `SPACESHIP_EMBER_COLOR` | `210` | Color of Ember.js section |
 
-### Kubectl context (`kubecontext`)
+### Kubernetes (`kubectl`)
+
+Kubernetes section consists of `kubectl_version` and `kubectl_context` subsections. It is shown only when kubectl can connect to Kubernetes cluster.
+
+| Variable | Default | Meaning |
+| :------- | :-----: | ------- |
+| `SPACESHIP_KUBECTL_SHOW` | `false` | Show Kubernetes section |
+| `SPACESHIP_KUBECTL_PREFIX` | `at·` | Prefix before Kubernetes section |
+| `SPACESHIP_KUBECTL_SUFFIX` | `$SPACESHIP_PROMPT_DEFAULT_SUFFIX` | Suffix after Kubernetes section |
+| `SPACESHIP_KUBECTL_COLOR` | `white` | Color of Kubernetes section |
+| `SPACESHIP_KUBECTL_SYMBOL` | `☸️··` | Character to be shown before Kubernetes subsection |
+
+Kubernetes version
+
+| Variable | Default | Meaning |
+| :------- | :-----: | ------- |
+| `SPACESHIP_KUBECTL_VERSION_SHOW` | `true` | Show Kubernetes version subsection |
+| `SPACESHIP_KUBECTL_VERSION_PREFIX` | ` ` | Prefix before Kubernetes version subsection |
+| `SPACESHIP_KUBECTL_VERSION_SUFFIX` | `$SPACESHIP_PROMPT_DEFAULT_SUFFIX` | Suffix after Kubernetes version subsection |
+| `SPACESHIP_KUBECTL_VERSION_COLOR` | `cyan` | Color of Kubernetes version subsection |
+
+Kubernetes context
 
 Shows the active kubectl context, which consists of a cluster name and, when working in a non-default namespace, also a namespace name.
 
@@ -617,7 +644,6 @@ Shows the active kubectl context, which consists of a cluster name and, when wor
 | `SPACESHIP_KUBECONTEXT_SHOW` | `true` | Current Kubectl context section |
 | `SPACESHIP_KUBECONTEXT_PREFIX` | `at·` | Prefix before Kubectl context section |
 | `SPACESHIP_KUBECONTEXT_SUFFIX` | `$SPACESHIP_PROMPT_DEFAULT_SUFFIX` | Suffix after Kubectl context section |
-| `SPACESHIP_KUBECONTEXT_SYMBOL` | `☸️·` | Character to be shown before Kubectl context |
 | `SPACESHIP_KUBECONTEXT_COLOR` | `cyan` | Color of Kubectl context section |
 | `SPACESHIP_KUBECONTEXT_NAMESPACE_SHOW` | `true` | Should namespace be also displayed |
 | `SPACESHIP_KUBECONTEXT_COLOR_GROUPS` | ` ` | _Array_ of pairs of colors and match patterns, empty by default |

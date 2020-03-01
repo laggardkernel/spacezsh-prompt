@@ -7,8 +7,8 @@ function prompt_spacezsh_help {
 
   prompt spacezsh
 
-Spacefish is a minimalistic, powerful and extremely customizable Z Shell prompt.
-It combines everything you may need for convenient work, without unnecessary complications, like a real spacezsh.
+Spacezsh is a minimalistic, powerful and extremely customizable Z Shell prompt.
+It combines everything you may need for convenient work, without unnecessary complications.
 EOF
 }
 
@@ -45,6 +45,10 @@ function prompt_spacezsh_setup {
   zmodload zsh/mathfunc
 
   typeset -gAH _SS_DATA=()
+
+  # Internal variable for checking if prompt is opened
+  _SS_DATA[section_var_file]="${XDG_RUNTIME_DIR:-$TMPDIR}/spacezsh_section_var.${UID}.zsh"
+
   # store result from sz::section
   _SS_DATA[section_result]=""
 
