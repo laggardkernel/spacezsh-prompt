@@ -10,13 +10,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Remove the totally useless prepositions
 - Remove `gitstatus` as a submodule
 
-## [Unreleased]
+## [4.5.0] - 2020-03-01
+### Added
+- Merge with upstream to 6319158
+
 ### Changed
 - Remove useless subshell in `utils.zsh`
 
 ### Fixed
 - Use a temp file to pass var back from the worker pseudo shell, which fixes #1, #2
-- iTerm2 integration: avoid duplicate marker
+- iTerm2 integration: avoid duplicate markers
 - Shallow clone `gitstatus`
 
 ## [4.4.0] - 2019-09-12
@@ -102,7 +105,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Removed
 - Remove utility `spaceship::exists`. `(($+commands[foo]))` is faster than `command -v foo` in ZSH. Do things in the ZSH way.
 
-[Unreleased]: https://github.com/laggardkernel/spacezsh-prompt/compare/v4.4.0...HEAD
+[Unreleased]: https://github.com/laggardkernel/spacezsh-prompt/compare/v4.5.0...HEAD
+[4.5.0]: https://github.com/laggardkernel/spacezsh-prompt/compare/v4.4.0...v4.5.0
 [4.4.0]: https://github.com/laggardkernel/spacezsh-prompt/compare/v4.3.0...v4.4.0
 [4.3.0]: https://github.com/laggardkernel/spacezsh-prompt/compare/v4.2.0...v4.3.0
 [4.2.0]: https://github.com/laggardkernel/spacezsh-prompt/compare/v4.1.0...v4.2.0
