@@ -10,6 +10,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Remove the totally useless prepositions
 - Remove `gitstatus` as a submodule
 
+## Unreleased
+### Fixed
+- docker section: suppress warning in stdout when docker daemon is not available
+
 ## [4.5.0] - 2020-03-01
 ### Added
 - Merge with upstream to 6319158
