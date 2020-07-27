@@ -138,7 +138,7 @@ TODO
 Clone this repo:
 
 ```zsh
-git clone https://github.com/laggardkernel/spacezsh-prompt.git "$ZSH_CUSTOM/themes/spacezsh-prompt"
+git clone https://github.com/laggardkernel/spacezsh-prompt.git "$ZSH_CUSTOM/themes/spacezsh-prompt" --depth=1
 ```
 
 Symlink `spaceship.zsh-theme` to your oh-my-zsh custom themes directory:
