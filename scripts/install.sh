@@ -30,7 +30,7 @@ REPO='https://github.com/laggardkernel/spacezsh-prompt.git'
 SOURCE="$PWD/spacezsh.zsh"
 USER_SOURCE="$HOME/.spacezsh-prompt"
 DEST='/usr/local/share/zsh/site-functions'
-USER_DEST="$HOME/.zfunctions"
+USER_DEST="${ZDOTDIR:-$HOME}/.zfunctions"
 
 # ------------------------------------------------------------------------------
 # HELPERS
@@ -55,13 +55,13 @@ error()   { paint "$red"    "SPACESHIP: $@" ; }
 success() { paint "$green"  "SPACESHIP: $@" ; }
 code()    { paint "$bold"   "SPACESHIP: $@" ; }
 
-# Append text in ~/.zshrc
+# Append text in .zshrc
 # USAGE:
 #   append_zshrc [text...]
 append_zshrc() {
-  info "These lines will be added to your ~/.zshrc file:"
+  info "These lines will be added to your \"${ZDOTDIR:-$HOME}/.zshrc\" file:"
   code "$@"
-  echo "$@" >> "$HOME/.zshrc"
+  echo "$@" >> "${ZDOTDIR:-$HOME}/.zshrc"
 }
 
 # ------------------------------------------------------------------------------
@@ -75,7 +75,7 @@ main() {
   #   2. Install via curl or wget
   if [[ ! -f "$SOURCE" ]]; then
     warn "Spaceship is not present in current directory"
-    # Clone repo into the ~/..spacezsh-prompt and change SOURCE
+    # Clone repo into the ${ZDOTDIR:-$HOME}/.spacezsh-prompt and change SOURCE
     git clone "$REPO" "$USER_SOURCE"
     SOURCE="$USER_SOURCE/spacezsh.zsh"
   else
@@ -106,7 +106,7 @@ main() {
     exit
   fi
 
-  # Enabling statements for ~/.zshrc
+  # Enabling statements for .zshrc
   msg="\n# Set Spaceship ZSH as a prompt"
   msg+="\nautoload -U promptinit; promptinit"
   msg+="\nprompt spacezsh"
@@ -117,7 +117,7 @@ main() {
     echo
   else
     error "Cannot automatically insert prompt init commands."
-    error "Please insert these line into your ~/.zshrc:"
+    error "Please insert these line into your \"${ZDOTDIR:-$HOME}/.zshrc\" file:"
     code "$msg"
     exit 1
   fi
