@@ -31,7 +31,7 @@ sz::xcode() {
   if [[ $SPACESHIP_XCODE_SHOW_GLOBAL == true ]] ; then
     xcode_path=$(xcenv version | sed 's/ .*//')
   elif [[ $SPACESHIP_XCODE_SHOW_LOCAL == true ]] ; then
-    if xcenv version | grep ".xcode-version" > /dev/null; then
+    if xcenv version | command grep ".xcode-version" > /dev/null; then
       xcode_path=$(xcenv version | sed 's/ .*//')
     fi
   fi

@@ -30,7 +30,7 @@ sz::julia() {
 
   (( $+commands[julia] )) || return
 
-  local julia_version=$(julia --version | grep --color=never -oE '[[:digit:]]+\.[[:digit:]]+\.[[:digit:]]')
+  local julia_version=$(julia --version | command grep --color=never -oE '[[:digit:]]+\.[[:digit:]]+\.[[:digit:]]')
 
   sz::section \
     "$SPACESHIP_JULIA_COLOR" \
