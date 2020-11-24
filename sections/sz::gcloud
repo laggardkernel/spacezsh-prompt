@@ -28,7 +28,7 @@ sz::gcloud() {
   # Check if the glcoud-cli is installed
   (( $+commands[gcloud] )) || return
 
-  local config_dir active_config active_config_file config_dir project gcloud_text
+  local config_dir active_config active_config_file project gcloud_text
   # Set the gcloud config base dir
   config_dir="${CLOUDSDK_CONFIG:-$HOME/.config/gcloud}"
 
