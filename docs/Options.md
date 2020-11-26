@@ -552,6 +552,18 @@ Shows selected Amazon Web Services profile configured using  [`AWS_PROFILE`](htt
 | `SPACESHIP_AWS_SYMBOL` | `☁️·` | Character to be shown before AWS profile |
 | `SPACESHIP_AWS_COLOR` | `208` | Color of AWS section |
 
+### Google Cloud Platform (`gcloud`)
+
+Shows active Google Cloud Platform configuration using gcloud active configuration file.
+
+| Variable | Default | Meaning |
+| :------- | :-----: | ------- |
+| `SPACESHIP_GCLOUD_SHOW` | `true` | Show current active gcloud configuration or not |
+| `SPACESHIP_GCLOUD_PREFIX` | `using·` | Prefix before the GCLOUD section |
+| `SPACESHIP_GCLOUD_SUFFIX` | `$SPACESHIP_PROMPT_DEFAULT_SUFFIX` | Suffix after the GCLOUD section |
+| `SPACESHIP_GCLOUD_SYMBOL` | `☁️· ` | Character to be shown before GCLOUD active configuration |
+| `SPACESHIP_GCLOUD_COLOR` | `26` | Color of GCLOUD section |
+
 ### Virtualenv (`venv`)
 
 | Variable | Default | Meaning |
