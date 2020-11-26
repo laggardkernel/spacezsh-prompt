@@ -91,9 +91,7 @@ Spacezsh is an **async** prompt tries to do things right in the ZSH way. It intr
 - Current Docker version and connected machine (`🐳`).
 - Current Amazon Web Services (AWS) profile (`☁️`) ([Using named profiles](http://docs.aws.amazon.com/cli/latest/userguide/cli-multiple-profiles.html)).
 - Current Google Cloud Platform gcloud active configuration (`☁️`).
-- Current Python virtualenv.
-- Current Conda virtualenv (`🅒`).
-- Current Python pyenv (`🐍`).
+- Current Python virtualenv (`🐍`).
 - Current .NET SDK version, through dotnet-cli (`.NET`).
 - Current Ember.js version, through ember-cli (`🐹`).
 - Current Kubectl context (`☸️`).

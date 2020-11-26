@@ -18,6 +18,9 @@ function sz::deprecated_check {
   if (( $+functions[sz::vi_mode] )); then
     print -P "%{%B%}vi_mode%{%b%} is deprecated and integrated into %{%B%}char%{%b%}. Check the doc for detail."
   fi
+  if (( $+functions[sz::conda] )) || (( $+functions[sz::venv] )) || (( $+functions[sz::pyenv] )); then
+    print -P "%{%B%}conda%{%b%}, %{%B%}venv%{%b%}, %{%B%}pyenv%{%b%} are deprecated and integrated into %{%B%}python%{%b%}. Check the doc for detail."
+  fi
 }
 
 sz::deprecated_check "$@"
