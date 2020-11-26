@@ -11,8 +11,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Remove `gitstatus` as a submodule
 
 ## Unreleased
+### Added
+- Integrate `conda`, `venv`, `pyenv` into new section `python`
+
 ### Fixed
-- docker section: suppress warning in stdout when docker daemon is not available
+- `docker` section: suppress warning in stdout when docker daemon is not available
+- Fix stderr being mapped to `/dev/null` by upgrade `zsh-async` to 1.8.5
+
+### Upstream changes
+- Use `SPACESHIP_XCODE_SHOW_*` for `xcode` section, which formerly share settings `SPACESHIP_SWIFT_SHOW_*` with `swift`
+- New section `gcloud`
+- Update instructions to do shallow clone on installation
+- Force `command grep` in case it's shadowed by aliases
 
 ## [4.5.0] - 2020-03-01
 ### Added
