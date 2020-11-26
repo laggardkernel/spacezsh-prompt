@@ -71,6 +71,7 @@ sz::load_sections() {
   if ${load_async}; then
     _SS_DATA[async]=true
     # Avoid duplicate sourcing and loading of zsh-async by checking flag ASYNC_INIT_DONE
+    # TODO: choose the newer zsh-async between the loaded and our builtin one
     (( ASYNC_INIT_DONE )) || { autoload -Uz +X async && async }
   fi
 }
