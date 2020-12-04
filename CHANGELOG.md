@@ -17,6 +17,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 - `docker` section: suppress warning in stdout when docker daemon is not available
 - Fix stderr being mapped to `/dev/null` by upgrade `zsh-async` to 1.8.5
+- Fix vi status conflict with plugin [zsh-vim-mode](https://github.com/softmoth/zsh-vim-mode) in pipenv shell or poetry shell
 
 ### Upstream changes
 - Use `SPACESHIP_XCODE_SHOW_*` for `xcode` section, which formerly share settings `SPACESHIP_SWIFT_SHOW_*` with `swift`
