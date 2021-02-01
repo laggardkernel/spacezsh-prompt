@@ -1,6 +1,6 @@
 {
   "name": "spacezsh-prompt",
-  "version": "4.4.0",
+  "version": "4.6.0",
   "description": "An async prompt does things in the ZSH way.",
   "files": [
     "lib",
