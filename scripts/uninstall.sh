@@ -93,7 +93,7 @@ main() {
   fi
 
   # Remove Spaceship from .zshrc
-  if grep -q "spaceship" "$ZSHRC"; then
+  if command grep -q "spaceship" "$ZSHRC"; then
     if [[ '-y' == $1 ]]; then
       remove_zshrc_content
     else

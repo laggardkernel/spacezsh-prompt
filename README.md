@@ -56,7 +56,7 @@ Spacezsh is an **async** prompt tries to do things right in the ZSH way. It intr
   <img alt="Spaceship with Hyper and One Dark" src="https://user-images.githubusercontent.com/10276208/36086434-5de52ace-0ff2-11e8-8299-c67f9ab4e9bd.gif" width="980px">
 </p>
 
-<sub>Vist <a href="./docs/Troubleshooting.md#why-doesnt-my-prompt-look-like-the-preview">Troubleshooting</a> for instructions to recreate this terminal setup.</sub>
+<sub>Visit <a href="./docs/Troubleshooting.md#why-doesnt-my-prompt-look-like-the-preview">Troubleshooting</a> for instructions to recreate this terminal setup.</sub>
 
 ## Features
 
@@ -90,9 +90,8 @@ Spacezsh is an **async** prompt tries to do things right in the ZSH way. It intr
 - (New) Currnet Vagrant machine status (`Ｖ`)
 - Current Docker version and connected machine (`🐳`).
 - Current Amazon Web Services (AWS) profile (`☁️`) ([Using named profiles](http://docs.aws.amazon.com/cli/latest/userguide/cli-multiple-profiles.html)).
-- Current Python virtualenv.
-- Current Conda virtualenv (`🅒`).
-- Current Python pyenv (`🐍`).
+- Current Google Cloud Platform gcloud active configuration (`☁️`).
+- Current Python virtualenv (`🐍`).
 - Current .NET SDK version, through dotnet-cli (`.NET`).
 - Current Ember.js version, through ember-cli (`🐹`).
 - Current Kubectl context (`☸️`).
@@ -137,7 +136,7 @@ TODO
 Clone this repo:
 
 ```zsh
-git clone https://github.com/laggardkernel/spacezsh-prompt.git "$ZSH_CUSTOM/themes/spacezsh-prompt"
+git clone https://github.com/laggardkernel/spacezsh-prompt.git "$ZSH_CUSTOM/themes/spacezsh-prompt" --depth=1
 ```
 
 Symlink `spaceship.zsh-theme` to your oh-my-zsh custom themes directory:

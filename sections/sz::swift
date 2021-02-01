@@ -31,7 +31,7 @@ sz::swift() {
   if [[ $SPACESHIP_SWIFT_SHOW_GLOBAL == true ]] ; then
     swift_version=$(swiftenv version | sed 's/ .*//')
   elif [[ $SPACESHIP_SWIFT_SHOW_LOCAL == true ]] ; then
-    if swiftenv version | grep ".swift-version" > /dev/null; then
+    if swiftenv version | command grep ".swift-version" > /dev/null; then
       swift_version=$(swiftenv version | sed 's/ .*//')
     fi
   fi

@@ -29,10 +29,9 @@ if [ -z "$SPACESHIP_PROMPT_ORDER" ]; then
     # julia::async       # Julia section
     # vagrant::async     # Vagrant section
     # docker::async      # Docker section
-    # aws::async         # Amazon Web Services section
-    # venv               # virtualenv section
-    # conda::async       # conda virtualenv section
-    # pyenv::async       # Pyenv section
+    # aws                # Amazon Web Services section
+    # gcloud::async      # Google Cloud Platform section
+    # python::async      # Python section
     # dotnet::async      # .NET section
     # ember::async       # Ember.js section
     # kubectl::async     # Kubectl context section

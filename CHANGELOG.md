@@ -10,6 +10,27 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Remove the totally useless prepositions
 - Remove `gitstatus` as a submodule
 
+## Unreleased
+None
+
+## [4.6.0] - 2021-02-01
+### Added
+- Integrate `conda`, `venv`, `pyenv` into new section `python`
+
+### Fixed
+- `docker` section: suppress warning in stdout when docker daemon is not available
+- Fix stderr being mapped to `/dev/null` by upgrade `zsh-async` to 1.8.5
+- Fix vi status conflict with plugin [zsh-vim-mode](https://github.com/softmoth/zsh-vim-mode) in pipenv shell or poetry shell
+
+### Removed
+- Drop submodule `gitstatus`, whose installation is left user themselves
+
+### Upstream changes
+- Use `SPACESHIP_XCODE_SHOW_*` for `xcode` section, which formerly share settings `SPACESHIP_SWIFT_SHOW_*` with `swift`
+- New section `gcloud`
+- Update instructions to do shallow clone on installation
+- Force `command grep` in case it's shadowed by aliases
+
 ## [4.5.0] - 2020-03-01
 ### Added
 - Merge with upstream to 6319158
@@ -105,7 +126,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Removed
 - Remove utility `spaceship::exists`. `(($+commands[foo]))` is faster than `command -v foo` in ZSH. Do things in the ZSH way.
 
-[Unreleased]: https://github.com/laggardkernel/spacezsh-prompt/compare/v4.5.0...HEAD
+[Unreleased]: https://github.com/laggardkernel/spacezsh-prompt/compare/v4.6.0...HEAD
+[4.6.0]: https://github.com/laggardkernel/spacezsh-prompt/compare/v4.5.0...4.6.0
 [4.5.0]: https://github.com/laggardkernel/spacezsh-prompt/compare/v4.4.0...v4.5.0
 [4.4.0]: https://github.com/laggardkernel/spacezsh-prompt/compare/v4.3.0...v4.4.0
 [4.3.0]: https://github.com/laggardkernel/spacezsh-prompt/compare/v4.2.0...v4.3.0

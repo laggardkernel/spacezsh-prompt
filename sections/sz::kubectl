@@ -70,9 +70,9 @@ sz::kubectl() {
 
   # Display kube version to avoid hostname misunderstand in denysdovhan/spaceship-prompt issue 748,
   # which is a stupid idea and the folllowing command is slow.
-  if [[ $SPACESHIP_KUBECONTEXT_SHOW == true ]]; then
+  if [[ $SPACESHIP_KUBECTL_VERSION_SHOW == true ]]; then
     # if kubectl can't connect kubernetes cluster, kubernetes version section will be not shown
-    kubectl_version=$(kubectl version --short 2>/dev/null | grep "Server Version" | sed 's/Server Version: \(.*\)/\1/')
+    kubectl_version=$(kubectl version --short 2>/dev/null | command grep "Server Version" | sed 's/Server Version: \(.*\)/\1/')
   fi
 
   if [[ -z $kube_context && -z $kubectl_version ]]; then

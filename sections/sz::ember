@@ -30,7 +30,7 @@ sz::ember() {
     && sz::upsearch "node_modules/ember-cli/package.json" >/dev/null \
     || return
 
-  local ember_version=$(grep '"version":' ./node_modules/ember-cli/package.json | cut -d\" -f4)
+  local ember_version=$(command grep '"version":' ./node_modules/ember-cli/package.json | cut -d\" -f4)
   [[ $ember_version == "system" || $ember_version == "ember" ]] && return
 
   sz::section \

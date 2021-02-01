@@ -66,9 +66,8 @@ SPACESHIP_PROMPT_ORDER=(
   # julia       # Julia section (Disabled)
   # docker      # Docker section (Disabled)
   aws           # Amazon Web Services section
-  venv          # virtualenv section
-  conda         # conda virtualenv section
-  pyenv         # Pyenv section
+  gcloud        # Google Cloud Platform section
+  python        # Python section
   dotnet        # .NET section
   # ember       # Ember.js section (Disabled)
   kubectl       # Kubectl context section

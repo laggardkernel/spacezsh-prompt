@@ -38,10 +38,9 @@ SPACESHIP_PROMPT_ORDER=(
   # julia::async       # Julia section
   # vagrant::async     # Vagrant section
   # docker::async      # Docker section
-  # aws::async         # Amazon Web Services section
-  # venv               # virtualenv section
-  # conda::async       # conda virtualenv section
-  # pyenv::async       # Pyenv section
+  # aws                # Amazon Web Services section
+  # gcloud::async      # Google Cloud Platform section
+  # python::async      # Python section
   # dotnet::async      # .NET section
   # ember::async       # Ember.js section
   # kubectl::async     # Kubectl context section
@@ -413,7 +412,7 @@ Shows current version of Xcode. Local version has more priority than global.
 | Variable | Default | Meaning |
 | :------- | :-----: | ------- |
 | `SPACESHIP_XCODE_SHOW_LOCAL` | `true` | Current local Xcode version based on [xcenv] |
-| `SPACESHIP_XCODE_SHOW_GLOBAL` | `true` | Global Xcode version based on [xcenv] |
+| `SPACESHIP_XCODE_SHOW_GLOBAL` | `false` | Global Xcode version based on [xcenv] |
 | `SPACESHIP_XCODE_PREFIX` | `$SPACESHIP_PROMPT_DEFAULT_PREFIX` | Prefix before Xcode section |
 | `SPACESHIP_XCODE_SUFFIX` | `$SPACESHIP_PROMPT_DEFAULT_SUFFIX` | Suffix after Xcode section |
 | `SPACESHIP_XCODE_SYMBOL` | `🛠·` | Character to be shown before Xcode version |
@@ -552,41 +551,35 @@ Shows selected Amazon Web Services profile configured using  [`AWS_PROFILE`](htt
 | `SPACESHIP_AWS_SYMBOL` | `☁️·` | Character to be shown before AWS profile |
 | `SPACESHIP_AWS_COLOR` | `208` | Color of AWS section |
 
-### Virtualenv (`venv`)
+### Google Cloud Platform (`gcloud`)
+
+Shows active Google Cloud Platform configuration using gcloud active configuration file.
 
 | Variable | Default | Meaning |
 | :------- | :-----: | ------- |
-| `SPACESHIP_VENV_SHOW` | `true` | Show current Python virtualenv or not |
-| `SPACESHIP_VENV_PREFIX` | `$SPACESHIP_PROMPT_DEFAULT_PREFIX` | Prefix before the virtualenv section |
-| `SPACESHIP_VENV_SUFFIX` | `$SPACESHIP_PROMPT_DEFAULT_SUFFIX` | Suffix after the virtualenv section |
-| `SPACESHIP_VENV_SYMBOL` | `·` | Character to be shown before virtualenv |
-| `SPACESHIP_VENV_GENERIC_NAMES` | `(virtualenv venv .venv)` | If the virtualenv folder is in this *array*, than use its parent directory as its name instead |
-| `SPACESHIP_VENV_COLOR` | `blue` | Color of virtualenv environment section |
+| `SPACESHIP_GCLOUD_SHOW` | `true` | Show current active gcloud configuration or not |
+| `SPACESHIP_GCLOUD_PREFIX` | `using·` | Prefix before the GCLOUD section |
+| `SPACESHIP_GCLOUD_SUFFIX` | `$SPACESHIP_PROMPT_DEFAULT_SUFFIX` | Suffix after the GCLOUD section |
+| `SPACESHIP_GCLOUD_SYMBOL` | `☁️· ` | Character to be shown before GCLOUD active configuration |
+| `SPACESHIP_GCLOUD_COLOR` | `26` | Color of GCLOUD section |
 
-### Conda virtualenv (`conda`)
+### Python (`python`)
 
-Show activated conda virtual environment. Disable native conda prompt by `conda config --set changeps1 False`.
+Show python virtual environment activate by conda, venv/pipenv/poetry, pyenv, etc.
+This section is shown only in directories that contain `requirements.txt`,`*.py`, or any other env manager related files.
+
+If one's using conda, disable native conda prompt by `conda config --set changeps1 False`.
 
 | Variable | Default | Meaning |
 | :------- | :-----: | ------- |
-| `SPACESHIP_CONDA_SHOW` | `true` | Show current Python conda virtualenv or not |
-| `SPACESHIP_CONDA_PREFIX` | `$SPACESHIP_PROMPT_DEFAULT_PREFIX` | Prefix before the conda virtualenv section |
-| `SPACESHIP_CONDA_SUFFIX` | `$SPACESHIP_PROMPT_DEFAULT_SUFFIX` | Suffix after the conda virtualenv section |
+| `SPACESHIP_PYTHON_SHOW` | `true` | Show current activated python env or not |
+| `SPACESHIP_PYTHON_PREFIX` | `$SPACESHIP_PROMPT_DEFAULT_PREFIX` | Prefix before the python section |
+| `SPACESHIP_PYTHON_SUFFIX` | `$SPACESHIP_PROMPT_DEFAULT_SUFFIX` | Suffix after the python section |
+| `SPACESHIP_PYTHON_SYMBOL` | `🐍·` | Character to be shown before Python env |
+| `SPACESHIP_PYTHON_COLOR` | `blue` | Color of python section |
 | `SPACESHIP_CONDA_SYMBOL` | `🅒·` | Character to be shown before conda virtualenv section |
-| `SPACESHIP_CONDA_COLOR` | `blue` | Color of conda virtualenv environment section |
 | `SPACESHIP_CONDA_VERBOSE` | `true` | Toggle to truncate environment names under custom prefix |
-
-### Pyenv (`pyenv`)
-
-pyenv section is shown only in directories that contain `requirements.txt`, `pyproject.toml` or any other file with `.py` extension.
-
-| Variable | Default | Meaning |
-| :------- | :-----: | ------- |
-| `SPACESHIP_PYENV_SHOW` | `true` | Show current Pyenv version or not |
-| `SPACESHIP_PYENV_PREFIX` | `$SPACESHIP_PROMPT_DEFAULT_PREFIX` | Prefix before the pyenv section |
-| `SPACESHIP_PYENV_SUFFIX` | `$SPACESHIP_PROMPT_DEFAULT_SUFFIX` | Suffix after the pyenv section |
-| `SPACESHIP_PYENV_SYMBOL` | `🐍·` | Character to be shown before Pyenv version |
-| `SPACESHIP_PYENV_COLOR` | `yellow` | Color of Pyenv section |
+| `SPACESHIP_VENV_GENERIC_NAMES` | `(virtualenv venv .venv)` | If the virtualenv folder is in this *array*, than use its parent directory as its name instead |
 
 ### .NET (`dotnet`)
 
