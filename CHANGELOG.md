@@ -11,6 +11,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Remove `gitstatus` as a submodule
 
 ## Unreleased
+None
+
+## [4.6.0] - 2021-02-01
 ### Added
 - Integrate `conda`, `venv`, `pyenv` into new section `python`
 
@@ -123,7 +126,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Removed
 - Remove utility `spaceship::exists`. `(($+commands[foo]))` is faster than `command -v foo` in ZSH. Do things in the ZSH way.
 
-[Unreleased]: https://github.com/laggardkernel/spacezsh-prompt/compare/v4.5.0...HEAD
+[Unreleased]: https://github.com/laggardkernel/spacezsh-prompt/compare/v4.6.0...HEAD
+[4.6.0]: https://github.com/laggardkernel/spacezsh-prompt/compare/v4.5.0...4.6.0
 [4.5.0]: https://github.com/laggardkernel/spacezsh-prompt/compare/v4.4.0...v4.5.0
 [4.4.0]: https://github.com/laggardkernel/spacezsh-prompt/compare/v4.3.0...v4.4.0
 [4.3.0]: https://github.com/laggardkernel/spacezsh-prompt/compare/v4.2.0...v4.3.0
