@@ -222,14 +222,8 @@ sz::gitstatus() {
 
 # }}}
 # Gitstatus Daemon {{{
-if [[ $SPACESHIP_GITSTATUS_SKIP_MODULE != true ]]; then
-  if ! (( $+functions[gitstatus_query] )); then
-    source "$SPACESHIP_ROOT/modules/gitstatus/gitstatus.plugin.zsh" || return
-  fi
-
-  if [[ $SPACESHIP_GITSTATUS_SKIP_DAEMON != true ]]; then
-    gitstatus_stop SPACESHIP && gitstatus_start SPACESHIP
-  fi
+if [[ $SPACESHIP_GITSTATUS_SKIP_DAEMON != true ]] && (( $+functions[gitstatus_query] )); then
+  gitstatus_stop SPACESHIP && gitstatus_start SPACESHIP
 fi
 
 # }}}
