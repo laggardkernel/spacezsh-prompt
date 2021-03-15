@@ -81,8 +81,7 @@ function sz::vi_mode_selfdestruct_setup {
   precmd_functions=("${(@)precmd_functions:#sz::vi_mode_selfdestruct_setup}")
   builtin unfunction sz::vi_mode_selfdestruct_setup
 
-  sz::vi_mode_setup
-
+  if [[ -n "$vim_mode_keymap_funcs" ]]; then
   # https://github.com/softmoth/zsh-vim-mode/blob/master/zsh-vim-mode.plugin.zsh
   # Remove hooks from zsh-vim-mode, some of them are not compatible with the async renderer
   # keymap update:
@@ -102,6 +101,16 @@ function sz::vi_mode_selfdestruct_setup {
     add-zle-hook-widget -D "$f" vim-mode-\*
   done
   typeset -ag vim_mode_keymap_funcs=()
+  # Warn user to disable ZLE hooks in zsh-vim-mode, possible crashes happen
+  #  even with this fix.
+  # Ways to produce this crash: load spacezsh and zsh-vim-mode in zinit's turbo
+  #  mode. Open ranger right after prompt shows, quit ranger and press enter.
+  print -P "ZLE widgets in zsh plugin %{%B%}zsh-vim-mode%{%b%} conflict with" \
+  "current prompt.\nPlease export 'VIM_MODE_TRACK_KEYMAP=no' before loading" \
+  "this very plugin to avoid possible shell crashes."
+  fi
+
+  sz::vi_mode_setup
 }
 
 # Init

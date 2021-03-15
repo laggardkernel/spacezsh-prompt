@@ -16,9 +16,8 @@ function sz::vi_mode_setup {
   done
 
   # No idea why zle hook widgets break shells in poetry, pipenv
-  # TODO: warn users to set VIM_MODE_TRACK_KEYMAP="no" ?
-  if [[ $VIM_MODE_TRACK_KEYMAP == "no" ]] \
-    || {[[ -z $POETRY_ACTIVE ]] && [[ -z $PIPENV_ACTIVE ]]}; then
+  if [[ -z $POETRY_ACTIVE ]] && [[ -z $PIPENV_ACTIVE ]] \
+    || [[ $VIM_MODE_TRACK_KEYMAP == "no" ]]; then
     for item in line-init line-finish; do
       track-sz-autoload sz::vi-mode-${item}
       add-zle-hook-widget -Uz $item sz::vi-mode-${item}
