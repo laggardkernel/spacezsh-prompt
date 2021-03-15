@@ -141,7 +141,7 @@ Clone this repo:
 git clone https://github.com/laggardkernel/spacezsh-prompt.git "$ZSH_CUSTOM/themes/spacezsh-prompt" --depth=1
 ```
 
-Symlink `spaceship.zsh-theme` to your oh-my-zsh custom themes directory:
+Symlink `spacezsh.zsh-theme` to your oh-my-zsh custom themes directory:
 
 ```zsh
 ln -s "$ZSH_CUSTOM/themes/spacezsh-prompt/spacezsh.zsh-theme" "$ZSH_CUSTOM/themes/spacezsh.zsh-theme"

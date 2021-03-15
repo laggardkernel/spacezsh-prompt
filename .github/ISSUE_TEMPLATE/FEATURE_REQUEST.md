@@ -17,7 +17,7 @@ For example, I have an issue when […]
 <!--
 For more information on above points, See our contributing guidelines:
 
-https://github.com/denysdovhan/spaceship-prompt/blob/master/CONTRIBUTING.md#sections
+https://github.com/laggardkernel/spacezsh-prompt/blob/master/CONTRIBUTING.md#sections
 -->
 
 **Describe the solution you'd like**

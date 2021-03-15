@@ -1,7 +1,7 @@
 #!/usr/bin/env zsh
 #
 # Author: Denys Dovhan, denysdovhan.com
-# https://github.com/denysdovhan/spaceship-prompt
+#
 
 # ------------------------------------------------------------------------------
 # Colors
@@ -26,9 +26,9 @@ fi
 # ------------------------------------------------------------------------------
 
 ZSHRC="$HOME/.zshrc"
-USER_SOURCE="$HOME/.spaceship-prompt"
-GLOBAL_DEST="/usr/local/share/zsh/site-functions/prompt_spaceship_setup"
-USER_DEST="$HOME/.zfunctions/prompt_spaceship_setup"
+USER_SOURCE="$HOME/.spacezsh-prompt"
+GLOBAL_DEST="/usr/local/share/zsh/site-functions/prompt_spacezsh_setup"
+USER_DEST="$HOME/.zfunctions/prompt_spacezsh_setup"
 
 # ------------------------------------------------------------------------------
 # HELPERS
@@ -77,7 +77,7 @@ remove_zshrc_content() {
   # which are grouped by `(`, `)`
   sed '/^# Set Spaceship ZSH as a prompt$/d' "$ZSHRC" | \
   sed '/^autoload -U promptinit; promptinit$/d' | \
-  sed '/^prompt spaceship$/d' | \
+  sed '/^prompt spacezsh$/d' | \
   sed  -E '/^SPACESHIP_R?PROMPT_ORDER=\([^)]*$/,/^[^(]*\)/d' | \
   sed '/^SPACESHIP_.*$/d' > "$ZSHRC.bak" && \
   mv -- "$ZSHRC.bak" "$ZSHRC"
@@ -93,7 +93,7 @@ main() {
   fi
 
   # Remove Spaceship from .zshrc
-  if command grep -q "spaceship" "$ZSHRC"; then
+  if command grep -q "spacezsh" "$ZSHRC"; then
     if [[ '-y' == $1 ]]; then
       remove_zshrc_content
     else

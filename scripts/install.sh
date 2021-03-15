@@ -1,7 +1,7 @@
 #!/usr/bin/env zsh
 #
 # Author: Denys Dovhan, denysdovhan.com
-# https://github.com/denysdovhan/spaceship-prompt
+#
 
 # ------------------------------------------------------------------------------
 # Colors
@@ -26,9 +26,9 @@ fi
 # ------------------------------------------------------------------------------
 
 ZSHRC="$HOME/.zshrc"
-REPO='https://github.com/denysdovhan/spaceship-prompt.git'
-SOURCE="$PWD/spaceship.zsh"
-USER_SOURCE="$HOME/.spaceship-prompt"
+REPO='https://github.com/laggardkernel/spacezsh-prompt.git'
+SOURCE="$PWD/spacezsh.zsh"
+USER_SOURCE="$HOME/.spacezsh-prompt"
 DEST='/usr/local/share/zsh/site-functions'
 USER_DEST="$HOME/.zfunctions"
 
@@ -75,9 +75,9 @@ main() {
   #   2. Install via curl or wget
   if [[ ! -f "$SOURCE" ]]; then
     warn "Spaceship is not present in current directory"
-    # Clone repo into the ~/..spaceship-prompt and change SOURCE
+    # Clone repo into the ~/..spacezsh-prompt and change SOURCE
     git clone "$REPO" "$USER_SOURCE"
-    SOURCE="$USER_SOURCE/spaceship.zsh"
+    SOURCE="$USER_SOURCE/spacezsh.zsh"
   else
     info "Spaceship is present in current directory"
   fi
@@ -96,20 +96,20 @@ main() {
   fi
 
   # Link prompt entry point to fpath
-  info "Linking $SOURCE to $DEST/prompt_spaceship_setup..."
+  info "Linking $SOURCE to $DEST/prompt_spacezsh_setup..."
   mkdir -p "$DEST"
-  ln -sf "$SOURCE" "$DEST/prompt_spaceship_setup"
+  ln -sf "$SOURCE" "$DEST/prompt_spacezsh_setup"
 
-  # If 'prompt spaceship' is already present in .zshrc, then skip
-  if sed 's/#.*//' "$ZSHRC" | command grep -q "prompt spaceship"; then
-    warn "Spaceship is already present in .zshrc!"
+  # If 'prompt spacezsh' is already present in .zshrc, then skip
+  if sed 's/#.*//' "$ZSHRC" | command grep -q "prompt spacezsh"; then
+    warn "Spacezsh is already present in .zshrc!"
     exit
   fi
 
   # Enabling statements for ~/.zshrc
   msg="\n# Set Spaceship ZSH as a prompt"
   msg+="\nautoload -U promptinit; promptinit"
-  msg+="\nprompt spaceship"
+  msg+="\nprompt spacezsh"
 
   # Check if appending was successful and perform corresponding actions
   if append_zshrc "$msg"; then

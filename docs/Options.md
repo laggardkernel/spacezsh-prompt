@@ -1,6 +1,6 @@
 ## Options
 
-You have ability to customize or disable specific elements of Spaceship. All options must be overridden in your `.zshrc` file **after** the theme.
+You have ability to customize or disable specific elements of Spacezsh. All options must be overridden in your `.zshrc` file **after** the theme.
 
 Colors for sections can be [basic colors](https://wiki.archlinux.org/index.php/zsh#Colors) or [color codes](https://upload.wikimedia.org/wikipedia/commons/1/15/Xterm_256color_chart.svg).
 
@@ -10,7 +10,7 @@ Colors for sections can be [basic colors](https://wiki.archlinux.org/index.php/z
 
 You can specify the order of prompt section using `SPACESHIP_PROMPT_ORDER` option. Use Zsh array syntax to define your own prompt order.
 
-The order also defines which sections that Spaceship loads. If you're struggling with slow prompt, you can just omit the sections that you don't use, and they won't be loaded.
+The order also defines which sections that Spacezsh loads. If you're struggling with slow prompt, you can just omit the sections that you don't use, and they won't be loaded.
 
 The default order is:
 
@@ -64,7 +64,7 @@ You can also add items to the right prompt by specifying them in the `SPACESHIP_
 
 ### Async Renderer
 
-Spaceship doesn't render the whole prompt asynchronously. It supports rendering a mixture.
+Spacezsh doesn't render the whole prompt asynchronously. It supports rendering a mixture.
 
 Async renderer could be enabled for a specific section with `async` tag, like `node::async`.
 
@@ -758,4 +758,4 @@ Disabled by default. Set `SPACESHIP_EXIT_CODE_SHOW` to `true` in your `.zshrc`, 
 
 ## Need more?
 
-If these options are not enough to do what you want, read more about Spaceship's API on [API page](./API.md) of the documentation.
+If these options are not enough to do what you want, read more about Spacezsh's API on [API page](./API.md) of the documentation.
