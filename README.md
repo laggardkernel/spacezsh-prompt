@@ -40,8 +40,10 @@
 
 <br>
 
-Spacezsh is an **async** prompt tries to do things right in the ZSH way. It introduced a lot of ZSH goodies including:
-- Conditional async on each section/segment.
+Spacezsh is an **async** prompt tries to do things right in the ZSH way.
+It introduces a lot of ZSH goodies including:
+
+- Conditional async on each section/segment with tag `section::async`
 - 100% `promptinit` compliant.
 - `autoload` all of the functions.
 - Speed the prompt up with ZSH built-in utilities
@@ -117,14 +119,14 @@ To work correctly, you will first need:
 
 ## Installing
 
-### [zplugin]
+### [zinit]
 Use this command in your `.zshrc` to load Spacezsh:
 
 ```shell
 # Optional: compile source files into bytecode to speed up init
-# zplugin ice pick'spacezsh.zsh' \
+# zinit ice pick'spacezsh.zsh' \
 #   compile'{presets/^(*.zwc),lib/**/^(*.zwc),sections/^(*.zwc)}'
-zplugin light laggardkernel/spacezsh-prompt
+zinit light laggardkernel/spacezsh-prompt
 ```
 
 ### [prezto]
@@ -178,6 +180,6 @@ MIT © [laggardkernel](https://github.com/laggardkernel)
 
 [oh-my-zsh]: http://ohmyz.sh/
 [prezto]: https://github.com/sorin-ionescu/prezto
-[zplugin]: https://github.com/zdharma/zplugin/
+[zinit]: https://github.com/zdharma/zinit/
 [nerd-fonts]: https://github.com/ryanoasis/nerd-fonts
 [powerline]: https://github.com/powerline/fonts
