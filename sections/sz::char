@@ -69,53 +69,11 @@ sz::char() {
     "$SPACESHIP_CHAR_SUFFIX"
 }
 
-# ------------------------------------------------------------------------------
-# Helpers
-# ------------------------------------------------------------------------------
-
-# Self destruct setup
-# Remove conflicting widgets at the 2nd run of precmd,
-# in case the plugins is loaded in Zplugin's turbo mode
-function sz::vi_mode_selfdestruct_setup {
-  # remove self from precmd
-  precmd_functions=("${(@)precmd_functions:#sz::vi_mode_selfdestruct_setup}")
-  builtin unfunction sz::vi_mode_selfdestruct_setup
-
-  sz::vi_mode_setup
-
-  # https://github.com/softmoth/zsh-vim-mode/blob/master/zsh-vim-mode.plugin.zsh
-  # Remove hooks from zsh-vim-mode, some of them are not compatible with the async renderer
-  # keymap update:
-  #   widget isearch-exit isearch-update line-pre-redraw, hook vim-mode-precmd
-  # prompt update:
-  #   vim_mode_keymap_funcs+=vim-mode-update-prompt
-  # cursor style update:
-  #   vim_mode_keymap_funcs+=vim-mode-set-cursor-style
-  #   add-zsh-hook        precmd      vim-mode-cursor-init-hook
-  #   add-zle-hook-widget line-finish vim-mode-cursor-finish-hook
-  autoload -Uz add-zsh-hook add-zle-hook-widget
-
-  # vim_mode_keymap_funcs=("${(@)vim_mode_keymap_funcs:#vim-mode-update-prompt}")
-  add-zsh-hook -D precmd vim-mode-\*
-  local f
-  for f in isearch-exit isearch-update line-pre-redraw line-finish; do
-    add-zle-hook-widget -D "$f" vim-mode-\*
-  done
-  typeset -ag vim_mode_keymap_funcs=()
-}
-
 # Init
-
-track-sz-autoload sz::vi_mode_setup sz::vi_mode_cleanup
+track-sz-autoload add-zle-hook-widget sz::vi_mode_setup sz::vi_mode_cleanup
 
 if [[ $SPACESHIP_VI_MODE_SHOW == true ]]; then
-  # https://github.com/softmoth/zsh-vim-mode/issues/8
-  # Enable vi_mode and cleanup conflicting ZLE widgets on the 2nd run of precmd,
-  # cause zsh-syntax-highlighting and fast-syntax-highlighting is not compatilbe
-  # ZLE method `add-zle-hook-widget`, we need to make sure widgets enabled by
-  # this method are loaded after the hightlighting plugins.
-  track-sz-autoload sz::vi_mode_selfdestruct_setup
-  add-zsh-hook precmd sz::vi_mode_selfdestruct_setup
+  sz::vi_mode_setup
 fi
 
 sz::char "$@"
