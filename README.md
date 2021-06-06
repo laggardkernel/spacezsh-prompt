@@ -32,7 +32,7 @@
 <div align="center">
   <sub>Built with ❤︎ by
   <a href="https://github.com/laggardkernel">laggardkernel</a> and
-  <a href="#contributors">contributors </a></sub>
+  <a href="https://github.com/laggardkernel/spacezsh-prompt/graphs/contributors">contributors </a></sub>
   <br>
   <sub>A fork of <a href="https://github.com/spaceship-prompt/spaceship-prompt">Spaceship ZSH</a> by
   <a href="https://denysdovhan.com/">Denys Dovhan</a></sub>

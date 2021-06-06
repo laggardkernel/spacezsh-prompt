@@ -5,12 +5,26 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## Unreleased
+## [Unreleased]
+
+## [4.7.0] - 2021-06-06
 
 ### Removed
 
 - Drop hack solution for line-init, line-finish conflict in vi mode. No point to
   use these zle hook widgets together. Just disable one of them.
+
+### Upstream Changes
+
+- Section:
+  - Docker, fix context
+  - Gradle, new added
+  - Maven, new added
+  - Rust, change symbol to crab emoji
+- Script:
+  - follow `ZDOTDIR` in install, uninstall script
+- Docs:
+  - explain custom sections
 
 ## [4.6.0] - 2021-02-01
 
@@ -29,7 +43,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Drop submodule `gitstatus`, whose installation is left user themselves
 
-### Upstream changes
+### Upstream Changes
 
 - Use `SPACESHIP_XCODE_SHOW_*` for `xcode` section, which formerly
   share settings `SPACESHIP_SWIFT_SHOW_*` with `swift`
@@ -67,9 +81,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
-- Redraw prompt on working directory changes with hook `chpwd`, where hook `precmd` is not triggered.
+- Redraw prompt on working directory changes with hook `chpwd`, where hook
+  `precmd` is not triggered.
 - Fix battery status query from [@Runrioter](https://github.com/spaceship-prompt/spaceship-prompt/pull/640).
-- Replace `${=}` with `(s)` for word splitting to avoid `IFS` overridden in the outer scope.
+- Replace `${=}` with `(s)` for word splitting to avoid `IFS` overridden
+  in the outer scope.
 
 ### Removed
 
@@ -175,8 +191,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Project files cleanup
 - Remove the totally useless prepositions
 
-[Unreleased]: https://github.com/laggardkernel/spacezsh-prompt/compare/v4.6.0...HEAD
-[4.6.0]: https://github.com/laggardkernel/spacezsh-prompt/compare/v4.5.0...4.6.0
+[Unreleased]: https://github.com/laggardkernel/spacezsh-prompt/compare/v4.7.0...HEAD
+[4.7.0]: https://github.com/laggardkernel/spacezsh-prompt/compare/v4.6.0...v4.7.0
+[4.6.0]: https://github.com/laggardkernel/spacezsh-prompt/compare/v4.5.0...v4.6.0
 [4.5.0]: https://github.com/laggardkernel/spacezsh-prompt/compare/v4.4.0...v4.5.0
 [4.4.0]: https://github.com/laggardkernel/spacezsh-prompt/compare/v4.3.0...v4.4.0
 [4.3.0]: https://github.com/laggardkernel/spacezsh-prompt/compare/v4.2.0...v4.3.0
