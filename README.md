@@ -34,7 +34,7 @@
   <a href="https://github.com/laggardkernel">laggardkernel</a> and
   <a href="#contributors">contributors </a></sub>
   <br>
-  <sub>A fork of <a href="https://github.com/denysdovhan/spaceship-prompt">Spaceship ZSH</a> by
+  <sub>A fork of <a href="https://github.com/spaceship-prompt/spaceship-prompt">Spaceship ZSH</a> by
   <a href="https://denysdovhan.com/">Denys Dovhan</a></sub>
 </div>
 
@@ -55,7 +55,7 @@ It introduces a lot of ZSH goodies including:
 - For more changes, new features, new sections brought by Spacezsh, check the [CHANGELOG](./CHANGELOG.md) for detail.
 
 <p align="center">
-  <img alt="Spaceship with Hyper and One Dark" src="https://user-images.githubusercontent.com/10276208/36086434-5de52ace-0ff2-11e8-8299-c67f9ab4e9bd.gif" width="980px">
+  <img alt="Spacezsh with Hyper and One Dark" src="https://user-images.githubusercontent.com/10276208/36086434-5de52ace-0ff2-11e8-8299-c67f9ab4e9bd.gif" width="980px">
 </p>
 
 <sub>Visit <a href="./docs/Troubleshooting.md#why-doesnt-my-prompt-look-like-the-preview">Troubleshooting</a> for instructions to recreate this terminal setup.</sub>
@@ -192,7 +192,7 @@ Still struggling? Please, [file an issue](https://github.com/laggardkernel/space
 
 ## Credits
 
-- [denysdovhan/spaceship-prompt](https://github.com/denysdovhan/spaceship-prompt).
+- [spaceship-prompt/spaceship-prompt](https://github.com/spaceship-prompt/spaceship-prompt).
 - Conditional async per segment ported from [dritter's implementaion](https://github.com/bhilburn/powerlevel9k/pull/1176).
 - [mafredri/zsh-async](https://github.com/mafredri/zsh-async), an asynchronous library.
 - [robobenklein/zinc](https://github.com/robobenklein/zinc), neat prompt framework where the neat framework and custom hook system are borrowed.

@@ -68,7 +68,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 
 - Redraw prompt on working directory changes with hook `chpwd`, where hook `precmd` is not triggered.
-- Fix battery status query from [@Runrioter](https://github.com/denysdovhan/spaceship-prompt/pull/640).
+- Fix battery status query from [@Runrioter](https://github.com/spaceship-prompt/spaceship-prompt/pull/640).
 - Replace `${=}` with `(s)` for word splitting to avoid `IFS` overridden in the outer scope.
 
 ### Removed
@@ -135,7 +135,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Right prompt begins at the same line with the left one.
 - Same name custom sections override built-in sections.
 - New section `gitstatus`.
-- New section `vagrant` from [@guilhermeleobas](https://github.com/denysdovhan/spaceship-prompt/pull/376).
+- New section `vagrant` from [@guilhermeleobas](https://github.com/spaceship-prompt/spaceship-prompt/pull/376).
 - New utility function `spaceship::upsearch`.
 - Add `.ruby-version` file check for `rbenv` in section `ruby`.
   Similar checks are added for `nodenv`, `pyenv`.

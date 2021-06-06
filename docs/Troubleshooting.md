@@ -37,8 +37,8 @@ Spacezsh may work slower in big repositories since status checkings are quite a 
 
 Using `grep` to fetch package version wasn't returning accurate information. So now we use `jq` with fallbacks to `python` and `node`, Which might slightly affect performance. In that case install [jq](https://stedolan.github.io/jq/) (see [#439], [#441] for more information).
 
-[#439]: https://github.com/denysdovhan/spaceship-prompt/issues/439
-[#441]: https://github.com/denysdovhan/spaceship-prompt/pull/441
+[#439]: https://github.com/spaceship-prompt/spaceship-prompt/issues/439
+[#441]: https://github.com/spaceship-prompt/spaceship-prompt/pull/441
 
 Prompt also may slow down because of loading of unused sections. Spacezsh loads only sections mentioned in `SPACESHIP_PROMPT_ORDER` or `SPACESHIP_RPROMPT_ORDER`. If you think some sections might be useless for you, try to disable them by omitting their names in order options.
 
@@ -119,7 +119,7 @@ Preview shows `spacezsh` prompt setup with:
 * [zsh-syntax-highlighting](https://github.com/zsh-users/zsh-syntax-highlighting) to have commands colorized.
 * [zsh-autosuggestions](https://github.com/zsh-users/zsh-autosuggestions) to have browser-like autocompletions.
 
-See [screenshots](https://github.com/denysdovhan/spaceship-prompt/wiki/Screenshots) wiki for more color schemes examples.
+See [screenshots](https://github.com/spaceship-prompt/spaceship-prompt/wiki/Screenshots) wiki for more color schemes examples.
 
 ## Does not help?
 
