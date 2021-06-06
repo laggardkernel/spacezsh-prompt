@@ -16,6 +16,8 @@ if [ -z "$SPACESHIP_PROMPT_ORDER" ]; then
     # hg::async          # deprecated
 
     # package::async     # Package version
+    # gradle::async      # Gradle section
+    # maven::async       # Maven section
     # node::async        # Node.js section
     # ruby::async        # Ruby section
     # elm::async         # Elm section
@@ -69,6 +71,6 @@ SPACESHIP_RPROMPT_ADD_NEWLINE="${SPACESHIP_RPROMPT_ADD_NEWLINE=false}"
 SPACESHIP_SECTION_PLACEHOLDER="${SPACESHIP_SECTION_PLACEHOLDER="…"}"
 
 # Load custom section functions tagged with "::custom" from files
-SPACESHIP_CUSTOM_SECTION_LOCATION="${SPACESHIP_CUSTOM_SECTION_LOCATION=$HOME/.config/spaceship/sections}"
+SPACESHIP_CUSTOM_SECTION_LOCATION="${SPACESHIP_CUSTOM_SECTION_LOCATION=$HOME/.config/spacezsh/sections}"
 
 fpath+=("$SPACESHIP_CUSTOM_SECTION_LOCATION")

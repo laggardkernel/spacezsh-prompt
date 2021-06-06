@@ -1,6 +1,6 @@
 MIT License
 
-Copyright (c) 2019 [laggardkernel](https://github.com/laggardkernel)
+Copyright (c) 2021 [laggardkernel](https://github.com/laggardkernel)
 
 Copyright (c) 2016-2018 [Denys Dovhan](https://denysdovhan.com)
 

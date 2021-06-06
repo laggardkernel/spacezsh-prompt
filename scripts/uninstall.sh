@@ -1,7 +1,7 @@
 #!/usr/bin/env zsh
 #
 # Author: Denys Dovhan, denysdovhan.com
-# https://github.com/denysdovhan/spaceship-prompt
+#
 
 # ------------------------------------------------------------------------------
 # Colors
@@ -25,10 +25,10 @@ fi
 # Paths to important resources
 # ------------------------------------------------------------------------------
 
-ZSHRC="$HOME/.zshrc"
-USER_SOURCE="$HOME/.spaceship-prompt"
-GLOBAL_DEST="/usr/local/share/zsh/site-functions/prompt_spaceship_setup"
-USER_DEST="$HOME/.zfunctions/prompt_spaceship_setup"
+ZSHRC="${ZDOTDIR:-$HOME}/.zshrc"
+USER_SOURCE="${ZDOTDIR:-$HOME}/.spacezsh-prompt"
+GLOBAL_DEST="/usr/local/share/zsh/site-functions/prompt_spacezsh_setup"
+USER_DEST="${ZDOTDIR:-$HOME}/.zfunctions/prompt_spacezsh_setup"
 
 # ------------------------------------------------------------------------------
 # HELPERS
@@ -70,14 +70,14 @@ rmln() {
 # ------------------------------------------------------------------------------
 
 remove_zshrc_content() {
-  info "Removing Spaceship from ~/.zshrc"
-  # Remove enabling statements from ~/.zshrc
+  info "Removing Spaceship from \"${ZDOTDIR:-$HOME}/.zshrc\""
+  # Remove enabling statements from .zshrc
   # and remove Spaceship configuration
   # Note: SPACESHIP_RPROMPT_ORDER and SPACESHIP_PROMPT_ORDER configuration may have multiple lines
   # which are grouped by `(`, `)`
   sed '/^# Set Spaceship ZSH as a prompt$/d' "$ZSHRC" | \
   sed '/^autoload -U promptinit; promptinit$/d' | \
-  sed '/^prompt spaceship$/d' | \
+  sed '/^prompt spacezsh$/d' | \
   sed  -E '/^SPACESHIP_R?PROMPT_ORDER=\([^)]*$/,/^[^(]*\)/d' | \
   sed '/^SPACESHIP_.*$/d' > "$ZSHRC.bak" && \
   mv -- "$ZSHRC.bak" "$ZSHRC"
@@ -93,7 +93,7 @@ main() {
   fi
 
   # Remove Spaceship from .zshrc
-  if command grep -q "spaceship" "$ZSHRC"; then
+  if command grep -q "spacezsh" "$ZSHRC"; then
     if [[ '-y' == $1 ]]; then
       remove_zshrc_content
     else
@@ -103,7 +103,7 @@ main() {
       fi
     fi
   else
-    warn "Spaceship configuration not found in ~/.zshrc!"
+    warn "Spaceship configuration not found in \"${ZDOTDIR:-$HOME}/.zshrc\"!"
   fi
 
   success "Done! Spaceship installation has been removed!"

@@ -6,7 +6,7 @@ about: If something isn't working as expected 🤔.
 <!--
 Please read our TROUBLESHOOTING page for commonly encountered problems:
 
-https://github.com/denysdovhan/spaceship-prompt/blob/master/docs/Troubleshooting.md
+https://github.com/laggardkernel/spacezsh-prompt/blob/master/docs/Troubleshooting.md
 -->
 
 **Current behavior**
@@ -27,7 +27,7 @@ A clear and concise description of what you expected to happen.
 
 <!-- Run `ss::env` to get the following information -->
 
-**Spaceship version:** <version> (use `echo $SPACESHIP_VERSION`)
+**Spacezsh version:** <version> (use `echo $SPACESHIP_VERSION`)
 **Zsh version:** <version>
 **Zsh framework:** <None/oh-my-zsh/prezto/etc>
 **Zsh plugin manager:** <None/antigen/zplug/etc>

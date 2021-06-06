@@ -1,6 +1,6 @@
 # Troubleshooting
 
-This page aimed to help you fix the common problems encountered while using Spaceship prompt.
+This page aimed to help you fix the common problems encountered while using Spacezsh prompt.
 
 ## What's the weird symbol for `git` branch?
 
@@ -11,7 +11,7 @@ You need to have a powerline patched font in order to properly display `git` bra
 
 ## What's the weird character in front of a section?
 
-This is not an issue with Spaceship prompt. Spaceship uses Unicode symbols to represent `SPACESHIP_*_SYMBOL` in sections. To solve this problem:
+This is not an issue with Spacezsh prompt. Spacezsh uses Unicode symbols to represent `SPACESHIP_*_SYMBOL` in sections. To solve this problem:
 
 * Verify your terminal emulator support Unicode characters with this command:
   ```zsh
@@ -33,14 +33,14 @@ SPACESHIP_VI_MODE_SHOW=false
 
 ## Why is my prompt slow?
 
-Spaceship may work slower in big repositories since status checkings are quite a heavy operation. In this case, try to avoid having many uncommitted files.
+Spacezsh may work slower in big repositories since status checkings are quite a heavy operation. In this case, try to avoid having many uncommitted files.
 
 Using `grep` to fetch package version wasn't returning accurate information. So now we use `jq` with fallbacks to `python` and `node`, Which might slightly affect performance. In that case install [jq](https://stedolan.github.io/jq/) (see [#439], [#441] for more information).
 
-[#439]: https://github.com/denysdovhan/spaceship-prompt/issues/439
-[#441]: https://github.com/denysdovhan/spaceship-prompt/pull/441
+[#439]: https://github.com/spaceship-prompt/spaceship-prompt/issues/439
+[#441]: https://github.com/spaceship-prompt/spaceship-prompt/pull/441
 
-Prompt also may slow down because of loading of unused sections. Spaceship loads only sections mentioned in `SPACESHIP_PROMPT_ORDER` or `SPACESHIP_RPROMPT_ORDER`. If you think some sections might be useless for you, try to disable them by omitting their names in order options.
+Prompt also may slow down because of loading of unused sections. Spacezsh loads only sections mentioned in `SPACESHIP_PROMPT_ORDER` or `SPACESHIP_RPROMPT_ORDER`. If you think some sections might be useless for you, try to disable them by omitting their names in order options.
 
 In the example below, `time`, `package`, `xcode`, `julia`, `docker`, `ember` and `vi_mode` sections are disabled so that they won't be loaded at all.
 
@@ -82,14 +82,14 @@ SPACESHIP_PROMPT_ORDER=(
 )
 ```
 
-Disabling a lot of unused section may achieve a significant performance boost. Here's a comparison of rendering Spaceship prompt 100 times with all sections enabled and with `SPACESHIP_PROMPT_ORDER` from example above:
+Disabling a lot of unused section may achieve a significant performance boost. Here's a comparison of rendering Spacezsh prompt 100 times with all sections enabled and with `SPACESHIP_PROMPT_ORDER` from example above:
 
 |                   | All section | With disabled sections |
 | :---------------- | :---------: | :--------------------: |
 | Inside Git repo*  |   `23.5s`   |         `21.3s`        |
 | Outside Git repo* |    `8.3s`   |          `7.4s`        |
 
-\* — `spaceship-prompt` repo is used in this test.
+\* — `spacezsh-prompt` repo is used in this test.
 
 ## Some section icons overlap each other?
 
@@ -111,7 +111,7 @@ In _iTerm_ follow these instructions:
 
 ![preview](https://user-images.githubusercontent.com/10276208/36086434-5de52ace-0ff2-11e8-8299-c67f9ab4e9bd.gif)
 
-Preview shows `spaceship` prompt setup with:
+Preview shows `spacezsh` prompt setup with:
 
 * [Hyper](https://hyper.is) as terminal emulator.
 * [One Dark](https://www.npmjs.com/package/hyperterm-atom-dark) color theme from [Atom](https://atom.io/) editor.
@@ -119,7 +119,7 @@ Preview shows `spaceship` prompt setup with:
 * [zsh-syntax-highlighting](https://github.com/zsh-users/zsh-syntax-highlighting) to have commands colorized.
 * [zsh-autosuggestions](https://github.com/zsh-users/zsh-autosuggestions) to have browser-like autocompletions.
 
-See [screenshots](https://github.com/denysdovhan/spaceship-prompt/wiki/Screenshots) wiki for more color schemes examples.
+See [screenshots](https://github.com/spaceship-prompt/spaceship-prompt/wiki/Screenshots) wiki for more color schemes examples.
 
 ## Does not help?
 

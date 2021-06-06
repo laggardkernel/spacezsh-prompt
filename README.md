@@ -32,16 +32,18 @@
 <div align="center">
   <sub>Built with ❤︎ by
   <a href="https://github.com/laggardkernel">laggardkernel</a> and
-  <a href="#contributors">contributors </a></sub>
+  <a href="https://github.com/laggardkernel/spacezsh-prompt/graphs/contributors">contributors </a></sub>
   <br>
-  <sub>A fork of <a href="https://github.com/denysdovhan/spaceship-prompt">Spaceship ZSH</a> by
+  <sub>A fork of <a href="https://github.com/spaceship-prompt/spaceship-prompt">Spaceship ZSH</a> by
   <a href="https://denysdovhan.com/">Denys Dovhan</a></sub>
 </div>
 
 <br>
 
-Spacezsh is an **async** prompt tries to do things right in the ZSH way. It introduced a lot of ZSH goodies including:
-- Conditional async on each section/segment.
+Spacezsh is an **async** prompt tries to do things right in the ZSH way.
+It introduces a lot of ZSH goodies including:
+
+- Conditional async on each section/segment with tag `section::async`
 - 100% `promptinit` compliant.
 - `autoload` all of the functions.
 - Speed the prompt up with ZSH built-in utilities
@@ -53,7 +55,7 @@ Spacezsh is an **async** prompt tries to do things right in the ZSH way. It intr
 - For more changes, new features, new sections brought by Spacezsh, check the [CHANGELOG](./CHANGELOG.md) for detail.
 
 <p align="center">
-  <img alt="Spaceship with Hyper and One Dark" src="https://user-images.githubusercontent.com/10276208/36086434-5de52ace-0ff2-11e8-8299-c67f9ab4e9bd.gif" width="980px">
+  <img alt="Spacezsh with Hyper and One Dark" src="https://user-images.githubusercontent.com/10276208/36086434-5de52ace-0ff2-11e8-8299-c67f9ab4e9bd.gif" width="980px">
 </p>
 
 <sub>Visit <a href="./docs/Troubleshooting.md#why-doesnt-my-prompt-look-like-the-preview">Troubleshooting</a> for instructions to recreate this terminal setup.</sub>
@@ -117,14 +119,14 @@ To work correctly, you will first need:
 
 ## Installing
 
-### [zplugin]
+### [zinit]
 Use this command in your `.zshrc` to load Spacezsh:
 
 ```shell
 # Optional: compile source files into bytecode to speed up init
-# zplugin ice pick'spacezsh.zsh' \
+# zinit ice pick'spacezsh.zsh' \
 #   compile'{presets/^(*.zwc),lib/**/^(*.zwc),sections/^(*.zwc)}'
-zplugin light laggardkernel/spacezsh-prompt
+zinit light laggardkernel/spacezsh-prompt
 ```
 
 ### [prezto]
@@ -139,7 +141,7 @@ Clone this repo:
 git clone https://github.com/laggardkernel/spacezsh-prompt.git "$ZSH_CUSTOM/themes/spacezsh-prompt" --depth=1
 ```
 
-Symlink `spaceship.zsh-theme` to your oh-my-zsh custom themes directory:
+Symlink `spacezsh.zsh-theme` to your oh-my-zsh custom themes directory:
 
 ```zsh
 ln -s "$ZSH_CUSTOM/themes/spacezsh-prompt/spacezsh.zsh-theme" "$ZSH_CUSTOM/themes/spacezsh.zsh-theme"
@@ -154,7 +156,33 @@ Spacezsh works well out of the box, but you can customize almost everything if y
 - [**Options**](./docs/Options.md) — Tweak section's behavior with tons of options.
 - [**API**](./docs/API.md) — Define a custom section that will do exactly what you want.
 
-You have ability to customize or disable specific elements of Spacezsh. All options must be overridden in your `.zshrc` file.
+You have the ability to customize or disable specific elements of Spaceship. Set options and define new sections in your `.zshrc` file, **after** the theme. To include a custom section you have defined in your prompt, add it to the `SPACESHIP_PROMPT_ORDER`.
+
+For example:
+
+```shell
+# .zshrc
+
+# add Spaceship (differs by setup, see Installating above)
+
+section_mysection() {
+  # ...
+}
+
+SPACESHIP_PROMPT_ORDER=(<any preceding sections> mysection <any following sections>)
+```
+
+To append custom sections to the default Spaceship prompt, follow the form:
+
+```shell
+SPACESHIP_PROMPT_ORDER=($SPACESHIP_PROMPT_ORDER mysection)
+```
+
+To prepend custom sections to the default Spaceship prompt, follow the form:
+
+```shell
+SPACESHIP_PROMPT_ORDER=(mysection $SPACESHIP_PROMPT_ORDER)
+```
 
 ## Troubleshooting
 
@@ -164,7 +192,7 @@ Still struggling? Please, [file an issue](https://github.com/laggardkernel/space
 
 ## Credits
 
-- [denysdovhan/spaceship-prompt](https://github.com/denysdovhan/spaceship-prompt).
+- [spaceship-prompt/spaceship-prompt](https://github.com/spaceship-prompt/spaceship-prompt).
 - Conditional async per segment ported from [dritter's implementaion](https://github.com/bhilburn/powerlevel9k/pull/1176).
 - [mafredri/zsh-async](https://github.com/mafredri/zsh-async), an asynchronous library.
 - [robobenklein/zinc](https://github.com/robobenklein/zinc), neat prompt framework where the neat framework and custom hook system are borrowed.
@@ -178,6 +206,6 @@ MIT © [laggardkernel](https://github.com/laggardkernel)
 
 [oh-my-zsh]: http://ohmyz.sh/
 [prezto]: https://github.com/sorin-ionescu/prezto
-[zplugin]: https://github.com/zdharma/zplugin/
+[zinit]: https://github.com/zdharma/zinit/
 [nerd-fonts]: https://github.com/ryanoasis/nerd-fonts
 [powerline]: https://github.com/powerline/fonts

@@ -1,4 +1,4 @@
-# https://github.com/denysdovhan/spaceship-prompt/wiki/Presets
+# https://github.com/laggardkernel/spacezsh-prompt/wiki/Presets
 
 # ORDER
 SPACESHIP_PROMPT_ORDER=(

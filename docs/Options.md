@@ -1,6 +1,6 @@
 ## Options
 
-You have ability to customize or disable specific elements of Spaceship. All options must be overridden in your `.zshrc` file **after** the theme.
+You have ability to customize or disable specific elements of Spacezsh. All options must be overridden in your `.zshrc` file **after** the theme.
 
 Colors for sections can be [basic colors](https://wiki.archlinux.org/index.php/zsh#Colors) or [color codes](https://upload.wikimedia.org/wikipedia/commons/1/15/Xterm_256color_chart.svg).
 
@@ -10,7 +10,7 @@ Colors for sections can be [basic colors](https://wiki.archlinux.org/index.php/z
 
 You can specify the order of prompt section using `SPACESHIP_PROMPT_ORDER` option. Use Zsh array syntax to define your own prompt order.
 
-The order also defines which sections that Spaceship loads. If you're struggling with slow prompt, you can just omit the sections that you don't use, and they won't be loaded.
+The order also defines which sections that Spacezsh loads. If you're struggling with slow prompt, you can just omit the sections that you don't use, and they won't be loaded.
 
 The default order is:
 
@@ -25,6 +25,8 @@ SPACESHIP_PROMPT_ORDER=(
   # hg::async          # deprecated
 
   # package::async     # Package version
+  # gradle::async      # Gradle section
+  # maven::async       # Maven section
   # node::async        # Node.js section
   # ruby::async        # Ruby section
   # elm::async         # Elm section
@@ -64,7 +66,7 @@ You can also add items to the right prompt by specifying them in the `SPACESHIP_
 
 ### Async Renderer
 
-Spaceship doesn't render the whole prompt asynchronously. It supports rendering a mixture.
+Spacezsh doesn't render the whole prompt asynchronously. It supports rendering a mixture.
 
 Async renderer could be enabled for a specific section with `async` tag, like `node::async`.
 
@@ -471,7 +473,7 @@ Rust section is shown only in directories that contain `Cargo.toml` or any other
 | `SPACESHIP_RUST_SHOW` | `true` | Shown current Rust version or not |
 | `SPACESHIP_RUST_PREFIX` | `$SPACESHIP_PROMPT_DEFAULT_PREFIX` | Prefix before the Rust section |
 | `SPACESHIP_RUST_SUFFIX` | `$SPACESHIP_PROMPT_DEFAULT_SUFFIX` | Suffix after the Rust section |
-| `SPACESHIP_RUST_SYMBOL` | `𝗥·` | Character to be shown before Rust version |
+| `SPACESHIP_RUST_SYMBOL` | `🦀·` | Character to be shown before Rust version |
 | `SPACESHIP_RUST_COLOR` | `red` | Color of Rust section |
 | `SPACESHIP_RUST_VERBOSE_VERSION` | `false` | Show what branch is being used, if any. (Beta, Nightly) |
 
@@ -658,6 +660,44 @@ SPACESHIP_KUBECONTEXT_COLOR_GROUPS=(
 )
 ```
 
+### Gradle (`gradle`)
+
+Shows current gradle & jvm version.
+
+| Variable | Default | Meaning |
+| :------- | :-----: | ------- |
+| `SPACESHIP_GRADLE_SHOW` | `true` | Current Gradle section |
+| `SPACESHIP_GRADLE_PREFIX` | `$SPACESHIP_PROMPT_DEFAULT_PREFIX` | Prefix before Gradle section |
+| `SPACESHIP_GRADLE_SUFFIX` | `$SPACESHIP_PROMPT_DEFAULT_SUFFIX` | Suffix after Gradle section |
+| `SPACESHIP_GRADLE_SYMBOL` | `⬡·` | Character to be shown before Gradle section |
+| `SPACESHIP_GRADLE_DEFAULT_VERSION` | ` ` | Gradle version to be treated as default |
+| `SPACESHIP_GRADLE_COLOR` | `green` | Color of Gradle section |
+| `SPACESHIP_GRADLE_JVM_SHOW` | `true` | Show JVM version used by Gradle |
+| `SPACESHIP_GRADLE_JVM_PREFIX` | `$SPACESHIP_PROMPT_DEFAULT_PREFIX` | Prefix before Gradle JVM section |
+| `SPACESHIP_GRADLE_JVM_SUFFIX` | `$SPACESHIP_PROMPT_DEFAULT_SUFFIX` | Suffix after Gradle JVM section |
+| `SPACESHIP_GRADLE_JVM_SYMBOL` | `☕️·` | Character to be shown before Gradle JVM section |
+| `SPACESHIP_GRADLE_JVM_DEFAULT_VERSION` | ` ` | Gradle JVM version to be treated as default |
+| `SPACESHIP_GRADLE_JVM_COLOR` | `magenta` | Color of Gradle JVM section |
+
+### Maven (`maven`)
+
+Shows current maven & jvm version.
+
+| Variable | Default | Meaning |
+| :------- | :-----: | ------- |
+| `SPACESHIP_MAVEN_SHOW` | `true` | Current Maven section |
+| `SPACESHIP_MAVEN_PREFIX` | `$SPACESHIP_PROMPT_DEFAULT_PREFIX` | Prefix before Maven section |
+| `SPACESHIP_MAVEN_SUFFIX` | `$SPACESHIP_PROMPT_DEFAULT_SUFFIX` | Suffix after Maven section |
+| `SPACESHIP_MAVEN_SYMBOL` | `𝑚·` | Character to be shown before Maven section |
+| `SPACESHIP_MAVEN_DEFAULT_VERSION` | ` ` | Maven version to be treated as default |
+| `SPACESHIP_MAVEN_COLOR` | `yellow` | Color of Maven section |
+| `SPACESHIP_MAVEN_JVM_SHOW` | `true` | Show JVM version used by Maven |
+| `SPACESHIP_MAVEN_JVM_PREFIX` | `$SPACESHIP_PROMPT_DEFAULT_PREFIX` | Prefix before Maven JVM section |
+| `SPACESHIP_MAVEN_JVM_SUFFIX` | `$SPACESHIP_PROMPT_DEFAULT_SUFFIX` | Suffix after Maven JVM section |
+| `SPACESHIP_MAVEN_JVM_SYMBOL` | `☕️·` | Character to be shown before Maven JVM section |
+| `SPACESHIP_MAVEN_JVM_DEFAULT_VERSION` | ` ` | Maven JVM version to be treated as default |
+| `SPACESHIP_MAVEN_JVM_COLOR` | `magenta` | Color of Maven JVM section |
+
 ### Terraform workspace (`terraform`)
 
 Shows the active Terraform wokspace in directories that contain `.terraform/environment` file.
@@ -758,4 +798,4 @@ Disabled by default. Set `SPACESHIP_EXIT_CODE_SHOW` to `true` in your `.zshrc`, 
 
 ## Need more?
 
-If these options are not enough to do what you want, read more about Spaceship's API on [API page](./API.md) of the documentation.
+If these options are not enough to do what you want, read more about Spacezsh's API on [API page](./API.md) of the documentation.
