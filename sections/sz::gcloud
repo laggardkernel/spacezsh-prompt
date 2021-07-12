@@ -35,8 +35,11 @@ sz::gcloud() {
   # Check if there is an active config
   [[ -f "${config_dir}/active_config" ]] || return
 
-  # Reads the current config from the file
-  active_config="$(head -n1 ${config_dir}/active_config)"
+  if [[ -n "$CLOUDSDK_ACTIVE_CONFIG_NAME" ]]; then
+    active_config="$CLOUDSDK_ACTIVE_CONFIG_NAME"
+  else
+    active_config="$(head -n1 ${config_dir}/active_config)"
+  fi
 
   # Check the active config file exists
   active_config_file=${config_dir}/configurations/config_${active_config}
