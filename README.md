@@ -78,7 +78,7 @@ It introduces a lot of ZSH goodies including:
     - `=` — unmerged changes;
     - changeset/commit id;
 - Indicator for jobs in the background (`✦`).
-- Current Node.js version, through nvm/nodenv/n (`⬢`).
+- Current Node.js version, through fnm/nvm/nodenv/n (`⬢`).
 - Current Ruby version, through rvm/rbenv/chruby/asdf (`💎`).
 - Current Elm version (`🌳`)
 - Current Elixir version, through kiex/exenv/elixir (`💧`).

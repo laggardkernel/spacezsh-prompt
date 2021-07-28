@@ -44,6 +44,9 @@ sz::node() {
   elif (( $+commands[nodenv] )); then
     node_version=$(nodenv version-name)
     [[ $node_version == "system" || $node_version == "node" ]] && return
+  elif (( $+commands[fnm] )); then
+    node_version=$(fnm current 2>/dev/null)
+    [[ $node_version == "system" || $node_version == "node" ]] && return
   elif (( $+commands[node] )); then
     node_version=$(node -v 2>/dev/null)
   else
