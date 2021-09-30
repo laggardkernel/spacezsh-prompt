@@ -35,7 +35,6 @@ if [ -z "$SPACESHIP_PROMPT_ORDER" ]; then
     # gcloud::async      # Google Cloud Platform section
     # python::async      # Python section
     # dotnet::async      # .NET section
-    # ember::async       # Ember.js section
     # kubectl::async     # Kubectl context section
     # terraform::async   # Terraform workspace section
 

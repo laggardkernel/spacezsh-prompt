@@ -37,7 +37,6 @@
   * [Google Cloud Platform (gcloud)](/docs/Options.md#google-cloud-platform-gcloud)
   * [Python (python)](/docs/Options.md#python-python)
   * [.NET (dotnet)](/docs/Options.md#net-dotnet)
-  * [Ember (ember)](/docs/Options.md#emberjs-ember)
   * [Kubernetes (kubectl)](/docs/Options.md#kubernetes-kubectl)
   * [Terraform workspace (terraform)](/docs/Options.md#terraform-workspace-terraform)
   * [Execution time (exec_time)](/docs/Options.md#execution-time-exec_time)

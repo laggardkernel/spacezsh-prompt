@@ -95,7 +95,6 @@ It introduces a lot of ZSH goodies including:
 - Current Google Cloud Platform gcloud active configuration (`☁️`).
 - Current Python virtualenv (`🐍`).
 - Current .NET SDK version, through dotnet-cli (`.NET`).
-- Current Ember.js version, through ember-cli (`🐹`).
 - Current Kubectl context (`☸️`).
 - Current Terraform workspace (`🛠`).
 - Package version, if there's is a package in current directory (`📦`).
