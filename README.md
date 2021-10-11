@@ -98,6 +98,7 @@ It introduces a lot of ZSH goodies including:
 - Current Ember.js version, through ember-cli (`🐹`).
 - Current Kubectl context (`☸️`).
 - Current Terraform workspace (`🛠`).
+- Current IBM Cloud account (`👔`).
 - Package version, if there's is a package in current directory (`📦`).
 - Current battery level and status:
   - `⇡` - charging;

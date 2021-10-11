@@ -38,6 +38,7 @@ if [ -z "$SPACESHIP_PROMPT_ORDER" ]; then
     # ember::async       # Ember.js section
     # kubectl::async     # Kubectl context section
     # terraform::async   # Terraform workspace section
+    # ibmcloud::async    # IBM Cloud section
 
     line_sep           # Line break
     # vi_mode           # deprecated
