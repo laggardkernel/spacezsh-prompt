@@ -108,6 +108,7 @@ It introduces a lot of ZSH goodies including:
 - Optional exit-code of last command ([how to enable](./docs/Options.md#exit-code-exit_code)).
 - Optional time stamps 12/24hr in format ([how to enable](./docs/Options.md#time-time)).
 - Execution time of the last command if it exceeds the set threshold.
+- Optional AWS now supports aws-vault ([aws-vault](https://github.com/99designs/aws-vault))
 
 Want more features? Please, [open an issue](https://github.com/laggardkernel/spacezsh-prompt/issues/new/choose) or send pull request.
 
