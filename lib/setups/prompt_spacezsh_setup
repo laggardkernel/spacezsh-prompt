@@ -47,7 +47,7 @@ function prompt_spacezsh_setup {
   typeset -gAH _SS_DATA=()
 
   # Internal variable for checking if prompt is opened
-  _SS_DATA[section_var_file]="${XDG_RUNTIME_DIR:-$TMPDIR}/spacezsh_section_var.${UID}.zsh"
+  _SS_DATA[section_var_file]="${XDG_CACHE_HOME:-$HOME/.cache}/spacezsh_section_var.zsh"
 
   # store result from sz::section
   _SS_DATA[section_result]=""
