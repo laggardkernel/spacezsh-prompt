@@ -1,0 +1,40 @@
+#!/usr/bin/env zsh
+# vim: ft=zsh fdm=marker foldlevel=0 sw=2 ts=2 sts=2 et
+
+# Java
+
+# Java is a class-based, object-oriented programming language
+# Link: https://www.java.com
+
+# ------------------------------------------------------------------------------
+# Configuration
+# ------------------------------------------------------------------------------
+SPACESHIP_JAVA_SHOW="${SPACESHIP_JAVA_SHOW=true}"
+SPACESHIP_JAVA_ASYNC="${SPACESHIP_JAVA_ASYNC=true}"
+SPACESHIP_JAVA_PREFIX="${SPACESHIP_JAVA_PREFIX="$SPACESHIP_PROMPT_DEFAULT_PREFIX"}"
+SPACESHIP_JAVA_SUFFIX="${SPACESHIP_JAVA_SUFFIX="$SPACESHIP_PROMPT_DEFAULT_SUFFIX"}"
+SPACESHIP_JAVA_SYMBOL="${SPACESHIP_JAVA_SYMBOL="☕ "}"
+SPACESHIP_JAVA_COLOR="${SPACESHIP_JAVA_COLOR="cyan"}"
+
+# ------------------------------------------------------------------------------
+# Section
+# ------------------------------------------------------------------------------
+sz::java() {
+  [[ $SPACESHIP_JAVA_SHOW == false ]] && return
+
+  (( $+commands[java] )) || return
+
+  sz::upsearch "pom.xml" >/dev/null \
+    || sz::upsearch "build.gradle" >/dev/null \
+    || sz::upsearch "settings.gradle" >/dev/null \
+    || [[ -n *.(java|class|jar|war)(#qN^/) ]] \
+    || return
+
+  local java_version=$(java -version 2>&1 | head -n 1 | command awk -F '"' '{print $2}')
+
+  spaceship::section \
+    "$SPACESHIP_JAVA_COLOR" \
+    "$SPACESHIP_JAVA_PREFIX" \
+    "${SPACESHIP_JAVA_SYMBOL}v${java_version}" \
+    "$SPACESHIP_JAVA_SUFFIX"
+}

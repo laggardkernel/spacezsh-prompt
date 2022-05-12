@@ -88,6 +88,7 @@ It introduces a lot of ZSH goodies including:
 - Current PHP version (`🐘`).
 - Current Rust version (`𝗥`).
 - Current version of Haskell GHC Compiler, defined in stack.yaml file (`λ`).
+- Current Java version (`☕️`)
 - Current Julia version (`ஃ`).
 - (New) Currnet Vagrant machine status (`Ｖ`)
 - Current Docker version and connected machine (`🐳`).

@@ -28,6 +28,7 @@ if [ -z "$SPACESHIP_PROMPT_ORDER" ]; then
     # php::async         # PHP section
     # rust::async        # Rust section
     # haskell::async     # Haskell Stack section
+    # java::async        # Java section
     # julia::async       # Julia section
     # vagrant::async     # Vagrant section
     # docker::async      # Docker section
