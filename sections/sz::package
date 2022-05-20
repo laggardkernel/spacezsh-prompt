@@ -9,6 +9,8 @@
 #   * npm
 #   * Lerna
 #   * Cargo
+#   * Composer
+#   * Julia
 
 # ------------------------------------------------------------------------------
 # Configuration
@@ -21,7 +23,7 @@ SPACESHIP_PACKAGE_SUFFIX="${SPACESHIP_PACKAGE_SUFFIX="$SPACESHIP_PROMPT_DEFAULT_
 SPACESHIP_PACKAGE_SYMBOL="${SPACESHIP_PACKAGE_SYMBOL="📦 "}"
 SPACESHIP_PACKAGE_COLOR="${SPACESHIP_PACKAGE_COLOR="red"}"
 if [ -z "$SPACESHIP_PACKAGE_ORDER" ]; then
-  SPACESHIP_PACKAGE_ORDER=(npm lerna cargo)
+  SPACESHIP_PACKAGE_ORDER=(npm lerna cargo composer julia)
 fi
 
 # ------------------------------------------------------------------------------
@@ -69,6 +71,16 @@ sz::package() {
         pkgid="$(cargo pkgid 2>&1)"
         echo "$pkgid" | grep -q "error:" && continue
         package_version="${pkgid##*\#}"
+      ;;
+      composer)
+        (( $+commands[composer] )) || continue
+        package_path="$(sz::upsearch composer.json file self)" || continue
+        package_version="$(sz::datafile "$package_path" version)"
+      ;;
+      julia)
+        (( $+commands[julia] )) || continue
+        package_path="$(sz::upsearch Project.toml file self)" || continue
+        package_version="$(sz::datafile "$package_path" version)"
       ;;
     esac
     [[ -z $package_version ]] || [[ "$package_version" == "null" ]] \

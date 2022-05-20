@@ -116,6 +116,7 @@ This group of options defines a behaviour of prompt and standard parameters for 
 A integration of `char` and `vi_mode` to use prompt character as vi-mode indicator. The idea is borrowed from ZSH framework [Prezto](https://github.com/sorin-ionescu/prezto).
 
 The other indicator for vi-mode is the cursor style change.
+
 | Variable | Default | Meaning |
 | :------- | :-----: | ------- |
 | `SPACESHIP_VI_MODE_SHOW` | `true` | Use prompt character as vi-mode indicator or not |
@@ -338,23 +339,26 @@ Mercurial status indicators is shown only when you have dirty repository.
 
 ### Package version (`package`)
 
-> Works for [npm](https://www.npmjs.com/) and [cargo](https://crates.io/) at the moment. Please, help us improve this section!
-
 Package version is shown when repository is a package.
 
-* **npm** — `npm` package contains a `package.json` file. We use `jq`, `python` to parse package version for improving performance and `node` as a fallback. Install [jq](https://stedolan.github.io/jq/) for **improved performance** of this section ([Why?](./Troubleshooting.md#why-is-my-prompt-slow))
-* **lerna** — `lerna` monorepo contains a `lerna.json` file. We use `jq`, `python` to parse package version for improving performance and `node` as a fallback. Install [jq](https://stedolan.github.io/jq/) for **improved performance** of this section (same reason as npm).
-* **cargo** — `cargo` package contains a `Cargo.toml` file. Currently, we use `cargo pkgid`, it depends on `Cargo.lock`. So if package version isn't shown, you may need to run some command like `cargo build` which can generate `Cargo.lock` file.
+We use `yq`, `jq`, `python` or `node` to parse package version in JSON/YAML/TOML/XML files. Install [jq](https://stedolan.github.io/jq/) and/or [yq](https://kislyuk.github.io/yq/) for **improved performance** of this section ([Why?](./troubleshooting.md#why-is-my-prompt-slow))
+
+- **npm** — `npm` package contains a `package.json` file.
+- **lerna** — `lerna` monorepo contains a `lerna.json` file.
+- **cargo** — `cargo` package contains a `Cargo.toml` file. Currently, we use `cargo pkgid`, it depends on `Cargo.lock`. So if package version isn't shown, you may need to run some command like `cargo build` which can generate `Cargo.lock` file.
+- **composer** — `composer` package containing a `composer.json` file.
+- **julia** — `julia` package containing a `Project.toml` file.
 
 > **Note:** This is the version of the package you are working on, not the version of package manager itself.
 
-| Variable | Default | Meaning |
-| :------- | :-----: | ------- |
-| `SPACESHIP_PACKAGE_SHOW` | `true` | Show package version |
-| `SPACESHIP_PACKAGE_PREFIX` | `is·` | Prefix before package version section |
-| `SPACESHIP_PACKAGE_SUFFIX` | `$SPACESHIP_PROMPT_DEFAULT_SUFFIX` | Suffix after package version section |
-| `SPACESHIP_PACKAGE_SYMBOL` | `📦·` | Character to be shown before package version |
-| `SPACESHIP_PACKAGE_COLOR` | `red` | Color of package version section |
+| Variable                         |              Default                | Meaning                                      |
+| :------------------------------- | :---------------------------------: | -------------------------------------------- |
+| `SPACESHIP_PACKAGE_SHOW`         |               `true`                | Show package version                         |
+| `SPACESHIP_PACKAGE_SHOW_PRIVATE` |               `false`               | Show private package version                 |
+| `SPACESHIP_PACKAGE_PREFIX`       |               `is·`                 | Prefix before package version section        |
+| `SPACESHIP_PACKAGE_SUFFIX`       | `$SPACESHIP_PROMPT_DEFAULT_SUFFIX`  | Suffix after package version section         |
+| `SPACESHIP_PACKAGE_SYMBOL`       |               `📦·`                 | Character to be shown before package version |
+| `SPACESHIP_PACKAGE_COLOR`        |               `red`                 | Color of package version section             |
 
 ### Node.js (`node`)
 
@@ -442,8 +446,8 @@ If you are using a development version of `Go`, the version uses git commit hash
 
 For example:
 
-* `devel:5efe9a8f11` for development version
-* `v1.11.4` for release version
+- `devel:5efe9a8f11` for development version
+- `v1.11.4` for release version
 
 | Variable | Default | Meaning |
 | :------- | :-----: | ------- |
@@ -494,8 +498,8 @@ Haskell section is shown only in directories that contain `stack.yaml` file.
 
 The Java section is displayed, by default, only in a Java context:
 
-* Projects containing `pom.xml`, `build.gradle`, `settings.gradle` files
-* Directories containing `*.java`, `*.class`, `*.jar` or `*.war` files
+- Projects containing `pom.xml`, `build.gradle`, `settings.gradle` files
+- Directories containing `*.java`, `*.class`, `*.jar` or `*.war` files
 
 | Variable                         | Default                            | Meaning                                  |
 | :------------------------------- | :--------------------------------: | ---------------------------------------- |
@@ -657,7 +661,7 @@ Shows the active kubectl context, which consists of a cluster name and, when wor
 | `SPACESHIP_KUBECONTEXT_SUFFIX` | `$SPACESHIP_PROMPT_DEFAULT_SUFFIX` | Suffix after Kubectl context section |
 | `SPACESHIP_KUBECONTEXT_COLOR` | `cyan` | Color of Kubectl context section |
 | `SPACESHIP_KUBECONTEXT_NAMESPACE_SHOW` | `true` | Should namespace be also displayed |
-| `SPACESHIP_KUBECONTEXT_COLOR_GROUPS` | ` ` | _Array_ of pairs of colors and match patterns, empty by default |
+| `SPACESHIP_KUBECONTEXT_COLOR_GROUPS` | ` ` | *Array* of pairs of colors and match patterns, empty by default |
 
 **Color Groups:** To set the section to a different color based on context or namespace, you can define an array of pair values in which the first value of a pair is a color name to use and the second value is a regular expression pattern to match against the section text (context name and/or namespace). The first matched pattern will determine the color, so list order can be used to prioritize patterns.
 
