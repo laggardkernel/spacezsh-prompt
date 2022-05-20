@@ -47,9 +47,9 @@ sz::maven() {
   [[ $SPACESHIP_MAVEN_SHOW == false ]] && return
 
   local maven_dir maven_exe
-  if maven_dir="$(sz::upsearch mvnw)"; then
+  if maven_dir="$(sz::upsearch mvnw file parent)"; then
     maven_exe="$maven_dir/mvnw"
-  elif maven_dir="$(sz::upsearch pom.xml)"; then
+  elif maven_dir="$(sz::upsearch pom.xml file parent)"; then
     maven_exe="mvn"
   else
     return

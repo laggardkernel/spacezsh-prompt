@@ -48,8 +48,8 @@ sz::gradle() {
 
   local gradle_root_dir
 
-  gradle_root_dir="$(sz::upsearch settings.gradle)" \
-    || gradle_root_dir="$(sz::upsearch settings.gradle.kts)" \
+  gradle_root_dir="$(sz::upsearch settings.gradle file parent)" \
+    || gradle_root_dir="$(sz::upsearch settings.gradle.kts file parent)" \
     || return
 
   local -A gradle_versions

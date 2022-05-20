@@ -81,30 +81,26 @@ function sz::section_in_use {
 # @args
 #   $1 string File/folder name to search for.
 #   $2 file/dir, type to be searched
+#   $3 self/parent, return path of file being searched, or parent of the file.
 # @return
 #   The 1st path where the file/folder has been found
 function sz::upsearch {
-  local search_type=""
-  local root="$PWD"
-
-  if [[ -z $2 ]]; then
-    search_type="file"
-  else
-    search_type="$2"
-  fi
+  local root="$PWD" target="$1" search_type="$2" r_type="$3"
+  [[ -n $search_type ]] || search_type="file"
+  [[ -n $r_type ]] || r_type="self"
 
   if [[ $search_type == file ]]; then
-    while [[ -n "$root" ]] && [[ ! -f "$root/$1" ]]; do
+    while [[ -n "$root" ]] && [[ ! -f "$root/$target" ]]; do
       root="${root%/*}"
     done
   elif [[ $search_type == dir ]]; then
-    while [[ -n "$root" ]] && [[ ! -d "$root/$1" ]]; do
+    while [[ -n "$root" ]] && [[ ! -d "$root/$target" ]]; do
       root="${root%/*}"
     done
   fi
 
   if [[ -n "$root" ]]; then
-    echo "$root"
+    [[ $r_type == "self" ]] && echo "$root/$target" || echo "$root"
     return 0
   else
     return 1

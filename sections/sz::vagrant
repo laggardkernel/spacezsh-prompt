@@ -32,7 +32,7 @@ sz::vagrant() {
   (( $+commands[vagrant] )) || return
 
   # Show Vagrant status only for Vagrant-specific folders
-  local project_root=$(sz::upsearch "${VAGRANT_VAGRANTFILE:-Vagrantfile}")
+  local project_root=$(sz::upsearch "${VAGRANT_VAGRANTFILE:-Vagrantfile}" file parent)
   [[ -n $project_root ]] || return
 
   local vagrant_index="${VAGRANT_HOME:-$HOME/.vagrant.d}/data/machine-index/index"

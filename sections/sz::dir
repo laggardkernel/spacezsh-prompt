@@ -31,8 +31,8 @@ sz::dir() {
 
   # Threat repo root as a top-level directory or not
   if [[ $SPACESHIP_DIR_TRUNC_REPO == true ]] && { \
-    vcs_root="$(sz::upsearch '.git' 'dir')" \
-    || vcs_root="$(sz::upsearch '.hg' 'dir')" }; then
+    vcs_root="$(sz::upsearch '.git' dir parent)" \
+    || vcs_root="$(sz::upsearch '.hg' dir parent)" }; then
 
     # Check if the parent of the $vcs_root is "/"
     if [[ $vcs_root:h == / ]]; then
