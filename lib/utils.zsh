@@ -106,3 +106,56 @@ function sz::upsearch {
     return 1
   fi
 }
+
+# Read json file with dot notation
+# USAGE:
+#   spaceship::datafile <file> [key]
+# EXAMPLE:
+#  $ spaceship::datafile package.json "author.name"
+#  > "John Doe"
+sz::datafile() {
+  local file="$1" key="$2"
+
+  case "$file" in
+    *.yaml|*.yml)
+      if (( $+commands[yq] )); then
+        command yq -r ".$key" "$file" 2>/dev/null
+      elif (( $+commands[python] )); then
+        command python -c "import yaml, functools; print(functools.reduce(lambda obj, key: obj[key] if key else obj, '$key'.split('.'), yaml.safe_load(open('$file'))))" 2>/dev/null
+      else
+        return 1
+      fi
+    ;;
+    *.json)
+      if (( $+commands[jq] )); then
+        command jq -r ".$key" "$file" 2>/dev/null
+      elif (( $+commands[yq] )); then
+        command yq -r ".$key" "$file" 2>/dev/null
+      elif (( $+commands[python] )); then
+        command python -c "import json, functools; print(functools.reduce(lambda obj, key: obj[key] if key else obj, '$key'.split('.'), json.load(open('$file'))))" 2>/dev/null
+      elif (( $+commands[node] )); then
+        command node -p "require('$file').$key" 2>/dev/null
+      else
+        return 1
+      fi
+    ;;
+    *.toml)
+      if (( $+commands[tomlq] )); then
+        command tomlq -r ".$key" "$file" 2>&1
+      else
+        return 1
+      fi
+    ;;
+    *.xml)
+      if (( $+commands[xq] )); then
+        command xq -r ".$key" "$file" 2>&1
+      else
+        return 1
+      fi
+    ;;
+    *)
+      # TODO: grep by regexp?
+      return 1
+    ;;
+  esac
+}

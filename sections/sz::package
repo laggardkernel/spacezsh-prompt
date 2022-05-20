@@ -7,7 +7,7 @@
 # Current package version.
 # These package managers supported:
 #   * npm
-#   * lerna
+#   * Lerna
 #   * Cargo
 
 # ------------------------------------------------------------------------------
@@ -15,66 +15,67 @@
 # ------------------------------------------------------------------------------
 
 SPACESHIP_PACKAGE_SHOW="${SPACESHIP_PACKAGE_SHOW=true}"
+SPACESHIP_PACKAGE_SHOW_PRIVATE="${SPACESHIP_PACKAGE_SHOW_PRIVATE=false}"
 SPACESHIP_PACKAGE_PREFIX="${SPACESHIP_PACKAGE_PREFIX="is "}"
 SPACESHIP_PACKAGE_SUFFIX="${SPACESHIP_PACKAGE_SUFFIX="$SPACESHIP_PROMPT_DEFAULT_SUFFIX"}"
 SPACESHIP_PACKAGE_SYMBOL="${SPACESHIP_PACKAGE_SYMBOL="📦 "}"
 SPACESHIP_PACKAGE_COLOR="${SPACESHIP_PACKAGE_COLOR="red"}"
+if [ -z "$SPACESHIP_PACKAGE_ORDER" ]; then
+  SPACESHIP_PACKAGE_ORDER=(npm lerna cargo)
+fi
 
 # ------------------------------------------------------------------------------
-# Section
+# Package Managers
 # ------------------------------------------------------------------------------
 
 sz::package() {
   [[ $SPACESHIP_PACKAGE_SHOW == false ]] && return
 
   # Show package version only when repository is a package
-  local package_version
+  local package_path package_version manager pkgid
 
-  if sz::upsearch "package.json" >/dev/null \
-    && (( $+commands[npm] )); then
-    if (( $+commands[jq] )); then
-      package_version=$(jq -r '.version' package.json 2>/dev/null)
-    elif (( $+commands[python] )); then
-      package_version=$(python -c "import json; print(json.load(open('package.json'))['version'])" 2>/dev/null)
-    elif (( $+commands[node] )); then
-      package_version=$(node -p "require('./package.json').version" 2> /dev/null)
-    fi
-  fi
-
-  # Show package version from lerna.json if is a lerna monorepo
-  # Note: lerna does not have to be installed in the global context
-  # so checking for lerna binary does not make sense
-  if sz::upsearch "lerna.json" >/dev/null && (( $+commands[npm] )); then
-    local lerna_package_version
-
-    if (( $+commands[jq] )); then
-      lerna_package_version=$(jq -r '.version' lerna.json 2>/dev/null)
-    elif (( $+commands[python] )); then
-      lerna_package_version=$(python -c "import json; print(json.load(open('lerna.json'))['version'])" 2>/dev/null)
-    elif (( $+commands[node] )); then
-      lerna_package_version=$(node -p "require('./lerna.json').version" 2> /dev/null)
-    fi
-
-    if [[ ! -z "$lerna_package_version" || "$package_version" != "null" || "$package_version" != "undefined" ]]; then
-      if [[ "$lerna_package_version" == "independent" ]]; then
-        package_version="($lerna_package_version)"
-      else
-        package_version="${lerna_package_version}"
-      fi
-    fi
-  fi
-
-  if sz::upsearch "Cargo.toml" >/dev/null \
-    && (( $+commands[cargo] )); then
-    # Handle missing field `version` in Cargo.toml.
-    # `cargo pkgid` need Cargo.lock exists too. If it does't, do not show package version
-    # https://github.com/spaceship-prompt/spaceship-prompt/pull/617
-    local pkgid=$(cargo pkgid 2>&1)
-    <<< $pkgid command grep -q "error:" || package_version=${pkgid##*\#}
-  fi
+  for manager in "${SPACESHIP_PACKAGE_ORDER[@]}"; do
+    case "$manager" in
+      npm)
+        (( $+commands[npm] )) || continue
+        package_path="$(sz::upsearch package.json file self)" || continue
+        if [[ "$SPACESHIP_PACKAGE_SHOW_PRIVATE" == false ]] \
+          && [[ "$(sz::datafile "$package_path" private)" == true ]]; then
+          break
+        fi
+        package_version="$(sz::datafile "$package_path" version)"
+        if [[ "$package_version" == "0.0.0-development" ]] \
+          || [[ $package_version == "0.0.0-semantic"* ]]; then
+          package_version="(semantic)"
+        fi
+      ;;
+      lerna)
+        # Show package version from lerna.json if is a lerna monorepo
+        # Note: lerna does not have to be installed in the global context
+        # so checking for lerna binary does not make sense
+        (( $+commands[npm] )) || continue
+        package_path="$(sz::upsearch lerna.json file self)" || continue
+        package_version="$(sz::datafile "$package_path" version)"
+        if [[ "$package_version" == "independent" ]]; then
+          package_version="($package_version)"
+        fi
+      ;;
+      cargo)
+        # Handle missing field `version` in Cargo.toml.
+        # `cargo pkgid` need Cargo.lock exists too. If it does't, do not show package version
+        # https://github.com/spaceship-prompt/spaceship-prompt/pull/617
+        (( $+commands[cargo] )) || continue
+        package_path="$(sz::upsearch Cargo.toml file self)" || continue
+        pkgid="$(cargo pkgid 2>&1)"
+        echo "$pkgid" | grep -q "error:" && continue
+        package_version="${pkgid##*\#}"
+      ;;
+    esac
+    [[ -z $package_version ]] || [[ "$package_version" == "null" ]] \
+      || [[ "$package_version" == "undefined" ]] || break
+  done
 
   [[ -z $package_version || "$package_version" == "null" || "$package_version" == "undefined" ]] && return
-
   sz::section \
     "$SPACESHIP_PACKAGE_COLOR" \
     "${SPACESHIP_PACKAGE_SYMBOL}v${package_version}" \
