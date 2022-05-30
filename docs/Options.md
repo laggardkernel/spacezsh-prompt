@@ -656,19 +656,19 @@ Shows the active kubectl context, which consists of a cluster name and, when wor
 
 | Variable | Default | Meaning |
 | :------- | :-----: | ------- |
-| `SPACESHIP_KUBECONTEXT_SHOW` | `true` | Current Kubectl context section |
-| `SPACESHIP_KUBECONTEXT_PREFIX` | `at·` | Prefix before Kubectl context section |
-| `SPACESHIP_KUBECONTEXT_SUFFIX` | `$SPACESHIP_PROMPT_DEFAULT_SUFFIX` | Suffix after Kubectl context section |
-| `SPACESHIP_KUBECONTEXT_COLOR` | `cyan` | Color of Kubectl context section |
-| `SPACESHIP_KUBECONTEXT_NAMESPACE_SHOW` | `true` | Should namespace be also displayed |
-| `SPACESHIP_KUBECONTEXT_COLOR_GROUPS` | ` ` | *Array* of pairs of colors and match patterns, empty by default |
+| `SPACESHIP_KUBECTL_CONTEXT_SHOW` | `true` | Current Kubectl context section |
+| `SPACESHIP_KUBECTL_CONTEXT_PREFIX` | `at·` | Prefix before Kubectl context section |
+| `SPACESHIP_KUBECTL_CONTEXT_SUFFIX` | `$SPACESHIP_PROMPT_DEFAULT_SUFFIX` | Suffix after Kubectl context section |
+| `SPACESHIP_KUBECTL_CONTEXT_COLOR` | `cyan` | Color of Kubectl context section |
+| `SPACESHIP_KUBECTL_CONTEXT_NAMESPACE_SHOW` | `true` | Should namespace be also displayed |
+| `SPACESHIP_KUBECTL_CONTEXT_COLOR_GROUPS` | ` ` | *Array* of pairs of colors and match patterns, empty by default |
 
 **Color Groups:** To set the section to a different color based on context or namespace, you can define an array of pair values in which the first value of a pair is a color name to use and the second value is a regular expression pattern to match against the section text (context name and/or namespace). The first matched pattern will determine the color, so list order can be used to prioritize patterns.
 
 For example, add the following to your `.zshrc` file:
 
 ```zsh
-SPACESHIP_KUBECONTEXT_COLOR_GROUPS=(
+SPACESHIP_KUBECTL_CONTEXT_COLOR_GROUPS=(
   # red if namespace is "kube-system"
   red    '\(kube-system)$'
   # else, green if "dev-01" is anywhere in the context or namespace

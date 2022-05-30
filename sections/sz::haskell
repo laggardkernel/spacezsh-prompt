@@ -26,7 +26,7 @@ sz::haskell() {
   [[ $SPACESHIP_HASKELL_SHOW == false ]] && return
 
   # If there are stack files in current directory
-  sz::upsearch "stack.yaml" >/dev/null || return
+  sz::upsearch "stack.yaml" >/dev/null || [[ -n *.hs(#qN^/) ]] || return
 
   # The command is stack, so do not change this to haskell.
   (( $+commands[stack] )) || return
