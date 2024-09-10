@@ -147,7 +147,7 @@ You can temporarily enable or disable vi-mode with handy functions (just execute
 
 - For oh-my-zsh users with vi-mode plugin enabled: Add `export RPS1="%{$reset_color%}"` before `source $ZSH/oh-my-zsh.sh` in `.zshrc` to disable default `<<<` NORMAL mode indicator in right prompt.
 - Vi mode indicator is enabled from the 2nd prompt on purpose to avoid the incompatibility between `zsh-syntax-highlighting` and `add-zle-hook-widget`.
-- If you are using tmux but `$TMUX` is not set (e.g., you're running zsh on a remote host), you may need to set `TMUX_PASSTHROUGH=1` to get the cursor styling to work.
+- If you are using `tmux` and cursor styles are not shown, first ensure that your terminal application [reports its capabilities][SsSe] properly. If it is an old version of tmux, you may need to set `TMUX_PASSTHROUGH=1` to get the cursor styling to work.
 - Prompt character color is still controlled by `char` to indicate return value of last command.
 - If `SPACESHIP_VI_MODE_SHOW` is set to `false`, prompt character will fallback to `SPACESHIP_CHAR_SYMBOL`.
 
@@ -787,3 +787,5 @@ Disabled by default. Set `SPACESHIP_EXIT_CODE_SHOW` to `true` in your `.zshrc`, 
 ## Need more?
 
 If these options are not enough to do what you want, read more about Spacezsh's API on [API page](./API.md) of the documentation.
+
+[SsSe]: https://github.com/softmoth/zsh-vim-mode/issues/23#issuecomment-627991663
